@@ -12,18 +12,18 @@ public interface InterfaceTS {
 
       public Commands BuscaId(String id);
 
-      public boolean InsertaTipo(String id, Enum Type)
+      public boolean InsertaTipo(String id, Enum Type);
 
-      Enum Type DameTipo(String id)
+      EnumType DameTipo(String id);
 
-      bool TiposComp(Enum Type tipo1, Enum Type tipo2)
+      bool TiposComp(Enum Type tipo1, Enum Type tipo2);
 
       bool esMatriz( Enum Tipo );
 
       int DaTamaño( Enum Tipo );
 
-      Enum Type DaTipoDest( Enum Type );
+      EnumType DaTipoDest( Enum Type );
 
-      ExpTipo -> TBAS || TBAS x TBAS x TBAS || TBAS x TBAS -> TBAS
+      //ExpTipo -> TBAS || TBAS x TBAS x TBAS || TBAS x TBAS -> TBAS
 
 }

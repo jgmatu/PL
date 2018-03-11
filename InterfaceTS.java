@@ -12,9 +12,9 @@ public interface InterfaceTS {
 
       public Commands buscaId(String id);
 
-      public boolean insertaTipo(String id, EnumType tipo);
+      public boolean insertaTipo(Commands commands, EnumType tipo);
 
-      public EnumType dameTipo(String id);
+      public EnumType dameTipo(Commands commands);
 
       public bool tiposComp(EnumType tipo1, EnumType tipo2);
 

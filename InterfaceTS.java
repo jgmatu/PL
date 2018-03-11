@@ -8,22 +8,22 @@ public interface InterfaceTS {
             FUNCTION, PARAMETERS, VARIABLE
       };
 
-      public boolean InsertaId(EnumType tipo, String id, EnumCommands cmd);
+      public boolean insertaId(EnumType tipo, String id, EnumCommands cmd);
 
-      public Commands BuscaId(String id);
+      public Commands buscaId(String id);
 
-      public boolean InsertaTipo(String id, Enum Type)
+      public boolean insertaTipo(Commands commands, EnumType tipo);
 
-      Enum Type DameTipo(String id)
+      public EnumType dameTipo(Commands commands);
 
-      bool TiposComp(Enum Type tipo1, Enum Type tipo2)
+      public bool tiposComp(EnumType tipo1, EnumType tipo2);
 
-      bool esMatriz( Enum Tipo );
+      public bool esMatriz( EnumType tipo );
 
-      int DaTamaño( Enum Tipo );
+      public int daTamaño( EnumType tipo );
 
-      Enum Type DaTipoDest( Enum Type );
+      public EnumType daTipoDest( EnumType tipo);
 
-      ExpTipo -> TBAS || TBAS x TBAS x TBAS || TBAS x TBAS -> TBAS
+      //ExpTipo -> TBAS || TBAS x TBAS x TBAS || TBAS x TBAS -> TBAS
 
 }

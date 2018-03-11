@@ -1,9 +1,9 @@
 public class Commands {
       protected String id;
-      protected Type enum;
+      protected EnumType tipo;
 
-      public Commands(String id, Type enum) {
+      public Commands(String id, EnumType tipo) {
             this.id = id;
-            this.enum = enum;
+            this.tipo = tipo;
       }
 }

@@ -26,5 +26,4 @@ public class Function extends Commands {
 		}
 		return success;
 	}
-
 }

@@ -22,7 +22,6 @@ Comment = {TraditionalComment} | {EndOfLineComment}
 
 
 "void"    { return new Symbol(sym.tvoid, yyline, yycolumn, yytext()); }
-
 "return"    { return new Symbol(sym.treturn, yyline, yycolumn, yytext()); }
 "("    { return new Symbol(sym.l_par, yyline, yycolumn, yytext());	 }
 ")"    { return new Symbol(sym.r_par, yyline, yycolumn, yytext());	 }

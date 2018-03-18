@@ -268,17 +268,6 @@ public class parser extends java_cup.runtime.lr_parser {
   public int error_sym() {return 1;}
 
 
-
-	/*Es un método que el cual se llama automáticamente al haber un error en la gramática,
-	con el que informamos de la linea y la columna en el que se encuentra dicho error.*/
-	@Override
-	public void syntax_error(Symbol s) {
-		int l = s.left + 1;
-		int c = s.right + 1;
-		report_error("\n   El String: '" + s.value + "' ha producido un error en la linea " + l + ", columna " + c + ".\n\n", null);
-	}
-
-
 /** Cup generated class to encapsulate user supplied action code.*/
 @SuppressWarnings({"rawtypes", "unchecked", "unused"})
 class CUP$parser$actions {
@@ -413,7 +402,7 @@ class CUP$parser$actions {
           case 10: // SENTLIST ::= SENTLIST SENT 
             {
               Object RESULT =null;
-		 
+		 System.out.println("SENTLIST SENT"); 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("SENTLIST",3, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -422,7 +411,7 @@ class CUP$parser$actions {
           case 11: // SENTLIST ::= SENT 
             {
               Object RESULT =null;
-		  
+		 System.out.println("SENT"); 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("SENTLIST",3, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -553,7 +542,7 @@ class CUP$parser$actions {
 		int listleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int listright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		ArrayList<String> list = (ArrayList<String>)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 list.add(id); RESULT = list; 
+		 list = new ArrayList<String>(); list.add(id); RESULT = list; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("LID",9, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;

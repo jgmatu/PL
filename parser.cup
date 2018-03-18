@@ -1,16 +1,5 @@
-// import java_cup.runtime.*;
 import java.util.ArrayList;
-
-parser code{:
-	/*Es un método que el cual se llama automáticamente al haber un error en la gramática,
-	con el que informamos de la linea y la columna en el que se encuentra dicho error.*/
-	@Override
-	public void syntax_error(Symbol s) {
-		int l = s.left + 1;
-		int c = s.right + 1;
-		report_error("\n   El String: '" + s.value + "' ha producido un error en la linea " + l + ", columna " + c + ".\n\n", null);
-	}
-:};
+// import java_cup.runtime.Symbol;
 
 /* TOKENS */
 
@@ -91,8 +80,8 @@ LISTPARAM ::= TYPE:type tid {: System.out.println("LISTPARAM TYPE: " + type); :}
 
 BLQ ::= l_brace {: System.out.println("NuevoEntorno"); :} SENTLIST r_brace {: System.out.println("Salir Entorno"); :};
 
-SENTLIST ::= SENTLIST SENT {: :};
-SENTLIST ::= SENT  {:  :};
+SENTLIST ::= SENTLIST SENT  {: System.out.println("SENTLIST SENT"); :};
+SENTLIST ::= SENT {: System.out.println("SENT"); :} ;
 
 
 SENT ::= TYPE:type LID:list  {: System.out.println("Inserta bucle de tipo con id's de la lista"); :} semicolon;
@@ -106,7 +95,7 @@ SENT ::= tdo BLQ tuntil l_par LCOND r_par;
 SENT ::= BLQ;
 
 LID ::= tid:id {: ArrayList<String> list = new ArrayList<String>(); list.add(id); RESULT = list;  :};
-LID ::= tid:id comma LID:list {: list.add(id); RESULT = list; :}; // Devolver tipo de tid a LID...
+LID ::= tid:id comma LID:list {: list = new ArrayList<String>(); list.add(id); RESULT = list; :}; // Devolver tipo de tid a LID...
 // LID ::= /* empty */;
 
 EXP ::= EXP add EXPT;
@@ -132,7 +121,7 @@ LCOND ::= LCOND tor LCONDT;
 LCOND ::= LCONDT;
 
 LCONDT ::= LCONDT tand LCONDF;
-LCONDT ::=  LCONDF;
+LCONDT  ::=  LCONDF;
 
 LCONDF ::= COND;
 LCONDF ::= tnot COND;

@@ -15,7 +15,7 @@ java -jar java-cup-11b.jar -dump parser.cup
 export CLASSPATH=$CLASSPATH:/home/javi/PL/java-cup-11b.jar
 export CLASSPATH=$CLASSPATH:/usr/bin/jflex
 export CLASSPATH=$CLASSPATH:/home/javi/PL/java-cup-11b-runtime.jar
-
+export CLASSPATH=$CLASSPATH:/home/javi/PL/src/com/urjc/master/semv
 javac -Xlint Analizador.java
 
 java Analizador test.c

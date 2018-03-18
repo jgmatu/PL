@@ -70,9 +70,13 @@ PROGRAM ::= PART;
 PART ::= TYPE:type RESTPART {: System.out.println("PART TYPE : " + type); :};
 
 
-RESTPART ::= tid l_par LISTPARAM r_par BLQ {: System.out.println("RESTPART InsertaId(func, idLexema)"); :};
+RESTPART ::= tid:idLexema l_par LISTPARAM:list {:
+ System.out.println("RESTPART InsertaId(idLexema,APITS.EnumCommands.FUNCTION, this);");
+ System.out.println("Function function = (Function) buscaId(idLexema);");
+ System.out.println("function.insertarParametros(list));");
+ :} r_par BLQ;
 
-RESTPART ::= tid l_par tvoid r_par BLQ {: System.out.println("RESTPART.void InsertaId(func, idLexema)"); :};
+RESTPART ::= tid:idLexema l_par tvoid r_par {: System.out.println("RESTPART.void InsertaId(idLexema,APITS.EnumCommands.FUNCTION, this)"); :} BLQ;
 
 
 LISTPARAM ::= LISTPARAM comma TYPE:type tid {: System.out.println("LISTPARAM TYPE comma: " + type); :};
@@ -80,8 +84,8 @@ LISTPARAM ::= TYPE:type tid {: System.out.println("LISTPARAM TYPE: " + type); :}
 
 BLQ ::= l_brace {: System.out.println("NuevoEntorno"); :} SENTLIST r_brace {: System.out.println("Salir Entorno"); :};
 
-SENTLIST ::= SENTLIST SENT  {: System.out.println("SENTLIST SENT"); :};
-SENTLIST ::= SENT {: System.out.println("SENT"); :} ;
+SENTLIST ::= SENTLIST SENT;
+SENTLIST ::= SENT;
 
 
 SENT ::= TYPE:type LID:list  {: System.out.println("Inserta bucle de tipo con id's de la lista"); :} semicolon;

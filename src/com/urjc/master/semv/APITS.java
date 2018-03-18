@@ -2,11 +2,11 @@ package com.urjc.master.semv;
 
 public interface APITS {
 
-      public enum EnumType {
+      public static enum EnumType {
             FLOAT, VOID, INT
       };
 
-      public enum EnumCommands {
+      public static enum EnumCommands {
             FUNCTION, PARAMETERS, VARIABLE
       };
 

@@ -5,14 +5,12 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-
 import org.junit.jupiter.api.Test;
 
-import com.urjc.master.semv.Ambito;
-import com.urjc.master.semv.Commands;
-import com.urjc.master.semv.Function;
 import com.urjc.master.semv.APITS.EnumCommands;
 import com.urjc.master.semv.APITS.EnumType;
+import com.urjc.master.semv.Ambito;
+import com.urjc.master.semv.Function;
 import com.urjc.master.semv.Variable;
 
 
@@ -55,7 +53,5 @@ class API_TS_TEST {
 		assertFalse(fun.insertarParametro("a", EnumType.FLOAT));
 		assertFalse(fun.insertarParametro("a", EnumType.INT));
 		assertTrue(fun.insertarParametro("b", EnumType.INT));
-
 	}
-
 }

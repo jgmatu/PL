@@ -25,7 +25,7 @@ public class Ambito implements APITS {
 			case PARAMETERS:
 				// buscar el id en la funcion y agregarle el parametro
 				Function function = (Function) this.buscaId(id);
-				return function.insertarParametro(id, tipo); 
+				return function.insertarSingleParametro(id, tipo); 
 			case VARIABLE:
 				return this.addEntryAmbito(id, new Variable(id, tipo));
 			default:

@@ -70,4 +70,7 @@ public class Ambito implements APITS {
 	
 	// ExpTipo -> TBAS || TBAS x TBAS x TBAS || TBAS x TBAS -> TBAS
 
+	public Ambito getFather(){
+		return this.father;
+	}
 }

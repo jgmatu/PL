@@ -1,5 +1,52 @@
+/********************************************************************/
+/********************************************************************/
+/*****          Autores: Ruben Morante Gonzalez                 *****/
+/*****                   Francisco Javier                       *****/
+/*****                   Jonathan                               *****/
+/********************************************************************/
+/********************************************************************/
+
 import java.util.ArrayList;
 // import java_cup.runtime.Symbol;
+
+parser code{:
+	private Ambito root;
+	private Ambito actual;
+
+	public Ambito getAmbitoRoot() {
+		return this.root;
+	}
+
+	public Ambito setAmbitoRoot(Ambito ambito) {
+		this.root = ambito;
+	}
+
+	public Ambito getAmbitoActual() {
+		return this.actual;
+	}
+
+	public Ambito setAmbitoActual(Ambito ambito) {
+		this.actual = ambito;
+	}
+
+	/*Es un método que el cual se llama automáticamente al haber un error en la gramática, 
+	con el que informamos de la linea y la columna en el que se encuentra dicho error.*/
+	@Override 
+	public void syntax_error(Symbol s) { 
+		int l = s.left + 1;
+		int c = s.right + 1;
+		report_error("\n   El String: '" + s.value + "' ha producido un error en la linea " + l + ", columna " + c + ".\n\n", null);
+	}
+:};
+
+action code {:
+	private Ambito root = new Ambito();
+	private Ambito actual = new Ambito();
+
+	public Ambito getAmbitoRoot() {
+		return this.root;
+	}
+:};
 
 /* TOKENS */
 
@@ -40,7 +87,7 @@ terminal constfloat;
 terminal String tvoid;
 terminal String tint;
 terminal String tfloat;
-terminal tboolean;
+//terminal tboolean;
 terminal String tid;
 
 // non terminals
@@ -53,7 +100,7 @@ non terminal EXP;
 non terminal EXPT;
 non terminal FACTOR;
 non terminal String TYPE;
-non terminal ArrayList<String> LID;
+non terminal LID LID;
 non terminal LISTPARAM;
 non terminal RESTPART;
 non terminal LCOND;
@@ -71,24 +118,50 @@ PART ::= TYPE:type RESTPART {: System.out.println("PART TYPE : " + type); :};
 
 
 RESTPART ::= tid:idLexema l_par LISTPARAM:list {:
- System.out.println("RESTPART InsertaId(idLexema,APITS.EnumCommands.FUNCTION, this);");
- System.out.println("Function function = (Function) buscaId(idLexema);");
- System.out.println("function.insertarParametros(list));");
- :} r_par BLQ;
+ System.out.println("
+ 	RESTPART this.root.InsertaId(idLexema, APITS.EnumCommands.FUNCTION, this.root);
+ 	Function function = (Function) this.root.buscaId(idLexema);
+ 	function.insertarParametros(list));
+ 	this.setAmbitoActual(function.getAmbito());
+ "); :} r_par BLQ;
 
-RESTPART ::= tid:idLexema l_par tvoid r_par {: System.out.println("RESTPART.void InsertaId(idLexema,APITS.EnumCommands.FUNCTION, this)"); :} BLQ;
+RESTPART ::= tid:idLexema l_par tvoid r_par {: 
+	System.out.println("
+		RESTPART.void 
+		this.root.InsertaId(idLexema, APITS.EnumCommands.FUNCTION, this.root);
+		Function function = (Function) this.root.buscaId(idLexema);
+		this.setAmbitoActual(function.getAmbito());
+	"); :} BLQ;
 
 
-LISTPARAM ::= LISTPARAM comma TYPE:type tid {: System.out.println("LISTPARAM TYPE comma: " + type); :};
-LISTPARAM ::= TYPE:type tid {: System.out.println("LISTPARAM TYPE: " + type); :};
+LISTPARAM ::= LISTPARAM:listparam comma TYPE:type tid:id {: 
+	System.out.println("
+		LISTPARAM TYPE comma: " + type +"
+		
+	"); :};
+LISTPARAM ::= TYPE:type tid:id {: 
+	System.out.println("
+		LISTPARAM TYPE: " + type + "
+		LISTPARAM listparam = new LISTPARAM();
+		listparam.insertar(id, type);
+	"); :};
 
-BLQ ::= l_brace {: System.out.println("NuevoEntorno"); :} SENTLIST r_brace {: System.out.println("Salir Entorno"); :};
+BLQ ::= l_brace {: System.out.println("NuevoEntorno"); :} SENTLIST r_brace {: 
+	System.out.println("
+		Salir Entorno
+		this.setAmbitoActual(this.getAmbitoActual().getFather());
+	"); :};
 
 SENTLIST ::= SENTLIST SENT;
 SENTLIST ::= SENT;
 
 
-SENT ::= TYPE:type LID:list  {: System.out.println("Inserta bucle de tipo con id's de la lista"); :} semicolon;
+SENT ::= TYPE:type LID:lid  {: 
+	System.out.println("
+		for(String id : lid.getList()) {
+			this.actual.insertaId(type, id, APITS.EnumCommands.VARIABLE);
+		}
+	"); :} semicolon;
 SENT ::= tid assig EXP semicolon;
 SENT ::= tid l_par LID r_par semicolon;
 SENT ::= treturn EXP semicolon;
@@ -98,8 +171,17 @@ SENT ::= twhile l_par LCOND r_par BLQ;
 SENT ::= tdo BLQ tuntil l_par LCOND r_par;
 SENT ::= BLQ;
 
-LID ::= tid:id {: ArrayList<String> list = new ArrayList<String>(); list.add(id); RESULT = list;  :};
-LID ::= tid:id comma LID:list {: list = new ArrayList<String>(); list.add(id); RESULT = list; :}; // Devolver tipo de tid a LID...
+LID ::= tid:id {: 
+	System.out.println("
+		LID lid = LID();
+		lid.add(id);
+		RESULT = lid;  
+	"); :};
+LID ::= tid:id comma LID:lid {:
+	System.out.println("
+		lid.add(id);
+		RESULT = lid; 
+	"); :}; // Devolver tipo de tid a LID...
 // LID ::= /* empty */;
 
 EXP ::= EXP add EXPT;

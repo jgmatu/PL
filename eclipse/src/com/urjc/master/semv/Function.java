@@ -45,4 +45,8 @@ public class Function extends Commands {
 		}
 		return success;
 	}
+	
+	public Ambito getAmbito(){
+		return this.ambito;
+	}
 }

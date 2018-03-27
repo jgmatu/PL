@@ -14,7 +14,7 @@ public class LISTPARAM {
 		this.parametros = new HashMap<EnumType, List<String>>();
 	}
 	
-	private void insertar(String id, EnumType tipo) {
+	public void insertar(String id, EnumType tipo) {
 		if (this.parametros.containsKey(tipo)) {
 			this.parametros.get(tipo).add(id);
 		} else {

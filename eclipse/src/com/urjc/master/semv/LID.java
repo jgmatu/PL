@@ -18,5 +18,9 @@ public class LID {
 	public void setList(List<String> list) {
 		this.list = list;
 	}
+	
+	public void add(String a){
+		this.list.add(a);
+	}
 
 }

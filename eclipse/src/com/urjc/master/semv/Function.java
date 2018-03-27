@@ -23,7 +23,8 @@ public class Function extends Commands {
 		boolean success = !parametros.contains(v);
 		
 		if (success) {
-			this.parametros.add(v);			
+			this.parametros.add(v);
+			this.ambito.insertaId(tipo, id, APITS.EnumCommands.VARIABLE);
 		}
 		return success;
 	}

@@ -137,13 +137,15 @@ RESTPART ::= tid:idLexema l_par tvoid r_par {:
 LISTPARAM ::= LISTPARAM:listparam comma TYPE:type tid:id {: 
 	System.out.println("
 		LISTPARAM TYPE comma: " + type +"
-		
+		listparam.insertar(id, type);
+		RETURN = listparam;
 	"); :};
 LISTPARAM ::= TYPE:type tid:id {: 
 	System.out.println("
 		LISTPARAM TYPE: " + type + "
 		LISTPARAM listparam = new LISTPARAM();
 		listparam.insertar(id, type);
+		RETURN = listparam;
 	"); :};
 
 BLQ ::= l_brace {: System.out.println("NuevoEntorno"); :} SENTLIST r_brace {: 

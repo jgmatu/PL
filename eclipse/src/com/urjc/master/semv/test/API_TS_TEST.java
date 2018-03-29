@@ -30,11 +30,11 @@ public class API_TS_TEST {
 		Ambito root = new Ambito();
 		Ambito child = new Ambito(root);
 
-		assertTrue(child.insertaId(EnumType.FLOAT, "idBla", EnumCommands.FUNCTION));
-		assertTrue(root.insertaId(EnumType.INT, "idBle", EnumCommands.VARIABLE));
+		assertTrue(child.insertaId("idBla", EnumType.FLOAT, EnumCommands.FUNCTION));
+		assertTrue(root.insertaId("idBle", EnumType.INT, EnumCommands.VARIABLE));
 
-		assertFalse(root.insertaId(EnumType.INT, "idBle", EnumCommands.VARIABLE));
-		assertFalse(root.insertaId(EnumType.INT, "idBle", EnumCommands.FUNCTION));
+		assertFalse(root.insertaId("idBle", EnumType.INT, EnumCommands.VARIABLE));
+		assertFalse(root.insertaId("idBle", EnumType.INT, EnumCommands.FUNCTION));
 	}
 
 	@Test
@@ -42,8 +42,8 @@ public class API_TS_TEST {
 		Ambito root = new Ambito();
 		Ambito child = new Ambito(root);
 
-		assertTrue(child.insertaId(EnumType.FLOAT, "idBla", EnumCommands.FUNCTION));
-		assertTrue(root.insertaId(EnumType.INT, "idBle", EnumCommands.VARIABLE));
+		assertTrue(child.insertaId("idBla", EnumType.FLOAT, EnumCommands.FUNCTION));
+		assertTrue(root.insertaId("idBle", EnumType.INT, EnumCommands.VARIABLE));
 
 		Function fun = (Function) child.buscaId("idBla");
 		assertEquals(EnumType.FLOAT, fun.getTipo());

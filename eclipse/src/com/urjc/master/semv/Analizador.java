@@ -1,7 +1,6 @@
 package com.urjc.master.semv;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import java_cup.parser;
 
 public class Analizador {
       public static void main(String argv[]) {

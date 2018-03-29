@@ -1,3 +1,5 @@
+package com.urjc.master.semv;
+
 import java_cup.runtime.*;
 
 %%

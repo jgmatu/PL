@@ -17,17 +17,17 @@ public class Ambito implements APITS {
 		this.father = father;
 	}
 
-	public boolean insertaId(EnumType tipo, String id, EnumCommands cmd) {
+	public boolean insertaId(String idLexema, EnumType tipo, EnumCommands cmd) {
 		switch (cmd) {
 			case FUNCTION:
 				// aqui el tipo se supone que es el devuelto.
-				return this.addEntryAmbito(id, new Function(id, tipo, this));
+				return this.addEntryAmbito(idLexema, new Function(idLexema, tipo, this));
 			case PARAMETERS:
 				// buscar el id en la funcion y agregarle el parametro
-				Function function = (Function) this.buscaId(id);
-				return function.insertarSingleParametro(id, tipo); 
+				Function function = (Function) this.buscaId(idLexema);
+				return function.insertarSingleParametro(idLexema, tipo); 
 			case VARIABLE:
-				return this.addEntryAmbito(id, new Variable(id, tipo));
+				return this.addEntryAmbito(idLexema, new Variable(idLexema, tipo));
 			default:
 				// error
 				return false;

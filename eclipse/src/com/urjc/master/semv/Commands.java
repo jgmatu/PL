@@ -3,6 +3,7 @@ package com.urjc.master.semv;
 import com.urjc.master.semv.APITS.EnumType;
 
 public class Commands {
+	
       protected String id;
       protected EnumType tipo;
 

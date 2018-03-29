@@ -18,17 +18,6 @@ public class Function extends Commands {
 		this.parametros = new ArrayList<>();
 	}
 
-	public boolean insertarSingleParametro(String id, EnumType tipo) {
-		Variable v = new Variable(id, tipo);
-		boolean success = !parametros.contains(v);
-		
-		if (success) {
-			this.parametros.add(v);
-			this.ambito.insertaId(tipo, id, APITS.EnumCommands.VARIABLE);
-		}
-		return success;
-	}
-	
 	public boolean insertarListParametros(List<String> ids, EnumType tipo) {
 		boolean success = true;
 		for (String id : ids) {
@@ -37,14 +26,36 @@ public class Function extends Commands {
 		return success;
 	}
 	
-	public boolean insertarParametros(LISTPARAM list) {
-		boolean success = true;
-		for (Map.Entry<EnumType, List<String>> entry : list.getParametros().entrySet()) {
-		    EnumType tipo = entry.getKey();
-		    List<String> ids = entry.getValue();
-		    success = insertarListParametros(ids, tipo) && success;
+	public boolean insertarSingleParametro(String id, EnumType tipo) {
+		Variable v = new Variable(id, tipo);
+		boolean success = !parametros.contains(v);
+		
+		if (success) {
+			this.parametros.add(v);			
 		}
 		return success;
+	}
+	
+	public boolean insertarParametros(Object list) {
+		boolean success = true;
+		
+		if (!(list instanceof LISTPARAM)) {
+			System.err.println("No me has pasado una lista de parámetros");
+			return false;
+		}
+		
+		LISTPARAM params = (LISTPARAM) list;
+		
+		for (Map.Entry<EnumType, List<String>> entry : params.getParametros().entrySet()) {
+		    EnumType tipo = entry.getKey();
+		    List<String> ids = entry.getValue();
+		    success = success && insertarListParametros(ids, tipo);
+		}
+		return success;
+	}
+	
+	public void setAmbito(Ambito father) {
+		this.ambito = father;
 	}
 	
 	public Ambito getAmbito(){

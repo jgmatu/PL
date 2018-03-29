@@ -10,7 +10,7 @@ public interface APITS {
             FUNCTION, PARAMETERS, VARIABLE
       };
 
-      public boolean insertaId(EnumType tipo, String id, EnumCommands cmd);
+      public boolean insertaId(String id, EnumType tipo, EnumCommands cmd);
 
       public Commands buscaId(String id);
 

@@ -9,6 +9,11 @@ public class Variable extends Commands {
 	}
 	
 	@Override
+	public String toString() {
+		return super.toString();
+	}
+	
+	@Override
 	public boolean equals(Object o) {
 		if (this == o) {
 			return true;

@@ -3,28 +3,27 @@ package com.urjc.master.semv.test;
 import static org.junit.Assert.*;
 
 import java.util.HashMap;
-import java.util.List;
 
 import org.junit.Test;
 
-import com.urjc.master.semv.LISTPARAM;
+import com.urjc.master.semv.ListParams;
 import com.urjc.master.semv.APITS.EnumType;
 
 public class LISTPARAM_Test {
 
 	@Test
 	public void testLISTPARAM() {
-		LISTPARAM listparam = null;
+		ListParams listparam = null;
 		assertNull(listparam);
 		
-		listparam = new LISTPARAM();
+		listparam = new ListParams();
 		assertNotNull(listparam);		
 	}
 	
 	@Test
 	public void testinsertar() {
-		LISTPARAM listparam = new LISTPARAM();
-		HashMap<EnumType, List<String>> parametros = listparam.getParametros();
+		ListParams listparam = new ListParams();
+		HashMap<String, EnumType> parametros = listparam.getParametros();
 		assertEquals(parametros.size(), 0);
 		
 		listparam.insertar("a", EnumType.FLOAT);

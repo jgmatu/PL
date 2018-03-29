@@ -3,7 +3,7 @@ package com.urjc.master.semv;
 public interface APITS {
 
       public static enum EnumType {
-            FLOAT, VOID, INT
+            FLOAT, VOID, INT, ERROR
       };
 
       public static enum EnumCommands {
@@ -11,12 +11,12 @@ public interface APITS {
       };
 
       public boolean insertaId(String id, EnumType tipo, EnumCommands cmd);
-
+      
       public Commands buscaId(String id);
 
-      public boolean insertaTipo(Commands commands, EnumType tipo);
+      public boolean insertaTipo(String id, EnumType tipo);
 
-      public EnumType dameTipo(Commands commands);
+      public EnumType dameTipo(String id);
 
       public boolean tiposComp(EnumType tipo1, EnumType tipo2);
 

@@ -6,15 +6,12 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import org.junit.Test;
 
 import com.urjc.master.semv.APITS.EnumType;
 import com.urjc.master.semv.Ambito;
 import com.urjc.master.semv.Function;
-import com.urjc.master.semv.LISTPARAM;
+import com.urjc.master.semv.ListParams;
 
 public class Function_Test {
 
@@ -39,6 +36,7 @@ public class Function_Test {
 		assertTrue(fun.insertarSingleParametro("b", EnumType.INT));
 	}
 	
+/*	
 	@Test
 	public void testInsertarListParametros() {
 		Function fun = new Function("main", EnumType.FLOAT, new Ambito());
@@ -54,19 +52,20 @@ public class Function_Test {
 		ids2.add("b");
 		assertFalse(fun.insertarListParametros(ids2, EnumType.FLOAT));
 	}
+*/
 	
 	@Test
 	public void testInsertarParametroso() {
 		Function fun = new Function("main", EnumType.FLOAT, new Ambito());
 		
-		LISTPARAM listparam = new LISTPARAM();
+		ListParams listparam = new ListParams();
 		listparam.insertar("a", EnumType.FLOAT);
 		listparam.insertar("b", EnumType.FLOAT);
 		listparam.insertar("c", EnumType.INT);
 				
 		assertTrue(fun.insertarParametros(listparam));
 		
-		LISTPARAM listparam2 = new LISTPARAM();
+		ListParams listparam2 = new ListParams();
 		listparam2.insertar("a", EnumType.FLOAT);
 		listparam2.insertar("b", EnumType.FLOAT);
 		listparam2.insertar("b", EnumType.FLOAT);

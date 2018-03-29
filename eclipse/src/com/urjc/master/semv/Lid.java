@@ -3,11 +3,11 @@ package com.urjc.master.semv;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LID {
+public class Lid {
 	
 	private List<String> idList;
 	
-	public LID() {
+	public Lid() {
 		 idList = new ArrayList<>();
 	}
 	

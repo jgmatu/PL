@@ -44,12 +44,14 @@ parser code{:
 :};
 
 action code {:
+	
 	private Ambito root = new Ambito();
 	private Ambito actual = new Ambito();
 
 	public Ambito getAmbitoRoot() {
 		return this.root;
 	}
+	
 :};
 
 /* TOKENS */
@@ -104,9 +106,9 @@ non terminal EXP;
 non terminal EXPT;
 non terminal FACTOR;
 non terminal EnumType TYPE;
-non terminal LID LID;
-non terminal LISTPARAM LISTPARAM;
-non terminal RESTPART;
+non terminal Lid LID;
+non terminal ListParams LISTPARAM;
+non terminal String RESTPART;
 non terminal LCOND;
 non terminal LCONDT;
 non terminal LCONDF;
@@ -115,42 +117,49 @@ non terminal OPR;
 
 /* GRAMMAR */
 PROGRAM ::= PART PROGRAM;
-PROGRAM ::= PART;
+PROGRAM ::= PART {: System.out.println(root.toString()); :};
 
 
-PART ::= TYPE:type RESTPART {: System.out.println("PART TYPE : " + type); :};
+PART ::= TYPE:type RESTPART:idLexema {: 
+
+	Function function = (Function) this.root.buscaId(idLexema);
+	function.insertaTipo(type);	
+
+:};
 
 
 RESTPART ::= tid:idLexema l_par LISTPARAM:list {:
-
-//	this.root.insertaId(idLexema, APITS.EnumCommands.FUNCTION, this.root);
-
-//	Function function = (Function) this.root.buscaId(idLexema);
- 	
-// 	function.insertarParametros(list));
-// 	this.setAmbitoActual(function.getAmbito());
-
+	
+	this.root.insertaIdFunction(idLexema);
+	Function function = (Function) this.root.buscaId(idLexema);
+	function.insertarParametros(list);
+	this.actual = function.getAmbito();
+	
+	RESULT = idLexema;
+	
 :} r_par BLQ;
 
 RESTPART ::= tid:idLexema l_par tvoid r_par {: 
 
-//	this.root.InsertaId(idLexema, APITS.EnumCommands.FUNCTION, this.root);
-//	Function function = (Function) this.root.buscaId(idLexema);
-//	this.setAmbitoActual(function.getAmbito());
+	this.root.insertaIdFunction(idLexema);
+	Function function = (Function) this.root.buscaId(idLexema);
+	this.actual = function.getAmbito();
+	
+	RESULT = idLexema;
 
 :} BLQ;
 
 
 LISTPARAM ::= LISTPARAM:listparam comma TYPE:type tid:idLexema {: 
 
-		listparam.insertar(idLexema, type);
-		RESULT = listparam;
-		
+	listparam.insertar(idLexema, type);
+	RESULT = listparam;		
+
 :};
 
 LISTPARAM ::= TYPE:type tid:id {: 
 
-	LISTPARAM listparam = new LISTPARAM();
+	ListParams listparam = new ListParams();
 	listparam.insertar(id, type);
 	RESULT = listparam;
 	
@@ -164,8 +173,7 @@ BLQ ::= l_brace {:
 
 	System.out.println("Salir Entorno");
 	this.root = this.actual;
-	
-	
+
 :};
 
 SENTLIST ::= SENTLIST SENT;
@@ -190,15 +198,18 @@ SENT ::= tdo BLQ tuntil l_par LCOND r_par;
 SENT ::= BLQ;
 
 LID ::= tid:id {: 
-	LID lid = new LID();
+
+	Lid lid = new Lid();
 
 	lid.add(id);
 	RESULT = lid; 
 :};
 
 LID ::= tid:id comma LID:lid {:
+
 	lid.add(id);
 	RESULT = lid; 
+
 :}; // Devolver tipo de tid a LID...
 
 // LID ::= /* empty */;

@@ -5,22 +5,22 @@ import java.util.List;
 
 public class LID {
 	
-	private List<String> list;
+	private List<String> idList;
 	
 	public LID() {
-		list = new ArrayList<>();
+		 idList = new ArrayList<>();
 	}
 	
 	public List<String> getList() {
-		return this.list;
+		return this.idList;
 	}
 
 	public void setList(List<String> list) {
-		this.list = list;
+		this.idList = list;
 	}
 	
 	public void add(String a){
-		this.list.add(a);
+		this.idList.add(a);
 	}
 
 }

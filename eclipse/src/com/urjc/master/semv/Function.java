@@ -24,7 +24,7 @@ public class Function extends Commands {
 		
 		if (success) {
 			this.parametros.add(v);
-			this.ambito.insertaId(tipo, id, APITS.EnumCommands.VARIABLE);
+			this.ambito.insertaId(id, tipo, APITS.EnumCommands.VARIABLE);
 		}
 		return success;
 	}

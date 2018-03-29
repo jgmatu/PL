@@ -1,16 +1,18 @@
 /********************************************************************/
 /********************************************************************/
 /*****          Autores: Ruben Morante Gonzalez                 *****/
-/*****                   Francisco Javier Gutiérrez-Maturana Sánchez                      *****/
-/*****                   Jonathan Ordóñez Gallegos 				*****/
+/*****                   Francisco Javier                       *****/
+/*****                   Jonathan                               *****/
 /********************************************************************/
 /********************************************************************/
 
-import java.util.ArrayList;
-import com.urjc.master.semv.Ambito;
+package com.urjc.master.semv;
+
+import com.urjc.master.semv.APITS.EnumType;
+import java_cup.runtime.Symbol;
+
 
 parser code{:
-
 	private Ambito root;
 	private Ambito actual;
 
@@ -18,7 +20,7 @@ parser code{:
 		return this.root;
 	}
 
-	public Ambito setAmbitoRoot(Ambito ambito) {
+	public void setAmbitoRoot(Ambito ambito) {
 		this.root = ambito;
 	}
 
@@ -26,11 +28,11 @@ parser code{:
 		return this.actual;
 	}
 
-	public Ambito setAmbitoActual(Ambito ambito) {
+	public void setAmbitoActual(Ambito ambito) {
 		this.actual = ambito;
 	}
 
-	/*Es un método que el cual se llama automáticamente al haber un error en la gramática, 
+	/* Es un método que el cual se llama automáticamente al haber un error en la gramática, 
 	con el que informamos de la linea y la columna en el que se encuentra dicho error.*/
 	@Override 
 	public void syntax_error(Symbol s) { 
@@ -100,9 +102,9 @@ non terminal SENT;
 non terminal EXP;
 non terminal EXPT;
 non terminal FACTOR;
-non terminal String TYPE;
+non terminal EnumType TYPE;
 non terminal LID LID;
-non terminal LISTPARAM;
+non terminal LISTPARAM LISTPARAM;
 non terminal RESTPART;
 non terminal LCOND;
 non terminal LCONDT;
@@ -112,42 +114,56 @@ non terminal OPR;
 
 /* GRAMMAR */
 PROGRAM ::= PART PROGRAM;
-PROGRAM ::= PART {: System.out.println("FIN PROGRAMA"); :};
+PROGRAM ::= PART;
 
 
-PART ::= TYPE:type RESTPART;
+PART ::= TYPE:type RESTPART {: System.out.println("PART TYPE : " + type); :};
 
 
 RESTPART ::= tid:idLexema l_par LISTPARAM:list {:
-	 System.out.println("\t this.root.InsertaId(idLexema, APITS.EnumCommands.FUNCTION, this.root)");
-	 System.out.println("\t Function function = (Function) this.root.buscaId(idLexema);");
-	 System.out.println("function.insertarParametros(list));");
-	 System.out.println("this.setAmbitoActual(function.getAmbito());");
+
+//	this.root.insertaId(idLexema, APITS.EnumCommands.FUNCTION, this.root);
+
+//	Function function = (Function) this.root.buscaId(idLexema);
+ 	
+// 	function.insertarParametros(list));
+// 	this.setAmbitoActual(function.getAmbito());
+
 :} r_par BLQ;
 
 RESTPART ::= tid:idLexema l_par tvoid r_par {: 
-	System.out.println("this.root.InsertaId(idLexema, APITS.EnumCommands.FUNCTION, this.root);");
-	System.out.println("Function function = (Function) this.root.buscaId(idLexema);");
-	System.out.println("this.setAmbitoActual(function.getAmbito());");	
+
+//	this.root.InsertaId(idLexema, APITS.EnumCommands.FUNCTION, this.root);
+//	Function function = (Function) this.root.buscaId(idLexema);
+//	this.setAmbitoActual(function.getAmbito());
+
 :} BLQ;
 
 
-LISTPARAM ::= LISTPARAM:listparam comma TYPE:type tid:id {: 
-	System.out.println("listparam.insertar(id, type);");
-	System.out.println("RETURN = listparam;");
+LISTPARAM ::= LISTPARAM:listparam comma TYPE:type tid:idLexema {: 
+
+		listparam.insertar(idLexema, type);
+		RESULT = listparam;
+		
 :};
 
 LISTPARAM ::= TYPE:type tid:id {: 
-	System.out.println("LISTPARAM listparam = new LISTPARAM();");
-	System.out.println("listparam.insertar(id, type);");
-	System.out.println("RETURN = listparam;");
+
+	LISTPARAM listparam = new LISTPARAM();
+	listparam.insertar(id, type);
+	RESULT = listparam;
+	
 :};
 
-BLQ ::= l_brace {: System.out.println("NuevoEntorno"); :} SENTLIST r_brace {: 
+BLQ ::= l_brace {: 
+	
+	System.out.println("NuevoEntorno"); 
+
+:} SENTLIST r_brace {: 
 
 	System.out.println("Salir Entorno");
-	System.out.println("this.setAmbitoActual(this.getAmbitoActual().getFather());");
-
+	this.setAmbitoActual(this.getAmbitoActual().getFather());
+	
 :};
 
 SENTLIST ::= SENTLIST SENT;
@@ -155,61 +171,32 @@ SENTLIST ::= SENT;
 
 
 SENT ::= TYPE:type LID:lid  {: 
-<<<<<<< HEAD
 
-	System.out.println("for(String id : lid.getList()) {");	
-	System.out.println("\t this.actual.insertaId(type, id, APITS.EnumCommands.VARIABLE);");
-	System.out.println("}");			
-
+	for(String id : lid.getList()) {
+		this.actual.insertaId(id, type, APITS.EnumCommands.VARIABLE);
+	}
+	
 :} semicolon;
 
 SENT ::= tid assig EXP semicolon;
-=======
-	System.out.println("
-		for(String id : lid.getList()) {
-			this.actual.insertaId(type, id, APITS.EnumCommands.VARIABLE);
-		}
-	"); :} semicolon;
-SENT ::= tid:id assig EXP:exp semicolon;
->>>>>>> 24070145de47f243dfe93077a53f6a4aacad087e
 SENT ::= tid l_par LID r_par semicolon;
 SENT ::= treturn EXP semicolon;
-SENT ::= tif l_par LCOND r_par tthen {: 
-	System.out.println("
-	this.setAmbitoActual(new Ambito(this.getAmbitoActual));
-	"); :} BLQ telse {: 
-	System.out.println("
-	this.setAmbitoActual(new Ambito(this.getAmbitoActual));
-	"); :} BLQ;
-SENT ::= tfor l_par tid assig EXP semicolon LCOND semicolon tid assig EXP r_par {: 
-	System.out.println("
-	this.setAmbitoActual(new Ambito(this.getAmbitoActual));
-	"); :} BLQ;
-SENT ::= twhile l_par LCOND r_par {: 
-	System.out.println("
-	this.setAmbitoActual(new Ambito(this.getAmbitoActual));
-	"); :} BLQ;
-SENT ::= tdo {: 
-	System.out.println("
-	this.setAmbitoActual(new Ambito(this.getAmbitoActual));
-	"); :} BLQ tuntil l_par LCOND r_par;
-SENT ::= {: 
-	System.out.println("
-	this.setAmbitoActual(new Ambito(this.getAmbitoActual));
-	"); :} BLQ;
+SENT ::= tif l_par LCOND r_par tthen BLQ telse BLQ;
+SENT ::= tfor l_par tid assig EXP semicolon LCOND semicolon tid assig EXP r_par BLQ;
+SENT ::= twhile l_par LCOND r_par BLQ;
+SENT ::= tdo BLQ tuntil l_par LCOND r_par;
+SENT ::= BLQ;
 
 LID ::= tid:id {: 
+	LID lid = new LID();
 
-	System.out.println("LID lid = LID();");
-	System.out.println("lid.add(id);");		
-	System.out.println("RESULT = lid;"); 
-	
+	lid.add(id);
+	RESULT = lid; 
 :};
+
 LID ::= tid:id comma LID:lid {:
-
-	System.out.println("lid.add(id);");
-	System.out.println("RESULT = lid;");
-
+	lid.add(id);
+	RESULT = lid; 
 :}; // Devolver tipo de tid a LID...
 
 // LID ::= /* empty */;
@@ -229,9 +216,9 @@ FACTOR ::= tid;
 FACTOR ::= constint;
 FACTOR ::= constfloat;
 
-TYPE ::= tvoid:v {: System.out.println("Type Void BLA : " + v); RESULT = v; :};
-TYPE ::= tint:i {: System.out.println("Type  Int: BLA " + i); RESULT = i; :};
-TYPE ::= tfloat:f {: System.out.println("Type  Float: BLA " + f); RESULT = f; :};
+TYPE ::= tvoid:v {: System.out.println("Type Void"); RESULT =  EnumType.VOID; :};
+TYPE ::= tint:i {: System.out.println("Type  Int"); RESULT =  EnumType.INT; :};
+TYPE ::= tfloat:f {: System.out.println("Type  Float"); RESULT =  EnumType.FLOAT; :};
 
 LCOND ::= LCOND tor LCONDT;
 LCOND ::= LCONDT;

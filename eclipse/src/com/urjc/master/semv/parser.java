@@ -5,6 +5,7 @@
 
 package com.urjc.master.semv;
 
+import com.urjc.master.semv.APITS.EnumType;
 import java_cup.runtime.Symbol;
 import java_cup.runtime.XMLElement;
 
@@ -274,7 +275,6 @@ public class parser extends java_cup.runtime.lr_parser {
 
 
 
-
 	private Ambito root;
 	private Ambito actual;
 
@@ -290,11 +290,11 @@ public class parser extends java_cup.runtime.lr_parser {
 		return this.actual;
 	}
 
-	public Ambito setAmbitoActual(Ambito ambito) {
-		return this.actual = ambito;
+	public void setAmbitoActual(Ambito ambito) {
+		this.actual = ambito;
 	}
 
-	/*Es un método que el cual se llama automáticamente al haber un error en la gramática, 
+	/* Es un método que el cual se llama automáticamente al haber un error en la gramática, 
 	con el que informamos de la linea y la columna en el que se encuentra dicho error.*/
 	@Override 
 	public void syntax_error(Symbol s) { 
@@ -309,14 +309,12 @@ public class parser extends java_cup.runtime.lr_parser {
 class CUP$parser$actions {
 
 
-
 	private Ambito root = new Ambito();
 	private Ambito actual = new Ambito();
 
 	public Ambito getAmbitoRoot() {
 		return this.root;
 	}
-	
 
   private final parser parser;
 
@@ -366,7 +364,7 @@ class CUP$parser$actions {
           case 2: // PROGRAM ::= PART 
             {
               Object RESULT =null;
-		 System.out.println("FIN PROGRAMA"); 
+
               CUP$parser$result = parser.getSymbolFactory().newSymbol("PROGRAM",0, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -377,14 +375,8 @@ class CUP$parser$actions {
               Object RESULT =null;
 		int typeleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int typeright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
-		String type = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		int bodyleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
-		int bodyright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
-		Object body = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		
-	System.out.println("TRACE...");	
-
-
+		EnumType type = (EnumType)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		 System.out.println("PART TYPE : " + type); 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("PART",1, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -401,8 +393,13 @@ class CUP$parser$actions {
 		LISTPARAM list = (LISTPARAM)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 
 
-	System.out.println("TRACE...");	
-		 
+//	this.root.insertaId(idLexema, APITS.EnumCommands.FUNCTION, this.root);
+
+//	Function function = (Function) this.root.buscaId(idLexema);
+ 	
+// 	function.insertarParametros(list));
+// 	this.setAmbitoActual(function.getAmbito());
+
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("NT$0",17, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -434,11 +431,9 @@ class CUP$parser$actions {
 		String idLexema = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
  
 
-	System.out.println("TRACE...");	
-
-	System.out.println("this.root.InsertaId(idLexema, APITS.EnumCommands.FUNCTION, this.root);");
-	System.out.println("Function function = (Function) this.root.buscaId(idLexema);");
-	System.out.println("this.setAmbitoActual(function.getAmbito());");	
+//	this.root.InsertaId(idLexema, APITS.EnumCommands.FUNCTION, this.root);
+//	Function function = (Function) this.root.buscaId(idLexema);
+//	this.setAmbitoActual(function.getAmbito());
 
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("NT$1",18, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -468,13 +463,15 @@ class CUP$parser$actions {
 		LISTPARAM listparam = (LISTPARAM)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
 		int typeleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int typeright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
-		String type = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
-		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
-		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		EnumType type = (EnumType)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		int idLexemaleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int idLexemaright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		String idLexema = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 
-	System.out.println("listparam.insertar(id, type);");
-	System.out.println("RETURN = listparam;");
+
+		listparam.insertar(idLexema, type);
+		RESULT = listparam;
+		
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("LISTPARAM",10, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -486,14 +483,16 @@ class CUP$parser$actions {
               LISTPARAM RESULT =null;
 		int typeleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int typeright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
-		String type = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		EnumType type = (EnumType)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 
-	System.out.println("LISTPARAM listparam = new LISTPARAM();");
-	System.out.println("listparam.insertar(id, type);");
-	System.out.println("RETURN = listparam;");
+
+	LISTPARAM listparam = new LISTPARAM();
+	listparam.insertar(id, type);
+	RESULT = listparam;
+	
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("LISTPARAM",10, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -503,7 +502,11 @@ class CUP$parser$actions {
           case 10: // NT$2 ::= 
             {
               Object RESULT =null;
- System.out.println("NuevoEntorno"); 
+ 
+	
+	System.out.println("NuevoEntorno"); 
+
+
               CUP$parser$result = parser.getSymbolFactory().newSymbol("NT$2",19, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -517,8 +520,8 @@ class CUP$parser$actions {
 		 
 
 	System.out.println("Salir Entorno");
-	System.out.println("this.setAmbitoActual(this.getAmbitoActual().getFather());");
-
+	this.setAmbitoActual(this.getAmbitoRoot().getFather());
+	
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("BLQ",2, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -548,16 +551,16 @@ class CUP$parser$actions {
               Object RESULT =null;
 		int typeleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int typeright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
-		String type = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		EnumType type = (EnumType)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		int lidleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int lidright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		LID lid = (LID)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
  
 
-	System.out.println("for(String id : lid.getList()) {");	
-	System.out.println("\t this.actual.insertaId(type, id, APITS.EnumCommands.VARIABLE);");
-	System.out.println("}");			
-
+	for(String id : lid.getList()) {
+		this.actual.insertaId(id, type, APITS.EnumCommands.VARIABLE);
+	}
+	
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("NT$3",20, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -571,7 +574,7 @@ class CUP$parser$actions {
                 RESULT = (Object) ((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		int typeleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left;
 		int typeright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).right;
-		String type = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
+		EnumType type = (EnumType)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
 		int lidleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
 		int lidright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
 		LID lid = (LID)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
@@ -660,11 +663,10 @@ class CUP$parser$actions {
 		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 
+	LID lid = new LID();
 
-	System.out.println("LID lid = LID();");
-	System.out.println("lid.add(id);");		
-	System.out.println("RESULT = lid;"); 
-	
+	lid.add(id);
+	RESULT = lid; 
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("LID",9, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -681,10 +683,8 @@ class CUP$parser$actions {
 		int lidright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		LID lid = (LID)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-
-	System.out.println("lid.add(id);");
-	System.out.println("RESULT = lid;");
-
+	lid.add(id);
+	RESULT = lid; 
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("LID",9, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -792,11 +792,11 @@ class CUP$parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 37: // TYPE ::= tvoid 
             {
-              String RESULT =null;
+              EnumType RESULT =null;
 		int vleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int vright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String v = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 System.out.println("Type Void BLA : " + v); RESULT = v; 
+		 System.out.println("Type Void"); RESULT =  EnumType.VOID; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("TYPE",8, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -804,11 +804,11 @@ class CUP$parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 38: // TYPE ::= tint 
             {
-              String RESULT =null;
+              EnumType RESULT =null;
 		int ileft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int iright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String i = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 System.out.println("Type  Int: BLA " + i); RESULT = i; 
+		 System.out.println("Type  Int"); RESULT =  EnumType.INT; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("TYPE",8, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -816,11 +816,11 @@ class CUP$parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 39: // TYPE ::= tfloat 
             {
-              String RESULT =null;
+              EnumType RESULT =null;
 		int fleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int fright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String f = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 System.out.println("Type  Float: BLA " + f); RESULT = f; 
+		 System.out.println("Type  Float"); RESULT =  EnumType.FLOAT; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("TYPE",8, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -941,7 +941,12 @@ class CUP$parser$actions {
         }
     } /* end of method */
 
-  /** Method splitting the generated action code into several parts. */
+  private void setAmbitoActual(Ambito father) {
+	// TODO Auto-generated method stub
+	
+}
+
+/** Method splitting the generated action code into several parts. */
   public final java_cup.runtime.Symbol CUP$parser$do_action(
     int                        CUP$parser$act_num,
     java_cup.runtime.lr_parser CUP$parser$parser,

@@ -1,2 +1,5 @@
 *class
 bin/
+parser.java
+sym.java
+AnalizadorLexico.java

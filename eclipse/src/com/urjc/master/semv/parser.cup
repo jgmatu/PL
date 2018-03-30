@@ -17,22 +17,6 @@ parser code{:
 	private Ambito root;
 	private Ambito actual;
 
-	public Ambito getAmbitoRoot() {
-		return this.root;
-	}
-
-	public void setAmbitoRoot(Ambito ambito) {
-		this.root = ambito;
-	}
-
-	public Ambito getAmbitoActual() {
-		return this.actual;
-	}
-
-	public void setAmbitoActual(Ambito ambito) {
-		this.actual = ambito;
-	}
-
 	/* Es un método que el cual se llama automáticamente al haber un error en la gramática, 
 	con el que informamos de la linea y la columna en el que se encuentra dicho error.*/
 	@Override 
@@ -47,10 +31,6 @@ action code {:
 	
 	private Ambito root = new Ambito();
 	private Ambito actual = new Ambito();
-
-	public Ambito getAmbitoRoot() {
-		return this.root;
-	}
 	
 :};
 
@@ -116,24 +96,30 @@ non terminal COND;
 non terminal OPR;
 
 /* GRAMMAR */
-PROGRAM ::= PART PROGRAM;
-PROGRAM ::= PART {: System.out.println("FIN DE PROGRAMA"); :};
+PROGRAM ::= PART PROGRAM {:
+	;
+:};
+
+PROGRAM ::= PART {:
+	System.out.println(this.root.toString());	
+	System.err.println("FIN DE PROGRAMA"); 	
+:};
 
 
 PART ::= TYPE:type RESTPART:command {: 
 	if (command instanceof Function) {
 		Function function = (Function) command;
 		function.insertaTipo(type);		
+		function.eraseAmbito();
 	}
-	System.out.println(this.actual.toString());	
-	this.actual = this.root;	
+	this.actual = this.root;
 :};
 
 /*
  * Definición de función
  */
 RESTPART ::= tid:idLexema l_par LISTPARAM:list {:
-	
+		
 	this.root.insertaIdFunction(idLexema);
 	Function function = (Function) this.root.buscaId(idLexema);
 	this.actual = function.getAmbito();
@@ -174,19 +160,14 @@ LISTPARAM ::= TYPE:type tid:id {:
 
 BLQ ::= l_brace {: 
 	
-	System.out.println("NuevoEntorno"); 
-
 :} SENTLIST r_brace {: 
-
-	System.out.println("Salir Entorno");
-	this.root = this.actual;
-
+	
 :};
 
 SENTLIST ::= SENTLIST SENT;
 SENTLIST ::= SENT;
 
-SENT ::= TYPE:type LID:lid  {: 
+SENT ::= TYPE:type LID:lid {: 
 
 	for(String id : lid.getList()) {
 		this.actual.insertaIdVariable(new Variable(id, type));
@@ -235,9 +216,9 @@ FACTOR ::= tid;
 FACTOR ::= constint;
 FACTOR ::= constfloat;
 
-TYPE ::= tvoid:v {: System.out.println("Type Void"); RESULT =  EnumType.VOID; :};
-TYPE ::= tint:i {: System.out.println("Type  Int"); RESULT =  EnumType.INT; :};
-TYPE ::= tfloat:f {: System.out.println("Type  Float"); RESULT =  EnumType.FLOAT; :};
+TYPE ::= tvoid:v {: RESULT =  EnumType.VOID; :};
+TYPE ::= tint:i {: RESULT =  EnumType.INT; :};
+TYPE ::= tfloat:f {: RESULT =  EnumType.FLOAT; :};
 
 LCOND ::= LCOND tor LCONDT;
 LCOND ::= LCONDT;

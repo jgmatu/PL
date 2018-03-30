@@ -33,13 +33,17 @@ public class Function extends Command {
 		return success;
 	}
 
-	public boolean insertarParametros(ListParams list) {
+	public boolean insertarParametros(ListParams params) {
 		boolean success = true;
 
-		for (Entry<String, EnumType> entry : list.getParametros().entrySet()) {
+		for (Entry<String, EnumType> entry : params.getParametros().entrySet()) {
 			success = insertarSingleParametro(entry.getKey(), entry.getValue()) && success;
 		}
 		return success;
+	}
+	
+	public void eraseAmbito() {
+		this.ambito.erase();
 	}
 
 	public Ambito getAmbito() {

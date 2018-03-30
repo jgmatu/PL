@@ -7,3 +7,17 @@ main(int argc, float argv)
 }
 
 
+int 
+bla(int argc, int argv) 
+{
+    int a, b;
+    float c, d;
+}
+
+
+int 
+ble(int argc, int argv) 
+{
+    int a, b;
+    float c, d;
+}

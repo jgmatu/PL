@@ -47,6 +47,10 @@ public class Ambito implements APITS {
 			return null;
 		}
 	}
+
+	public void erase() {
+		this.ambito = null;
+	}
 	
 	// ExpTipo -> TBAS || TBAS x TBAS x TBAS || TBAS x TBAS -> TBAS
 	public Ambito getFather(){
@@ -65,7 +69,8 @@ public class Ambito implements APITS {
 	@Override
 	public String toString() {
 		StringBuffer format = new StringBuffer();
-		
+	
+		format.append("\n\n.... Start Ambito ...\n");		
 		
 		if (this.father != null) {
 			format.append("\nWe have Father ");
@@ -73,8 +78,8 @@ public class Ambito implements APITS {
 		}
 		
 		format.append("Ambito...\n");
-		for (Entry<String, Command> pair : this.ambito.entrySet()) {
-			Command cmd = pair.getValue();
+		for (Entry<String, Command> entry : this.ambito.entrySet()) {
+			Command cmd = entry.getValue();
 		
 			if (cmd instanceof Function) {
 				Function fun = (Function) cmd;
@@ -86,6 +91,7 @@ public class Ambito implements APITS {
 				format.append(String.format("Defined variable : %s\n", var.toString()));
 			}
 		}
+		format.append("\n.... End Ambito ...\n");		
 		return format.toString();
 	}
 

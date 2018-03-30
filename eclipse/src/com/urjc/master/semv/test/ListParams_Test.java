@@ -9,7 +9,7 @@ import org.junit.Test;
 import com.urjc.master.semv.ListParams;
 import com.urjc.master.semv.APITS.EnumType;
 
-public class LISTPARAM_Test {
+public class ListParams_Test {
 
 	@Test
 	public void testLISTPARAM() {

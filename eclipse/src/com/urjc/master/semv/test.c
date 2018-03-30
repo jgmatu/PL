@@ -1,19 +1,22 @@
 
 
 void
-main(int argc, float argv)
+main(int argc, float argv, int param)
 {
     int a, b;
     
     a = 3;
     if (a < 3) then {
         int c;
+        c = 1;
+        b = a + c;
     }
 }
 
+
 /*
 int 
-ble(int argc, int argv) 
+ble(int argc, int argv, float param) 
 {
     int a, b;
     float c, d;
@@ -31,8 +34,9 @@ ble(int argc, int argv)
         ;
     }
 }
+*/
 
-
+/*
 int 
 ble(int argc, int argv) 
 {
@@ -58,7 +62,7 @@ blo(int argc, int argv)
 
 
 int 
-blu(int argc, int argv) 
+blu(float argc, float argv, int param) 
 {
     int a, b;
     float c, d;

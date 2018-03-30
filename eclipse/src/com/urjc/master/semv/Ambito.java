@@ -30,7 +30,7 @@ public class Ambito implements APITS {
 	}
 		
 	private boolean addEntry(String id, Command command) {
-		boolean success = !this.ambito.containsKey(id);
+		boolean success = !this.existId(id);
 		
 		if (success) {
 			this.ambito.put(id, command);						
@@ -77,6 +77,13 @@ public class Ambito implements APITS {
 			}
 			return null;
 		}
+	}
+	
+	public boolean existId(String id) {
+		if (this.father != null) {
+			return this.father.existId(id) || this.ambito.containsKey(id);
+		}
+		return this.ambito.containsKey(id);
 	}
 	
 	// ExpTipo -> TBAS || TBAS x TBAS x TBAS || TBAS x TBAS -> TBAS

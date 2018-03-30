@@ -18,10 +18,8 @@ public class ListParams {
 		
 		if (success) {
 			this.parametros.put(id, tipo);
-
 		} else {
-			this.parametros.put("?", EnumType.ERROR);
-			System.err.println("Ya existe un parametro con ese identificador");
+			System.err.println(String.format("The parameter : %s already exist...", id));
 		}
 	}
 	

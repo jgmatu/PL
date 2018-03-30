@@ -113,19 +113,20 @@ PROGRAM ::= PART {:
 * NOTE: De la clase Command heredan las funciones y las variables que luego se 
 * insertan en el ambito...
 */
-PART ::= TYPE:type RESTPART:command {: 
-	
+PART ::= TYPE:type RESTPART:command {: 	
+
+	Command err = this.actual.buscaError();
+	if (err != null) {
+		this.actual.deleteError(err);
+	}	
+
 	if (command != null && command instanceof Function) {
 		Function function = (Function) command;
 		function.insertaTipo(type);		
 		function.eraseAmbito();
 	}
-	
-	Command err = this.root.buscaError();
-	if (err != null) {
-		this.root.deleteError(err);
-	}
-	this.actual = this.root;
+
+	this.actual = this.actual.getFather();
 :};
 
 /*
@@ -187,11 +188,13 @@ BLQ ::= l_brace {:
 
 	this.actual = new Ambito(this.actual);
 	
-:} SENTLIST r_brace {: 
-	
-	System.out.println(this.actual.toString());	
+:} SENTLIST r_brace {: 	
+	Command err = this.actual.buscaError();
+	if (err != null) {
+		this.actual.deleteError(err);
+	}
+	System.out.println(this.actual.toString());
 	this.actual = this.actual.getFather();
-
 :};
 
 SENTLIST ::= SENTLIST SENT;
@@ -206,44 +209,44 @@ SENT ::= TYPE:type LID:lid {:
 :} semicolon;
 
 SENT ::= tid assig EXP semicolon {: 
-	System.err.println("Asignacion");
+	// System.err.println("Asignacion");
 :};
 
 SENT ::= tid l_par LID r_par semicolon {: 
-	System.err.println("Llamada a función!!"); 
+	// System.err.println("Llamada a función!!"); 
 :};
 
 SENT ::= treturn EXP semicolon {: 
-	System.err.println("Return statement"); 
+	// System.err.println("Return statement"); 
 :};
 
 SENT ::= tif l_par LCOND r_par tthen BLQ telse BLQ {: 
-	System.err.println("if statement with else"); 
+	// System.err.println("if statement with else"); 
 :};
 
 SENT ::= tif l_par LCOND r_par tthen BLQ {: 
-	System.err.println("if statement no else start bloque...."); 
+	System.err.println("if statement no else end BLQ..."); 
 :};
 
 
 SENT ::= tfor l_par tid assig EXP semicolon LCOND semicolon tid assig EXP r_par BLQ {: 
-	System.err.println("for statement"); 	
+	// System.err.println("for statement"); 	
 :}; 
 
 SENT ::= twhile l_par LCOND r_par BLQ {:
-	System.err.println("while statement"); 	
+	// System.err.println("while statement"); 	
 :};
 
 SENT ::= tdo BLQ tuntil l_par LCOND r_par {:
-	System.err.println("do until statement"); 	
+	// System.err.println("do until statement"); 	
 :};
 
 SENT ::= BLQ {:
-	System.err.println("sentencia bloque..."); 	
+	// System.err.println("sentencia bloque..."); 	
 :};
 
 SENT ::= semicolon {:
-	System.err.println("NOP instrucction...."); 	
+	// System.err.println("NOP instrucction...."); 	
 :};
 
 LID ::= tid:id {: 

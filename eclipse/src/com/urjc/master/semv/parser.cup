@@ -112,11 +112,14 @@ PROGRAM ::= PART {:
 * podríamos tener variables globales, aunque no esté
 * contemplado, habría que hacer el sintáctico de variable 
 * global, pero se puede dejar así para solo funciones...
+*
+* NOTE: De la clase Command heredan las funciones y las variables que luego se 
+* insertan en el ambito...
 */
-PART ::= TYPE:type RESTPART:cmd {: 
+PART ::= TYPE:type RESTPART:command {: 
 	
-	if (cmd != null && cmd instanceof Function) {
-		Function function = (Function) cmd;
+	if (command != null && command instanceof Function) {
+		Function function = (Function) command;
 		function.insertaTipo(type);		
 		function.eraseAmbito();
 	}

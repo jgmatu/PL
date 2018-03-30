@@ -28,8 +28,6 @@ parser code{:
 :};
 
 action code {:
-
-	private static final String ERROR_PREFIX = "0func_err";
 	
 	private Ambito root = new Ambito();
 	private Ambito actual = new Ambito();
@@ -103,7 +101,6 @@ PROGRAM ::= PART PROGRAM {:
 :};
 
 PROGRAM ::= PART {:
-	System.out.println(this.actual.toString());	
 	System.err.println("FIN DE PROGRAMA"); 	
 :};
 
@@ -143,7 +140,7 @@ RESTPART ::= tid:idLexema l_par LISTPARAM:list {:
 		this.actual = function.getAmbito();
 		function.insertarParametros(list);
 	} else {
-		function = (Function) this.root.buscaId(ERROR_PREFIX + idLexema);
+		function = (Function) this.root.buscaId(Ambito.ERROR_PREFIX + idLexema);
 		this.actual = function.getAmbito();
 		function.insertarParametros(list);
 	}
@@ -157,14 +154,13 @@ RESTPART ::= tid:idLexema l_par LISTPARAM:list {:
  */
 RESTPART ::= tid:idLexema l_par tvoid r_par {: 
 	boolean success = this.root.insertaIdFunction(idLexema);
-
 	Function function = null;
 	
 	if (success) {
 		function = (Function) this.root.buscaId(idLexema);
 		this.actual = function.getAmbito();
 	} else {
-		function = (Function) this.root.buscaId(ERROR_PREFIX + idLexema);
+		function = (Function) this.root.buscaId(Ambito.ERROR_PREFIX + idLexema);
 		this.actual = function.getAmbito();
 	}
 	
@@ -192,7 +188,8 @@ BLQ ::= l_brace {:
 	this.actual = new Ambito(this.actual);
 	
 :} SENTLIST r_brace {: 
-
+	
+	System.out.println(this.actual.toString());	
 	this.actual = this.actual.getFather();
 
 :};
@@ -225,7 +222,7 @@ SENT ::= tif l_par LCOND r_par tthen BLQ telse BLQ {:
 :};
 
 SENT ::= tif l_par LCOND r_par tthen BLQ {: 
-	System.err.println("if statement no else"); 
+	System.err.println("if statement no else start bloque...."); 
 :};
 
 

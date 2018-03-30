@@ -3,7 +3,12 @@
 void
 main(int argc, float argv)
 {
-      int a, b;
+    int a, b;
+    
+    a = 3;
+    if (a < 3) then {
+        int c;
+    }
 }
 
 /*

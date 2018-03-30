@@ -6,7 +6,7 @@ import java.util.Map.Entry;
 
 public class Ambito implements APITS {
 
-	private static String ERROR_PREFIX = "0func_err";
+	public static String ERROR_PREFIX = "0func_err";
 	
 	private Ambito father;
 	private HashMap<String, Command> ambito;
@@ -96,14 +96,7 @@ public class Ambito implements APITS {
 	@Override
 	public String toString() {
 		StringBuffer format = new StringBuffer();
-	
-		format.append("\n\n.... Start Ambito ...\n");		
-		
-		if (this.father != null) {
-			format.append("\nWe have Father ");
-			format.append(this.father.toString());			
-		}
-		
+				
 		format.append("Ambito...\n");
 		for (Entry<String, Command> entry : this.ambito.entrySet()) {
 			Command cmd = entry.getValue();
@@ -118,7 +111,13 @@ public class Ambito implements APITS {
 				format.append(String.format("Defined variable : %s\n", var.toString()));
 			}
 		}
-		format.append("\n.... End Ambito ...\n");		
+		
+		if (this.father != null) {
+			format.append("\nWe have Father ");
+			format.append(this.father.toString());			
+		} else {
+			format.append("................... END AMBITO .......................\n");			
+		}
 		return format.toString();
 	}
 

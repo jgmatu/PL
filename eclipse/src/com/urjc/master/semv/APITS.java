@@ -9,10 +9,8 @@ public interface APITS {
       public static enum EnumCommands {
             FUNCTION, PARAMETERS, VARIABLE
       };
-
-      public boolean insertaId(String id, EnumType tipo, EnumCommands cmd);
       
-      public Commands buscaId(String id);
+      public Command buscaId(String id);
 
       public boolean insertaTipo(String id, EnumType tipo);
 

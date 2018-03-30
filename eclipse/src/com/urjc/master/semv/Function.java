@@ -5,15 +5,16 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import com.urjc.master.semv.APITS.EnumType;
-import com.urjc.master.semv.Commands;
+import com.urjc.master.semv.Command;
 
-public class Function extends Commands {
+public class Function extends Command {
 
 	private List<Variable> parametros;
 	private Ambito ambito;
 
 	public Function(String id, Ambito father) {
 		super(id, EnumType.ERROR);
+		
 		this.ambito = new Ambito(father);
 		this.parametros = new ArrayList<>();
 	}
@@ -24,7 +25,10 @@ public class Function extends Commands {
 
 		if (success) {
 			this.parametros.add(v);
-			this.ambito.insertaId(id, tipo, APITS.EnumCommands.VARIABLE);
+			this.ambito.insertaIdVariable(new Variable(id, tipo));
+		} else {
+			System.err.println("Ya existe un parámetro con ese identificador");
+			this.parametros.add(new Variable(id, EnumType.ERROR));	
 		}
 		return success;
 	}

@@ -5,16 +5,16 @@ import java.util.Map.Entry;
 
 public class Ambito implements APITS {
 
-	private HashMap<String, Commands> ambito;
 	private Ambito father;
+	private HashMap<String, Command> ambito;
 
 	public Ambito() {
-		this.ambito = new HashMap<String, Commands>();
+		this.ambito = new HashMap<String, Command>();
 		this.father = null;
 	}
 
 	public Ambito(Ambito father) {
-		this.ambito = new HashMap<String, Commands>();
+		this.ambito = new HashMap<String, Command>();
 		this.father = father;
 	}
 
@@ -22,34 +22,22 @@ public class Ambito implements APITS {
 		return this.addEntryAmbito(idLexema, new Function(idLexema, this));
 	}
 	
-	public boolean insertaId(String idLexema, EnumType tipo ,EnumCommands cmd) {
-		switch (cmd) {
-		
-			case PARAMETERS:				
-				
-				// buscar el id en la funcion y agregarle el parametro
-				Function function = (Function) this.buscaId(idLexema);
-				return function.insertarSingleParametro(idLexema, tipo); 
-				
-			case VARIABLE:
-				return this.addEntryAmbito(idLexema, new Variable(idLexema, tipo));
-		
-			default:
-				// error
-				return false;
-		}
+	public boolean insertaIdVariable(Variable var) {
+		return this.addEntryAmbito(var.id, var);		
 	}
-	
-	private boolean addEntryAmbito(String id, Commands commands) {
+		
+	private boolean addEntryAmbito(String id, Command commands) {
 		boolean success = !this.ambito.containsKey(id);
 		
 		if (success) {
 			this.ambito.put(id, commands);						
+		} else {
+			System.err.println("The id is defined and not is possible insert in this ambito...");
 		}
 		return success;
 	}
 
-	public Commands buscaId(String id) {
+	public Command buscaId(String id) {
 		if (this.ambito.containsKey((id))) {
 			return this.ambito.get(id);			
 		} else {
@@ -59,16 +47,19 @@ public class Ambito implements APITS {
 			return null;
 		}
 	}
-
-	public boolean insertaTipo(String id, EnumType tipo) {
-		Commands cmd = this.ambito.get(id);
-		cmd.tipo = tipo;
-		return true;
-	}
 	
 	// ExpTipo -> TBAS || TBAS x TBAS x TBAS || TBAS x TBAS -> TBAS
 	public Ambito getFather(){
 		return this.father;
+	}
+
+	public boolean insertaTipo(String id, EnumType tipo) {
+		Command cmd = this.ambito.get(id);
+		
+		if (cmd != null) {
+			cmd.tipo = tipo;			
+		}
+		return cmd != null;
 	}
 	
 	@Override
@@ -76,14 +67,15 @@ public class Ambito implements APITS {
 		StringBuffer format = new StringBuffer();
 		
 		
-		format.append("Father...\n");
 		if (this.father != null) {
+			format.append("\nWe have Father ");
 			format.append(this.father.toString());			
 		}
 		
-		format.append("Ambito....\n");
-		for (Entry<String, Commands> pair : this.ambito.entrySet()) {
-			Commands cmd = pair.getValue();
+		format.append("Ambito...\n");
+		for (Entry<String, Command> pair : this.ambito.entrySet()) {
+			Command cmd = pair.getValue();
+		
 			if (cmd instanceof Function) {
 				Function fun = (Function) cmd;
 				format.append(String.format("Defined funcion... %s\n", fun.toString()));
@@ -104,6 +96,13 @@ public class Ambito implements APITS {
 
 	@Override
 	public EnumType dameTipo(String id) {
-		return this.ambito.get(id).dameTipo();
+		if (this.ambito.containsKey(id)) {
+			return this.ambito.get(id).dameTipo();
+		}
+		if (this.father != null) {
+			return this.father.dameTipo(id);
+		}
+		return EnumType.ERROR;
 	}
+
 }

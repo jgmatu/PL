@@ -21,15 +21,17 @@ public class Function_Test {
 		assertNull(fun);
 		
 		Ambito root = new Ambito();
-		fun = new Function("main", EnumType.FLOAT, root);
+		fun = new Function("main", root);
+		fun.insertaTipo(EnumType.FLOAT);
 		assertNotNull(fun);
-		
-		assertEquals(EnumType.FLOAT, fun.getTipo());
+
+		assertEquals(EnumType.FLOAT, fun.dameTipo());
 	}
 	
 	@Test
 	public void testInsertarSingleParametro() {
-		Function fun = new Function("main", EnumType.FLOAT, new Ambito());
+		Function fun = new Function("main", new Ambito());
+		fun.insertaTipo(EnumType.FLOAT);
 		assertTrue(fun.insertarSingleParametro("a", EnumType.FLOAT));
 		assertFalse(fun.insertarSingleParametro("a", EnumType.FLOAT));
 		assertFalse(fun.insertarSingleParametro("a", EnumType.INT));
@@ -56,8 +58,9 @@ public class Function_Test {
 	
 	@Test
 	public void testInsertarParametroso() {
-		Function fun = new Function("main", EnumType.FLOAT, new Ambito());
+		Function fun = new Function("main", new Ambito());
 		
+		fun.insertaTipo(EnumType.FLOAT);
 		ListParams listparam = new ListParams();
 		listparam.insertar("a", EnumType.FLOAT);
 		listparam.insertar("b", EnumType.FLOAT);

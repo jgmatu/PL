@@ -2,12 +2,12 @@ package com.urjc.master.semv;
 
 import com.urjc.master.semv.APITS.EnumType;
 
-public class Commands {
+public class Command {
 
 	protected String id;
 	protected EnumType tipo;
 
-	public Commands(String id, EnumType tipo) {
+	public Command(String id, EnumType tipo) {
 		this.id = id;
 		this.tipo = tipo;
 	}
@@ -20,7 +20,7 @@ public class Commands {
 		this.tipo = tipo;
 	}
 
-	public boolean compTipos(Commands c) {
+	public boolean compTipos(Command c) {
 		return this.tipo == c.dameTipo();
 	}
 

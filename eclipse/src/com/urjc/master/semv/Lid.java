@@ -3,12 +3,16 @@ package com.urjc.master.semv;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.urjc.master.semv.APITS.EnumType;
+
 public class Lid {
 	
 	private List<String> idList;
+	private EnumType tipo;
 	
 	public Lid() {
 		 idList = new ArrayList<>();
+		 this.tipo = EnumType.ERROR;
 	}
 	
 	public List<String> getList() {
@@ -23,4 +27,12 @@ public class Lid {
 		this.idList.add(a);
 	}
 
+	public void insertaTipo(EnumType tipo) {
+		this.tipo = tipo;
+	}
+	
+	public EnumType dameTipo() {
+		return this.tipo;
+	}
+	
 }

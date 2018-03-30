@@ -108,7 +108,7 @@ non terminal FACTOR;
 non terminal EnumType TYPE;
 non terminal Lid LID;
 non terminal ListParams LISTPARAM;
-non terminal String RESTPART;
+non terminal Command RESTPART;
 non terminal LCOND;
 non terminal LCONDT;
 non terminal LCONDF;
@@ -117,51 +117,60 @@ non terminal OPR;
 
 /* GRAMMAR */
 PROGRAM ::= PART PROGRAM;
-PROGRAM ::= PART {: System.out.println(root.toString()); :};
+PROGRAM ::= PART {: System.out.println("FIN DE PROGRAMA"); :};
 
 
-PART ::= TYPE:type RESTPART:idLexema {: 
-
-	Function function = (Function) this.root.buscaId(idLexema);
-	function.insertaTipo(type);	
-
+PART ::= TYPE:type RESTPART:command {: 
+	if (command instanceof Function) {
+		Function function = (Function) command;
+		function.insertaTipo(type);		
+	}
+	this.actual = this.root;	
 :};
 
-
+/*
+ * Definición de función
+ */
 RESTPART ::= tid:idLexema l_par LISTPARAM:list {:
 	
 	this.root.insertaIdFunction(idLexema);
 	Function function = (Function) this.root.buscaId(idLexema);
-	function.insertarParametros(list);
 	this.actual = function.getAmbito();
 	
-	RESULT = idLexema;
+	function.insertarParametros(list);
+	
+	System.out.println(this.actual.toString());	
+
+	RESULT = function;
 	
 :} r_par BLQ;
 
+/*
+ * Definición de función
+ */
 RESTPART ::= tid:idLexema l_par tvoid r_par {: 
 
 	this.root.insertaIdFunction(idLexema);
 	Function function = (Function) this.root.buscaId(idLexema);
 	this.actual = function.getAmbito();
-	
-	RESULT = idLexema;
+		
+	RESULT = function;
 
 :} BLQ;
 
 
-LISTPARAM ::= LISTPARAM:listparam comma TYPE:type tid:idLexema {: 
+LISTPARAM ::= LISTPARAM:listparams comma TYPE:type tid:id {: 
 
-	listparam.insertar(idLexema, type);
-	RESULT = listparam;		
+	listparams.insertar(id, type);
+	RESULT = listparams;		
 
 :};
 
 LISTPARAM ::= TYPE:type tid:id {: 
 
-	ListParams listparam = new ListParams();
-	listparam.insertar(id, type);
-	RESULT = listparam;
+	ListParams listparams = new ListParams();
+	listparams.insertar(id, type);
+	RESULT = listparams;
 	
 :};
 
@@ -179,11 +188,10 @@ BLQ ::= l_brace {:
 SENTLIST ::= SENTLIST SENT;
 SENTLIST ::= SENT;
 
-
 SENT ::= TYPE:type LID:lid  {: 
 
 	for(String id : lid.getList()) {
-		this.actual.insertaId(id, type, APITS.EnumCommands.VARIABLE);
+		this.actual.insertaIdVariable(new Variable(id, type));
 	}
 	
 :} semicolon;
@@ -200,8 +208,8 @@ SENT ::= BLQ;
 LID ::= tid:id {: 
 
 	Lid lid = new Lid();
-
 	lid.add(id);
+	
 	RESULT = lid; 
 :};
 

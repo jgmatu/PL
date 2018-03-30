@@ -31,6 +31,6 @@ public class LISTPARAM_Test {
 		listparam.insertar("c", EnumType.INT);
 		listparam.insertar("d", EnumType.INT);
 		listparam.insertar("e", EnumType.INT);
-		assertEquals(parametros.size(), 2);//The size are the types
+		assertEquals(parametros.size(), 5); //The size are the types
 	}
 }

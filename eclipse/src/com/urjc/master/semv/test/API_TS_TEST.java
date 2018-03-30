@@ -4,9 +4,10 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.urjc.master.semv.APITS.EnumCommands;
+
 import com.urjc.master.semv.APITS.EnumType;
 import com.urjc.master.semv.Ambito;
+import com.urjc.master.semv.Command;
 import com.urjc.master.semv.Function;
 import com.urjc.master.semv.Variable;
 
@@ -30,11 +31,18 @@ public class API_TS_TEST {
 		Ambito root = new Ambito();
 		Ambito child = new Ambito(root);
 
-		assertTrue(child.insertaId("idBla", EnumType.FLOAT, EnumCommands.FUNCTION));
-		assertTrue(root.insertaId("idBle", EnumType.INT, EnumCommands.VARIABLE));
-
-		assertFalse(root.insertaId("idBle", EnumType.INT, EnumCommands.VARIABLE));
-		assertFalse(root.insertaId("idBle", EnumType.INT, EnumCommands.FUNCTION));
+		assertTrue(child.insertaIdFunction("idBla"));		
+		Command cmd = child.buscaId("idBla");
+		assertNotNull(cmd);
+		if (cmd instanceof Function) {
+			Function fun = (Function) cmd;
+			fun.insertaTipo(EnumType.VOID);
+		}
+		
+		assertTrue(root.insertaIdVariable(new Variable("idBle", EnumType.INT)));
+		assertFalse(root.insertaIdVariable(new Variable("idBle", EnumType.INT)));
+		assertFalse(root.insertaIdFunction("idBle"));
+		
 	}
 
 	@Test
@@ -42,14 +50,25 @@ public class API_TS_TEST {
 		Ambito root = new Ambito();
 		Ambito child = new Ambito(root);
 
-		assertTrue(child.insertaId("idBla", EnumType.FLOAT, EnumCommands.FUNCTION));
-		assertTrue(root.insertaId("idBle", EnumType.INT, EnumCommands.VARIABLE));
-
-		Function fun = (Function) child.buscaId("idBla");
-		assertEquals(EnumType.FLOAT, fun.getTipo());
-
+		assertTrue(child.insertaIdFunction("idBla"));
+		Command cmd = child.buscaId("idBla");
+		assertNotNull(cmd);
+		if (cmd instanceof Function) {
+			Function func = (Function) cmd;
+			func.insertaTipo(EnumType.FLOAT);
+		} else {
+			fail();
+		}
+		
+		assertTrue(root.insertaIdVariable(new Variable("idBle", EnumType.INT)));
+		
+		cmd = child.buscaId("idBla");
+		if (cmd instanceof Function) {
+			Function fun = (Function) cmd;
+			assertEquals(EnumType.FLOAT, fun.dameTipo());			
+		}
+		
 		assertNull(child.buscaId("false"));
-
 		assertNotNull(child.buscaId("idBle"));
 		assertNull(child.buscaId("idBlo"));
 	}
@@ -57,25 +76,32 @@ public class API_TS_TEST {
 	@Test
 	public void testDameTipo() {
 		Ambito root = new Ambito();
-		Ambito child = new Ambito(root);
+		Ambito functionAmbito = new Ambito(root);
 
-		Function fun = new Function("idBla", EnumType.FLOAT, child);
-		assertEquals(EnumType.FLOAT, child.dameTipo(fun));
-		assertEquals(EnumType.FLOAT, fun.getTipo());
+		Function fun = new Function("idBla", functionAmbito);
+		
+		root.insertaIdFunction("idBla");
+		assertEquals(EnumType.ERROR, functionAmbito.dameTipo("idBla"));
+		
+		fun.insertaTipo(EnumType.FLOAT);
+		assertEquals(EnumType.FLOAT, fun.dameTipo());
 
 		Variable v = new Variable("idBle", EnumType.INT);
-		assertEquals(EnumType.INT, v.getTipo());
-		assertEquals(EnumType.INT, root.dameTipo(v));
+		assertEquals(EnumType.INT, v.dameTipo());
+		functionAmbito.insertaIdVariable(new Variable("idBle", EnumType.INT));
+		assertEquals(EnumType.INT, functionAmbito.dameTipo("idBle"));
 	}
 
 	@Test
 	public void testInsertaTipo() {
 		Ambito root = new Ambito();
-		Variable v = new Variable("idBle", EnumType.INT);
-		assertEquals(EnumType.INT, root.dameTipo(v));
-		assertFalse(EnumType.FLOAT == root.dameTipo(v));
 
-		root.insertaTipo(v, EnumType.FLOAT);
-		assertEquals(EnumType.FLOAT, root.dameTipo(v));
+		root.insertaIdVariable(new Variable("idBle", EnumType.INT));
+
+		assertEquals(EnumType.INT, root.dameTipo("idBle"));
+		assertNotEquals(EnumType.FLOAT, root.dameTipo("idBle"));
+
+		root.insertaTipo("idBle", EnumType.FLOAT);
+		assertEquals(EnumType.FLOAT, root.dameTipo("idBle"));
 	}
 }

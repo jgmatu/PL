@@ -12,6 +12,7 @@ public class Analizador {
 			AnalizadorLexico lexico = null;
 
 			try {
+				
 				lexico = new AnalizadorLexico(new java.io.FileReader(argv[i]));
 				parser sintactico = new parser(lexico);
 				sintactico.parse();

@@ -158,13 +158,17 @@ RESTPART ::= tid:idLexema l_par LISTPARAM:list {:
 RESTPART ::= tid:idLexema l_par tvoid r_par {: 
 	boolean success = this.root.insertaIdFunction(idLexema);
 
+	Function function = null;
+	
 	if (success) {
-		Function function = (Function) this.root.buscaId(idLexema);
-		this.actual = function.getAmbito();	
-		RESULT = function;
+		function = (Function) this.root.buscaId(idLexema);
+		this.actual = function.getAmbito();
 	} else {
-		RESULT = null;
+		function = (Function) this.root.buscaId(ERROR_PREFIX + idLexema);
+		this.actual = function.getAmbito();
 	}
+	
+	RESULT = function;
 :} BLQ;
 
 
@@ -209,7 +213,7 @@ SENT ::= tid assig EXP semicolon {:
 :};
 
 SENT ::= tid l_par LID r_par semicolon {: 
-	System.err.println("Llamada a función!!!"); 
+	System.err.println("Llamada a función!!"); 
 :};
 
 SENT ::= treturn EXP semicolon {: 

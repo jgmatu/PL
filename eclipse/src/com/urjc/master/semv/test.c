@@ -40,17 +40,28 @@ ble(int argc, int argv)
 }
 
 int 
-ble(int argc, int argv) 
+blo(int argc, int argv) 
 {
     int a, b;
     float c, d;
+    
+    a = 10;
+    while (a < 10) {
+        ;
+    }
 }
 
 
 int 
-ble(int argc, int argv) 
+blu(int argc, int argv) 
 {
     int a, b;
     float c, d;
+
+    a = 10;
+    do {
+        a = a - 1;
+    } until(a < 10);
+        
 }
 

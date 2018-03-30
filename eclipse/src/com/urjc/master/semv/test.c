@@ -6,7 +6,7 @@ main(int argc, float argv)
       int a, b;
 }
 
-
+/*
 int 
 ble(int argc, int argv) 
 {
@@ -64,4 +64,4 @@ blu(int argc, int argv)
     } until(a < 10);
         
 }
-
+*/

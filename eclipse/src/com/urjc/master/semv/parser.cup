@@ -205,12 +205,11 @@ SENT ::= TYPE:type LID:lid {:
 :} semicolon;
 
 SENT ::= tid assig EXP semicolon {: 
-	System.err.println("Asignacion"); 
-
+	System.err.println("Asignacion");
 :};
 
 SENT ::= tid l_par LID r_par semicolon {: 
-	System.err.println("Lista de identificadores"); 
+	System.err.println("Llamada a función!!!"); 
 :};
 
 SENT ::= treturn EXP semicolon {: 

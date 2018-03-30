@@ -36,11 +36,14 @@ public class Ambito implements APITS {
 			this.ambito.put(id, command);						
 		} else {
 			printError(command);
-			id = ERROR_PREFIX + id;
-			command.id = id;
-			this.ambito.put(id, command);
+			putError(command);
 		}
 		return success;
+	}
+	
+	private void putError(Command command) {
+		command.id = ERROR_PREFIX + command.id;
+		this.ambito.put(command.id, command);		
 	}
 	
 	public Command buscaError() {

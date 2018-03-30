@@ -12,6 +12,19 @@ ble(int argc, int argv)
 {
     int a, b;
     float c, d;
+    
+    a = 3;
+    b = 4;
+
+    if (a == 3) then {
+        ;
+    } else {
+        ;
+    }
+
+    if (a < 3) then {
+        ;
+    }
 }
 
 

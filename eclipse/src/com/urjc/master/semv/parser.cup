@@ -125,6 +125,7 @@ PART ::= TYPE:type RESTPART:command {:
 		Function function = (Function) command;
 		function.insertaTipo(type);		
 	}
+	System.out.println(this.actual.toString());	
 	this.actual = this.root;	
 :};
 
@@ -138,9 +139,6 @@ RESTPART ::= tid:idLexema l_par LISTPARAM:list {:
 	this.actual = function.getAmbito();
 	
 	function.insertarParametros(list);
-	
-	System.out.println(this.actual.toString());	
-
 	RESULT = function;
 	
 :} r_par BLQ;

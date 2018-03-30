@@ -27,7 +27,8 @@ public class Function extends Command {
 			this.parametros.add(v);
 			this.ambito.insertaIdVariable(new Variable(id, tipo));
 		} else {
-			System.err.println("Ya existe un parámetro con ese identificador");
+			System.err.println(String.format("Ya existe un parámetro %s"
+					+ " en la función : %s", id, this.id));
 			this.parametros.add(new Variable(id, EnumType.ERROR));	
 		}
 		return success;
@@ -43,7 +44,7 @@ public class Function extends Command {
 	}
 	
 	public void eraseAmbito() {
-		this.ambito.erase();
+		this.ambito = null;
 	}
 
 	public Ambito getAmbito() {

@@ -1,10 +1,13 @@
 package com.urjc.master.semv;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 public class Ambito implements APITS {
 
+	private static String ERROR_PREFIX = "0func_err";
+	
 	private Ambito father;
 	private HashMap<String, Command> ambito;
 
@@ -19,22 +22,47 @@ public class Ambito implements APITS {
 	}
 
 	public boolean insertaIdFunction(String idLexema) {
-		return this.addEntryAmbito(idLexema, new Function(idLexema, this));
+		return this.addEntry(idLexema, new Function(idLexema, this));
 	}
 	
 	public boolean insertaIdVariable(Variable var) {
-		return this.addEntryAmbito(var.id, var);		
+		return this.addEntry(var.id, var);		
 	}
 		
-	private boolean addEntryAmbito(String id, Command commands) {
+	private boolean addEntry(String id, Command command) {
 		boolean success = !this.ambito.containsKey(id);
 		
 		if (success) {
-			this.ambito.put(id, commands);						
+			this.ambito.put(id, command);						
 		} else {
-			System.err.println("The id is defined and not is possible insert in this ambito...");
+			printError(command);
+			id = ERROR_PREFIX + id;
+			command.id = id;
+			this.ambito.put(id, command);
 		}
 		return success;
+	}
+	
+	public Command buscaError() {
+		for (Map.Entry<String, Command> entry : this.ambito.entrySet()) {
+			if (entry.getKey().contains(ERROR_PREFIX)) {
+				return entry.getValue();
+			}
+		}
+		return null;
+	}
+	
+	public void deleteError(Command err) {
+		this.ambito.remove(err.id);
+	}
+	
+	private void printError(Command command) {
+		if (command instanceof Function) {
+			System.err.println(String.format("The function %s already exist\n", command.id));
+		}
+		if (command instanceof Variable) {
+			System.err.println(String.format("The variable %s already exist\n", command.id));
+		}
 	}
 
 	public Command buscaId(String id) {
@@ -46,10 +74,6 @@ public class Ambito implements APITS {
 			}
 			return null;
 		}
-	}
-
-	public void erase() {
-		this.ambito = null;
 	}
 	
 	// ExpTipo -> TBAS || TBAS x TBAS x TBAS || TBAS x TBAS -> TBAS

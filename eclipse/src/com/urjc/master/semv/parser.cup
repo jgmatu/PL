@@ -101,6 +101,7 @@ PROGRAM ::= PART PROGRAM {:
 :};
 
 PROGRAM ::= PART {:
+	System.out.println(this.actual.toString());
 	System.err.println("FIN DE PROGRAMA"); 	
 :};
 

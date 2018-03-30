@@ -33,6 +33,10 @@ ble(int argc, int argv)
 {
     int a, b;
     float c, d;
+
+    for (a = 0; a < 10; a = a + 1) {
+        ;
+    }
 }
 
 int 

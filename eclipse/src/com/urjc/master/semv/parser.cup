@@ -251,6 +251,7 @@ LID ::= tid:id {:
 	Lid lid = new Lid();
 	lid.add(id);
 	RESULT = lid; 
+	
 :};
 
 LID ::= tid:id comma LID:lid {:

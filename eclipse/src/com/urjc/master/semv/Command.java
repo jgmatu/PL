@@ -4,8 +4,8 @@ import com.urjc.master.semv.APITS.EnumType;
 
 public class Command {
 
-	protected String id;
-	protected EnumType tipo;
+	private String id;
+	private EnumType tipo;
 
 	public Command(String id, EnumType tipo) {
 		this.id = id;
@@ -28,10 +28,10 @@ public class Command {
 	public String toString() {
 		StringBuffer format = new StringBuffer();
 
-		format.append(String.format("\n\tId : %s, type : %s\n", this.id, getStringType(this.tipo)));
+		format.append("\n\tId : " + this.id + ", type : " + this.tipo + "\n");
 		return format.toString();
 	}
-
+/*
 	protected String getStringType(EnumType type) {
 		switch (type) {
 		case FLOAT:
@@ -45,5 +45,21 @@ public class Command {
 		default:
 			return "";
 		}
+	}*/
+
+	public String getId() {
+		return id;
 	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public EnumType getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(EnumType tipo) {
+		this.tipo = tipo;
+	}	
 }

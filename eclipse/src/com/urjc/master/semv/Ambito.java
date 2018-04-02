@@ -26,24 +26,23 @@ public class Ambito implements APITS {
 	}
 	
 	public boolean insertaIdVariable(Variable var) {
-		return this.addEntry(var.id, var);		
+		return this.addEntry(var.getId(), var);		
 	}
 		
 	private boolean addEntry(String id, Command command) {
-		boolean success = !this.existId(id);
-		
+		boolean success = !this.existId(id);		
 		if (success) {
-			this.ambito.put(id, command);						
+			this.ambito.put(id, command);			
 		} else {
-			printError(command);
-			putError(command);
+			this.printErrorAlreadyExists(command);
+			this.putError(command);
 		}
 		return success;
 	}
 	
 	private void putError(Command command) {
-		command.id = ERROR_PREFIX + command.id;
-		this.ambito.put(command.id, command);		
+		command.setId(ERROR_PREFIX + command.getId());
+		this.ambito.put(command.getId(), command);		
 	}
 	
 	public Command buscaError() {
@@ -56,34 +55,33 @@ public class Ambito implements APITS {
 	}
 	
 	public void deleteError(Command err) {
-		this.ambito.remove(err.id);
+		this.ambito.remove(err.getId());
 	}
 	
-	private void printError(Command command) {
-		if (command instanceof Function) {
-			System.err.println(String.format("The function %s already exist\n", command.id));
-		}
-		if (command instanceof Variable) {
-			System.err.println(String.format("The variable %s already exist\n", command.id));
-		}
+	private void printErrorAlreadyExists(Command command) {
+		System.err.println("The " + command.getClass().getSimpleName() + " " + command.getId() + " already exist\n");
 	}
 
 	public Command buscaId(String id) {
 		if (this.ambito.containsKey((id))) {
 			return this.ambito.get(id);			
-		} else {
-			if (this.father != null) {
-				return this.father.buscaId(id);				
-			}
-			return null;
-		}
+		} 
+		if (this.hasFather()) {
+			return this.father.buscaId(id);				
+		}		
+		return null;
+	}
+	
+	public boolean hasFather(){
+		return this.father != null;
 	}
 	
 	public boolean existId(String id) {
-		if (this.father != null) {
-			return this.father.existId(id) || this.ambito.containsKey(id);
+		boolean exist = this.ambito.containsKey(id);
+		if(!exist && this.hasFather()) {
+			return this.father.existId(id);			
 		}
-		return this.ambito.containsKey(id);
+		return exist;
 	}
 	
 	// ExpTipo -> TBAS || TBAS x TBAS x TBAS || TBAS x TBAS -> TBAS
@@ -92,12 +90,11 @@ public class Ambito implements APITS {
 	}
 
 	public boolean insertaTipo(String id, EnumType tipo) {
-		Command cmd = this.ambito.get(id);
-		
-		if (cmd != null) {
-			cmd.tipo = tipo;			
+		boolean exit = this.ambito.containsKey(id);
+		if(exit){
+			this.ambito.get(id).setTipo(tipo);
 		}
-		return cmd != null;
+		return exit;
 	}
 	
 	@Override
@@ -108,15 +105,20 @@ public class Ambito implements APITS {
 		for (Entry<String, Command> entry : this.ambito.entrySet()) {
 			Command cmd = entry.getValue();
 		
+			switch(cmd.getClass().getSimpleName()){
+				case "Function": format.append("Defined funcion... " + cmd.toString() + "\n"); break;
+				case "Variable": format.append("Defined variable : " + cmd.toString() + "\n"); break;
+			}
+			/*
 			if (cmd instanceof Function) {
 				Function fun = (Function) cmd;
-				format.append(String.format("Defined funcion... %s\n", fun.toString()));
+				format.append("Defined funcion... " + fun.toString() + "\n");
 			}
 			
 			if (cmd instanceof Variable) {
 				Variable var = (Variable) cmd;
-				format.append(String.format("Defined variable : %s\n", var.toString()));
-			}
+				format.append("Defined variable : " + var.toString() + "\n");
+			}*/
 		}
 		
 		if (this.father != null) {
@@ -138,7 +140,7 @@ public class Ambito implements APITS {
 		if (this.ambito.containsKey(id)) {
 			return this.ambito.get(id).dameTipo();
 		}
-		if (this.father != null) {
+		if (this.hasFather()) {
 			return this.father.dameTipo(id);
 		}
 		return EnumType.ERROR;

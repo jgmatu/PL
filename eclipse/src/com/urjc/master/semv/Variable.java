@@ -22,6 +22,6 @@ public class Variable extends Command {
 			return false;
 		}
 		Variable v = (Variable) o;
-		return this.id.equals(v.id);
+		return this.getId().equals(v.getId());
 	}
 }

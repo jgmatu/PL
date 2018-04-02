@@ -27,8 +27,7 @@ public class Function extends Command {
 			this.parametros.add(v);
 			this.ambito.insertaIdVariable(new Variable(id, tipo));
 		} else {
-			System.err.println(String.format("Ya existe un par√°metro %s"
-					+ " en la funci√≥n : %s", id, this.id));
+			System.err.println("Ya existe un par·metro " + id + " en la funciÛn : " + super.getId());
 			this.parametros.add(new Variable(id, EnumType.ERROR));	
 		}
 		return success;
@@ -55,10 +54,10 @@ public class Function extends Command {
 	public String toString() {
 		StringBuffer format = new StringBuffer();
 
-		format.append(String.format("Function : %s return %s\n", this.id, this.getStringType(this.tipo)));
+		format.append("Function : " + super.getId() + " return " + super.dameTipo() + "\n");
 		format.append("Parameters... \n");
 		for (Variable var : this.parametros) {
-			format.append(String.format("\n\tParameter : %s\n", var.toString()));
+			format.append("\n\tParameter : " + var.toString() + "\n");
 		}
 		return format.toString();
 	}

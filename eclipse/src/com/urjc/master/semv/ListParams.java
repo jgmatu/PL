@@ -19,7 +19,7 @@ public class ListParams {
 		if (success) {
 			this.parametros.put(id, tipo);
 		} else {
-			System.err.println(String.format("The parameter : %s already exist...", id));
+			System.err.println("The parameter : " + id + " already exist...");
 		}
 	}
 	
@@ -32,7 +32,7 @@ public class ListParams {
 		StringBuffer format = new StringBuffer();
 
 		for (Entry<String, EnumType> pair : parametros.entrySet()) {
-			format.append(String.format("\n\tParam : %s\n", pair.getKey()));
+			format.append("\n\tParam : " + pair.getKey() + "\n");
 		}		
 		return format.toString();
 	}

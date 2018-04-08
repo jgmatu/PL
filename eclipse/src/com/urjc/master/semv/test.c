@@ -3,20 +3,23 @@ void
 main(int argc, float argv, int param)
 {
     int a, b;
-    float param;    
-
+ 
     a = 3;
+
     if (a < 3) then {
         int c;
         c = 1;
         b = a + c;
+    } else {
+        ;
     }
     if (a < 4) then {
         ;
+    } else { 
+        ;    
     }
 }
 
-/*
 int 
 ble(int argc, int argv, float param) 
 {
@@ -34,11 +37,11 @@ ble(int argc, int argv, float param)
 
     if (a < 3) then {
         ;
+    } else {
+    	;
     }
 }
-*/
 
-/*
 int 
 ble(int argc, int argv) 
 {
@@ -47,6 +50,9 @@ ble(int argc, int argv)
 
     for (a = 0; a < 10; a = a + 1) {
         ;
+    }
+    {
+    	int a;
     }
 }
 
@@ -75,4 +81,3 @@ blu(float argc, float argv, int param)
     } until(a < 10);
         
 }
-*/

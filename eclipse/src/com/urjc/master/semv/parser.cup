@@ -30,7 +30,7 @@ parser code{:
 action code {:
 	
 	private Ambito root = new Ambito();
-	private Ambito actual = new Ambito();
+	private Ambito actual = this.root;
 	
 :};
 
@@ -124,10 +124,7 @@ PART ::= TYPE:type RESTPART:command {:
 	if (command != null && command instanceof Function) {
 		Function function = (Function) command;
 		function.insertaTipo(type);		
-		function.eraseAmbito();
 	}
-	
-	this.actual = this.actual.getFather();
 :};
 
 /**
@@ -135,6 +132,7 @@ PART ::= TYPE:type RESTPART:command {:
  *
  */
 RESTPART ::= tid:idLexema l_par LISTPARAM:list {:
+
 	boolean success = this.root.insertaIdFunction(idLexema);
 	Function function = null;
 	
@@ -193,6 +191,7 @@ BLQ ::= l_brace {:
 	}
 	System.out.println(this.actual.toString());
 	this.actual = this.actual.getFather();
+
 :};
 
 SENTLIST ::= SENTLIST SENT;
@@ -216,30 +215,39 @@ SENT ::= treturn EXP semicolon {:
 	// System.err.println("Return statement"); 
 :};
 
-SENT ::= tif l_par LCOND r_par tthen BLQ telse BLQ {: 
-	// System.err.println("if statement with else"); 
-:};
 
+SENT ::= tif l_par LCOND r_par tthen {: 
+	this.actual = new Ambito(this.actual);
+
+:} BLQ telse {: 
+
+	this.actual = new Ambito(this.actual);
+
+:} BLQ;
+
+/*
 SENT ::= tif l_par LCOND r_par tthen BLQ {: 
+	this.actual = new Ambito(this.actual);
 	System.err.println("if statement no else end BLQ..."); 
 :};
+*/
 
+SENT ::= tfor l_par tid assig EXP semicolon LCOND semicolon tid assig EXP r_par {:
+	this.actual = new Ambito(this.actual);
+:} BLQ; 
 
-SENT ::= tfor l_par tid assig EXP semicolon LCOND semicolon tid assig EXP r_par BLQ {: 
-	// Comprobar tipo de la asignación del id con la expresión...
-	// System.err.println("for statement"); 	
-:}; 
+SENT ::= twhile l_par LCOND r_par {:
+	this.actual = new Ambito(this.actual);
+:} BLQ;
 
-SENT ::= twhile l_par LCOND r_par BLQ {:
-	// System.err.println("while statement"); 	
-:};
+SENT ::= tdo {:
+	this.actual = new Ambito(this.actual);
+:} BLQ tuntil l_par LCOND r_par;
 
-SENT ::= tdo BLQ tuntil l_par LCOND r_par {:
-	// System.err.println("do until statement"); 	
-:};
+SENT ::= {:
+	this.actual = new Ambito(this.actual);
+:} BLQ {:
 
-SENT ::= BLQ {:
-	// System.err.println("bloue anónimo..."); 	
 :};
 
 SENT ::= semicolon {:

@@ -7,5 +7,4 @@ public class Garrosh {
 		Function f = new Function("hola",null);
 		System.out.println(f.toString());
 	}
-
 }

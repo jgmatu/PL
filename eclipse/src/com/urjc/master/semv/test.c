@@ -1,18 +1,20 @@
 
-
 void
 main(int argc, float argv, int param)
 {
     int a, b;
-    
+    float param;    
+
     a = 3;
     if (a < 3) then {
         int c;
         c = 1;
         b = a + c;
     }
+    if (a < 4) then {
+        ;
+    }
 }
-
 
 /*
 int 

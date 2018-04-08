@@ -126,12 +126,13 @@ PART ::= TYPE:type RESTPART:command {:
 		function.insertaTipo(type);		
 		function.eraseAmbito();
 	}
-
+	
 	this.actual = this.actual.getFather();
 :};
 
-/*
+/**
  * Definición de función
+ *
  */
 RESTPART ::= tid:idLexema l_par LISTPARAM:list {:
 	boolean success = this.root.insertaIdFunction(idLexema);
@@ -139,13 +140,11 @@ RESTPART ::= tid:idLexema l_par LISTPARAM:list {:
 	
 	if (success) {
 		function = (Function) this.root.buscaId(idLexema);
-		this.actual = function.getAmbito();
-		function.insertarParametros(list);
 	} else {
 		function = (Function) this.root.buscaId(Ambito.ERROR_PREFIX + idLexema);
-		this.actual = function.getAmbito();
-		function.insertarParametros(list);
 	}
+	this.actual = function.getAmbito();
+	function.insertarParametros(list);
 	
 	RESULT = function;
 	
@@ -160,12 +159,11 @@ RESTPART ::= tid:idLexema l_par tvoid r_par {:
 	
 	if (success) {
 		function = (Function) this.root.buscaId(idLexema);
-		this.actual = function.getAmbito();
 	} else {
 		function = (Function) this.root.buscaId(Ambito.ERROR_PREFIX + idLexema);
-		this.actual = function.getAmbito();
 	}
-	
+	this.actual = function.getAmbito();
+
 	RESULT = function;
 :} BLQ;
 
@@ -187,9 +185,8 @@ LISTPARAM ::= TYPE:type tid:id {:
 
 BLQ ::= l_brace {: 
 
-	this.actual = new Ambito(this.actual);
-	
 :} SENTLIST r_brace {: 	
+
 	Command err = this.actual.buscaError();
 	if (err != null) {
 		this.actual.deleteError(err);
@@ -202,11 +199,9 @@ SENTLIST ::= SENTLIST SENT;
 SENTLIST ::= SENT;
 
 SENT ::= TYPE:type LID:lid {: 
-
 	for(String id : lid.getList()) {
 		this.actual.insertaIdVariable(new Variable(id, type));
-	}
-	
+	}	
 :} semicolon;
 
 SENT ::= tid assig EXP semicolon {: 
@@ -231,6 +226,7 @@ SENT ::= tif l_par LCOND r_par tthen BLQ {:
 
 
 SENT ::= tfor l_par tid assig EXP semicolon LCOND semicolon tid assig EXP r_par BLQ {: 
+	// Comprobar tipo de la asignación del id con la expresión...
 	// System.err.println("for statement"); 	
 :}; 
 
@@ -243,7 +239,7 @@ SENT ::= tdo BLQ tuntil l_par LCOND r_par {:
 :};
 
 SENT ::= BLQ {:
-	// System.err.println("sentencia bloque..."); 	
+	// System.err.println("bloue anónimo..."); 	
 :};
 
 SENT ::= semicolon {:
@@ -251,18 +247,14 @@ SENT ::= semicolon {:
 :};
 
 LID ::= tid:id {: 
-
 	Lid lid = new Lid();
 	lid.add(id);
 	RESULT = lid; 
-	
 :};
 
 LID ::= tid:id comma LID:lid {:
-
 	lid.add(id);
 	RESULT = lid; 
-
 :}; // Devolver tipo de tid a LID...
 
 // LID ::= /* empty */;
@@ -270,7 +262,6 @@ LID ::= tid:id comma LID:lid {:
 EXP ::= EXP add EXPT;
 EXP ::= EXP sub EXPT;
 EXP ::= EXPT;
-
 
 EXPT ::= EXPT mul FACTOR;
 EXPT ::= EXPT div FACTOR;
@@ -294,7 +285,6 @@ LCONDT  ::=  LCONDF;
 
 LCONDF ::= COND;
 LCONDF ::= tnot COND;
-
 
 COND ::= EXP OPR EXP;
 

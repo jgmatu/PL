@@ -1,4 +1,4 @@
-/********************************************************************/
+	/********************************************************************/
 /********************************************************************/
 /*****          Autores: Ruben Morante Gonzalez                 *****/
 /*****                   Francisco Javier                       *****/
@@ -191,39 +191,42 @@ BLQ ::= l_brace {:
 	}
 	System.out.println(this.actual.toString());
 	this.actual = this.actual.getFather();
-
 :};
 
 SENTLIST ::= SENTLIST SENT;
 SENTLIST ::= SENT;
 
+// Declare id's...
 SENT ::= TYPE:type LID:lid {: 
 	for(String id : lid.getList()) {
 		this.actual.insertaIdVariable(new Variable(id, type));
 	}	
 :} semicolon;
 
-SENT ::= tid assig EXP semicolon {: 
+
+// Assign....
+SENT ::= tid:idLexema assig EXP:type semicolon {: 
+	EnumType type = EnumType.ERROR;
+	
+	Command cmd = this.actual.buscaId(idLexema);
+	if (cmd == null) {
+		System.err.println("No existe el identificador de la assignación");
+		RESULT = EnumType.ERROR;
+	} else {
+		RESULT = EnumType.VOID;
+	}
 	// System.err.println("Asignacion");
 :};
 
+// Call function...
 SENT ::= tid l_par LID r_par semicolon {: 
 	// System.err.println("Llamada a función!!"); 
 :};
 
+// return....
 SENT ::= treturn EXP semicolon {: 
 	// System.err.println("Return statement"); 
 :};
-
-
-SENT ::= tif l_par LCOND r_par tthen {: 
-	this.actual = new Ambito(this.actual);
-
-:} BLQ telse {: 
-
-	this.actual = new Ambito(this.actual);
-
-:} BLQ;
 
 /*
 SENT ::= tif l_par LCOND r_par tthen BLQ {: 
@@ -232,20 +235,43 @@ SENT ::= tif l_par LCOND r_par tthen BLQ {:
 :};
 */
 
-SENT ::= tfor l_par tid assig EXP semicolon LCOND semicolon tid assig EXP r_par {:
-	this.actual = new Ambito(this.actual);
-:} BLQ; 
+// if then else...
+SENT ::= tif l_par LCOND r_par tthen {: 
 
-SENT ::= twhile l_par LCOND r_par {:
 	this.actual = new Ambito(this.actual);
+
+:} BLQ telse {: 
+
+	this.actual = new Ambito(this.actual);
+
 :} BLQ;
 
-SENT ::= tdo {:
+// for...
+SENT ::= tfor l_par tid assig EXP semicolon LCOND semicolon tid assig EXP r_par {:
+
 	this.actual = new Ambito(this.actual);
+
+:} BLQ; 
+
+// while ..
+SENT ::= twhile l_par LCOND r_par {:
+
+	this.actual = new Ambito(this.actual);
+
+:} BLQ;
+
+// do while...
+SENT ::= tdo {:
+
+	this.actual = new Ambito(this.actual);
+
 :} BLQ tuntil l_par LCOND r_par;
 
+// Bloque anonimo
 SENT ::= {:
+
 	this.actual = new Ambito(this.actual);
+
 :} BLQ {:
 
 :};
@@ -255,27 +281,82 @@ SENT ::= semicolon {:
 :};
 
 LID ::= tid:id {: 
+
 	Lid lid = new Lid();
 	lid.add(id);
 	RESULT = lid; 
+
 :};
 
 LID ::= tid:id comma LID:lid {:
+
 	lid.add(id);
 	RESULT = lid; 
+	
 :}; // Devolver tipo de tid a LID...
 
 // LID ::= /* empty */;
 
-EXP ::= EXP add EXPT;
-EXP ::= EXP sub EXPT;
-EXP ::= EXPT;
+EXP ::= EXP:typeExp add EXPT:typeExpt {: 
+	EnumType type = EnumType.ERROR;
+	
+	RESULT = type;
+:};
 
-EXPT ::= EXPT mul FACTOR;
-EXPT ::= EXPT div FACTOR;
-EXPT ::= FACTOR;
+EXP ::= EXP:typeExp sub EXPT:typeExpt {:
+	EnumType type = EnumType.ERROR;
+	
+	RESULT = type;	
+:};
 
-FACTOR ::= tid l_par LID r_par;
+EXP ::= EXPT:type {:	
+	RESULT = type;
+:};
+
+EXPT ::= EXPT:typeExpr mul FACTOR:typeFactor {:
+	EnumType type = EnumType.ERROR;
+	
+	RESULT = type;
+:};
+
+EXPT ::= EXPT:typeExpr div FACTOR:typeFactor {:
+	EnumType type = EnumType.ERROR;
+	
+	RESULT = type;
+:};
+
+EXPT ::= FACTOR:type {:	
+	RESULT = type;
+:};
+
+// Llamada a función evaluar..
+FACTOR ::= tid:idLexema l_par LID:lid r_par {:
+	Function func = null;
+	Command cmd = null;
+	EnumType type = EnumType.ERROR;
+		
+	cmd = this.actual.buscaId(idLexema);
+	if (cmd == null && !(cmd instanceof Function)) {
+		System.err.println("The function not exist..");
+		type = EnumType.ERROR;
+	} else {
+		func = (Function) cmd;
+		type = cmd.getTipo();
+	}
+	
+	if (type != EnumType.ERROR && func != null) {
+		TupleTypes idTypes_1 = this.actual.buscaIdsType(lid);
+		TupleTypes idTypes_2 = func.getParamsTypes();
+		boolean success = idTypes_1.compare(idTypes_2);
+		if (!success) {
+			type = EnumType.ERROR;
+		}
+	} else {
+		type = EnumType.ERROR;
+	}
+	RESULT = type;
+:};
+
 FACTOR ::= l_bracket EXP r_bracket;
 FACTOR ::= tid;
 FACTOR ::= constint;

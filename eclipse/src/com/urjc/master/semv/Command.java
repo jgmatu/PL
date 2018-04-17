@@ -31,21 +31,6 @@ public class Command {
 		format.append("\n\tId : " + this.id + ", type : " + this.tipo + "\n");
 		return format.toString();
 	}
-/*
-	protected String getStringType(EnumType type) {
-		switch (type) {
-		case FLOAT:
-			return "FLOAT";
-		case INT:
-			return "INT";
-		case VOID:
-			return "VOID";
-		case ERROR:
-			return "ERROR";
-		default:
-			return "";
-		}
-	}*/
 
 	public String getId() {
 		return id;

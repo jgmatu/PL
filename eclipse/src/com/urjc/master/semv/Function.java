@@ -27,7 +27,7 @@ public class Function extends Command {
 			this.parametros.add(v);
 			this.ambito.insertaIdVariable(new Variable(id, tipo));
 		} else {
-			System.err.println("Ya existe un parámetro " + id + " en la función : " + super.getId());
+			System.err.println("Ya existe un parï¿½metro " + id + " en la funciï¿½n : " + super.getId());
 			this.parametros.add(new Variable(id, EnumType.ERROR));	
 		}
 		return success;
@@ -40,6 +40,15 @@ public class Function extends Command {
 			success = insertarSingleParametro(entry.getKey(), entry.getValue()) && success;
 		}
 		return success;
+	}
+	
+	public TupleTypes getParamsTypes() {
+		TupleTypes types = new TupleTypes();
+		
+		for (Variable v: this.parametros) {
+			types.insert(v.getId(), v.dameTipo());
+		}
+		return types;
 	}
 	
 	public void eraseAmbito() {

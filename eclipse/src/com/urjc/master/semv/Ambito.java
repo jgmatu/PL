@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.urjc.master.semv.APITS.EnumType;
+
 public class Ambito implements APITS {
 
 	public static String ERROR_PREFIX = "0func_err";
@@ -129,12 +131,21 @@ public class Ambito implements APITS {
 		}
 		return format.toString();
 	}
-
+	
+	public TupleTypes buscaIdsType(Lid lid) {
+		TupleTypes types = new TupleTypes();
+		
+		for (String id : lid.getList()) {
+			types.insert(id, dameTipo(id));
+		}
+		return types;
+	}
+	
 	@Override
 	public boolean tiposComp(EnumType tipo1, EnumType tipo2) {
 		return tipo1 == tipo2;
 	}
-
+		
 	@Override
 	public EnumType dameTipo(String id) {
 		if (this.ambito.containsKey(id)) {

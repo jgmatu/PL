@@ -1,11 +1,31 @@
+// 7
+void main (float hola)
+{ // 6
+	{ // 5
+		int kaka;
+		if (hola == 3) then { // 4
+			int i;
+			for (i = 0; i < 10; i = i + 1) { // 3
+				while (5 == 5) { // 2
+					do { // 1
+					    a = a - 1;
+					} until(a < 10);
+				}
+			}
+		} else {
+			int v;
+			v = b + 1;
+		}
+	}	
+}
 
+/*
 void
 main(int argc, float argv, int param)
 {
-    int a, b;
+    int a, b, blasss;
  
     a = 3;
-
     if (a < 3) then {
         int c;
         c = 1;
@@ -17,7 +37,7 @@ main(int argc, float argv, int param)
         ;
     } else { 
         ;    
-    }
+    }    
 }
 
 int 
@@ -45,14 +65,14 @@ ble(int argc, int argv, float param)
 int 
 ble(int argc, int argv) 
 {
-    int a, b;
+    int a, b, z;
     float c, d;
 
     for (a = 0; a < 10; a = a + 1) {
         ;
     }
     {
-    	int a;
+    	int z, c;
     }
 }
 
@@ -81,3 +101,4 @@ blu(float argc, float argv, int param)
     } until(a < 10);
         
 }
+*/

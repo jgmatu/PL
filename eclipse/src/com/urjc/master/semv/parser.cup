@@ -360,8 +360,12 @@ FACTOR ::= tid:idLexema l_par LID:lid r_par {:
 
 FACTOR ::= l_bracket EXP r_bracket;
 FACTOR ::= tid;
-FACTOR ::= constint;
-FACTOR ::= constfloat;
+FACTOR ::= constint {:
+	RESULT = EnumType.INT;
+:};
+FACTOR ::= constfloat {:
+	RESULT = EnumTYpe.FLOAT;
+:};
 
 TYPE ::= tvoid:v {: RESULT =  EnumType.VOID; :};
 TYPE ::= tint:i {: RESULT =  EnumType.INT; :};

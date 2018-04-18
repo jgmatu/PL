@@ -1,4 +1,4 @@
-	/********************************************************************/
+/********************************************************************/
 /********************************************************************/
 /*****          Autores: Ruben Morante Gonzalez                 *****/
 /*****                   Francisco Javier                       *****/
@@ -32,6 +32,21 @@ action code {:
 	private Ambito root = new Ambito();
 	private Ambito actual = this.root;
 	
+	private EnumType checkTypesOperation(String op, EnumType type1, EnumType type2) {		
+		EnumType type = EnumType.ERROR;
+		
+		if (type1 == EnumType.ERROR || type2 == EnumType.ERROR) {
+			return type;
+		}
+		
+		if (type1 == type2) {
+			type = type1;
+		} else {
+			System.err.println(" Incompatible types on " + op);			
+		}
+		return type;	
+	}
+		
 :};
 
 /* TOKENS */
@@ -225,8 +240,8 @@ SENT ::= tid l_par LID r_par semicolon {:
 :};
 
 // return....
-SENT ::= treturn EXP semicolon {: 
-	// System.err.println("Return statement"); 
+SENT ::= treturn EXP:type semicolon {: 
+	// System.err.println("Return statement");
 :};
 
 /*
@@ -273,12 +288,10 @@ SENT ::= {:
 
 	this.actual = new Ambito(this.actual);
 
-:} BLQ {:
-
-:};
+:} BLQ;
 
 SENT ::= semicolon {:
-	// System.err.println("NOP instrucction...."); 	
+	// System.err.println("NOP instruction...."); 	
 :};
 
 LID ::= tid:id {: 
@@ -298,16 +311,16 @@ LID ::= tid:id comma LID:lid {:
 
 // LID ::= /* empty */;
 
-EXP ::= EXP:typeExp add EXPT:typeExpt {: 
-	EnumType type = EnumType.ERROR;
-	
-	RESULT = type;
+EXP ::= EXP:typeExp add EXPT:typeExpt {:
+	EnumType type1 = (EnumType) typeExp;
+	EnumType type2 = (EnumType) typeExpt; 
+	RESULT = checkTypesOperation("add", type1, type2);
 :};
 
 EXP ::= EXP:typeExp sub EXPT:typeExpt {:
-	EnumType type = EnumType.ERROR;
-	
-	RESULT = type;	
+	EnumType type1 = (EnumType) typeExp;
+	EnumType type2 = (EnumType) typeExpt; 
+	RESULT = checkTypesOperation("sub", type1, type2);
 :};
 
 EXP ::= EXPT:type {:	
@@ -315,15 +328,15 @@ EXP ::= EXPT:type {:
 :};
 
 EXPT ::= EXPT:typeExpr mul FACTOR:typeFactor {:
-	EnumType type = EnumType.ERROR;
-	
-	RESULT = type;
+	EnumType type1 = (EnumType) typeExpr;
+	EnumType type2 = (EnumType) typeFactor; 
+	RESULT = checkTypesOperation("mul", type1, type2);
 :};
 
 EXPT ::= EXPT:typeExpr div FACTOR:typeFactor {:
-	EnumType type = EnumType.ERROR;
-	
-	RESULT = type;
+	EnumType type1 = (EnumType) typeExpr;
+	EnumType type2 = (EnumType) typeFactor; 
+	RESULT = checkTypesOperation("div", type1, type2);
 :};
 
 EXPT ::= FACTOR:type {:	
@@ -364,7 +377,7 @@ FACTOR ::= constint {:
 	RESULT = EnumType.INT;
 :};
 FACTOR ::= constfloat {:
-	RESULT = EnumTYpe.FLOAT;
+	RESULT = EnumType.FLOAT;
 :};
 
 TYPE ::= tvoid:v {: RESULT =  EnumType.VOID; :};

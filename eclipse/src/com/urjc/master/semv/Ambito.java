@@ -79,11 +79,7 @@ public class Ambito implements APITS {
 	}
 	
 	public boolean existId(String id) {
-		boolean exist = this.ambito.containsKey(id);
-		if(!exist && this.hasFather()) {
-			return this.father.existId(id);			
-		}
-		return exist;
+		return this.ambito.containsKey(id);
 	}
 	
 	// ExpTipo -> TBAS || TBAS x TBAS x TBAS || TBAS x TBAS -> TBAS
@@ -106,21 +102,11 @@ public class Ambito implements APITS {
 		format.append("Ambito...\n");
 		for (Entry<String, Command> entry : this.ambito.entrySet()) {
 			Command cmd = entry.getValue();
-		
+			
 			switch(cmd.getClass().getSimpleName()){
 				case "Function": format.append("Defined funcion... " + cmd.toString() + "\n"); break;
 				case "Variable": format.append("Defined variable : " + cmd.toString() + "\n"); break;
 			}
-			/*
-			if (cmd instanceof Function) {
-				Function fun = (Function) cmd;
-				format.append("Defined funcion... " + fun.toString() + "\n");
-			}
-			
-			if (cmd instanceof Variable) {
-				Variable var = (Variable) cmd;
-				format.append("Defined variable : " + var.toString() + "\n");
-			}*/
 		}
 		
 		if (this.father != null) {

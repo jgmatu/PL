@@ -1,6 +1,5 @@
 // 7
-int 
-main (float hola)
+int main (float hola)
 { // 6
 	{ // 5
 		int kaka;
@@ -15,7 +14,7 @@ main (float hola)
 				}
 			}
 		} else {
-			int v;
+			int v, kaka;
 			v = b + 1;
 		}
 	}	
@@ -23,7 +22,7 @@ main (float hola)
 
 void useMain(float hola) 
 {
-    float result;
+    int result;
     float param, param2;
 
 	result = 0;
@@ -41,7 +40,7 @@ main(int argc, float argv, int param)
  
     a = 3;
     if (a < 3) then {
-        int c;
+        int c, a;
         c = 1;
         b = a + c;
     } else {

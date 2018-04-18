@@ -1,5 +1,6 @@
 // 7
-void main (float hola)
+int 
+main (float hola)
 { // 6
 	{ // 5
 		int kaka;
@@ -8,6 +9,7 @@ void main (float hola)
 			for (i = 0; i < 10; i = i + 1) { // 3
 				while (5 == 5) { // 2
 					do { // 1
+						int a;
 					    a = a - 1;
 					} until(a < 10);
 				}
@@ -17,6 +19,18 @@ void main (float hola)
 			v = b + 1;
 		}
 	}	
+}
+
+void useMain(float hola) 
+{
+    float result;
+    float param, param2;
+
+	result = 0;
+	param = 0.0;
+	param2 = 0.0;
+	
+    result = main(param, param2); 
 }
 
 /*

@@ -101,7 +101,7 @@ PROGRAM ::= PART PROGRAM {:
 :};
 
 PROGRAM ::= PART {:
-	System.out.println(this.actual.toString());
+//	System.out.println(this.actual.toString());
 	System.err.println("FIN DE PROGRAMA"); 	
 :};
 
@@ -181,15 +181,13 @@ LISTPARAM ::= TYPE:type tid:id {:
 	
 :};
 
-BLQ ::= l_brace {: 
-
-:} SENTLIST r_brace {: 	
-
+BLQ ::= l_brace SENTLIST r_brace {: 	
+	// Manejo de errores al cierre del ámbito...
 	Command err = this.actual.buscaError();
 	if (err != null) {
 		this.actual.deleteError(err);
 	}
-	System.out.println(this.actual.toString());
+//	System.out.println(this.actual.toString());
 	this.actual = this.actual.getFather();
 :};
 
@@ -212,10 +210,10 @@ SENT ::= tid:idLexema assig EXP:typeExp semicolon {:
 	if (cmd == null) {
 		System.err.println("No existe el identificador de la assignación");
 	} else if (typeExp != EnumType.ERROR) {
-		if (cmd.getType == typeExpt) {
+		if (cmd.dameTipo() == typeExp) {
 			type = EnumType.VOID;
 		} else {
-			System.err.println("Incompatible types...");
+			System.err.println("Incompatible types in assgin...");
 		}
 	}
 	RESULT = type;
@@ -348,7 +346,7 @@ FACTOR ::= tid:idLexema l_par LID:lid r_par {:
 	}
 	
 	if (type != EnumType.ERROR && func != null) {
-		TupleTypes idTypes_1 = this.actual.bus1caIdsType(lid);
+		TupleTypes idTypes_1 = this.actual.buscaIdsType(lid);
 		TupleTypes idTypes_2 = func.getParamsTypes();
 		boolean success = idTypes_1.compare(idTypes_2);
 		if (!success) {

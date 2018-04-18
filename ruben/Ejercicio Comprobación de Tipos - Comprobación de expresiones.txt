@@ -1,0 +1,95 @@
+S ::= DEST = ORIG;
+	| DEST = ORIG; S
+
+DEST ::= id {
+		ts = BuscaId(id.lexema);
+	   	if (ts == null) {
+			Error("...");
+			DEST.tipo = error;
+	   	} else {
+			DEST.tipo = DameTipo(ts);
+		}
+    }
+	| id[cte] {
+		ts = BuscaId(id.lexema);
+		if (ts == null) {
+			Error("...");
+			DEST.tipo = error;
+		} else {
+			tipo = DameTipo(ts);
+			if (esMatriz(tipo)) {
+				if ((cte.valex >= 0) && (cte.valex < DaTamaño(tipo)) {
+					DEST.tipo = DaTipoElem(tipo);
+				} else {
+					Error("...");
+					DEST.tipo = error;
+				}
+			} else {
+				Error("...");
+				DEST.tipo = error;
+			}
+	   	}
+	}
+	| id[id1] {
+		ts = BuscaId(id.lexema);
+		if (ts == null) {
+			Error("...");
+			DEST.tipo = error;
+		} else {
+			tipo = DameTipo(ts);
+			ts2 = BuscarId(id1.lexema);
+			if (ts2 == null) {
+				Error("...");
+				DEST.tipo = error;
+			} else {
+				tipo2 = DameTipo(ts2);
+				if (esMatriz(tipo)) {
+					if ((tipo2.valex >= 0) && (tipo2.valex < DaTamaño(tipo)) {
+						DEST.tipo = DaTipoElem(tipo);
+					} else {
+						Error("...");
+						DEST.tipo = error;
+					}
+				} else {
+					Error("...");
+					DEST.tipo = error;
+				}
+		    }
+		}
+	}
+	| *(DEST1) {
+		if (DEST.tipo == error) {
+			DEST.tipo = error;
+		} else {
+			if (esPuntero(DEST1.tipo)) {
+				DEST.tipo = DaTipoDest(DEST1.tipo);
+		    } else {
+				Error("...");
+				DEST.tipo = error;
+		    }
+		}
+    }
+
+ORIG ::= ORIG1 OP1 T {
+		if ((ORIG1.tipo == error) || (T.tipo == error)) {
+			ORIG.tipo = error;
+		} else {
+			if (TiposComp(ORIG1.tipo, T.tipo)) {
+				ORIG.tipo = T.tipo;
+			} else {
+				Error("...");
+				ORIG.tipo = error;
+			}
+		}
+    }
+	| T
+
+T ::= DEST OP2 DEST
+    | DEST {T.tipo = DEST.tipo}
+
+OP1 ::= +
+	|-
+
+OP2 ::= *
+	|/
+	|%

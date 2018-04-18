@@ -1,0 +1,24 @@
+S ::= TIPO LIST_ID; {LIST_ID.tipo = TIPO.tipo;}
+	| TIPO LIST_ID; S {LIST_ID.tipo = TIPO.tipo;}
+	| DEST = ORIG;
+	| DEST = ORIG; S
+
+TIPO ::= TBAS {TIPO.tipo = TBAS.tipo;}
+	| TBAS * {TIPO.tipo = pointer(TBAS.tipo);}
+
+TBAS ::= char {TBAS.tipo = char;}
+	| int {TBAS.tipo = int;}
+	| float {TBAS.tipo = float;}
+
+LIST_ID ::= id {InsertaTipo(id.ts, LIST_ID.tipo);}
+	| id, LIST_ID {
+		InsertaTipo(id.ts, LIST_ID.tipo);
+		LIST_ID1.tipo = LIST_ID.tipo}
+	| id[cte] {
+		InsertaTipo(id.ts,array(cte.valex,
+		LIST_ID.tipo));}
+
+	| id[cte], LIST_ID {
+		InsertaTipo(id.ts,array(cte.valex,
+		LIST_ID.tipo));
+		LIST_ID1.tipo = LIST_ID.tipo}

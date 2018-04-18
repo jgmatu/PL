@@ -1,0 +1,40 @@
+EJERCICIO A PARTE
+
+S ::= switch (EXP) {LCASE.h = EXP.tipo;} {LCASE} {
+		if (EXP.tipo == error) {
+			S.tipo = error;
+		} else {
+			S.tipo = LCASE.tipo;
+		}
+	}
+
+LCASE ::= case EXP1 : S1; {
+		if (EXP1.tipo == error) {
+			LCASE.tipo = error;
+		} else {
+			if (TiposCom(LCASE.h, EXP1.tipo)) {
+				LCASE.tipo = S1.tipo;
+			} else {
+				Error("...");
+				LCASE.tipo = error;
+			}			
+		}
+	}
+	| {LCASE1.h = LCASE.h;} LCASE1 case EXP2 : S2; {
+		if (LCASE1.tipo == error || EXP2.tipo == error) {
+			LCASE.tipo = error;
+		} else {
+			if (TiposComp(LCASE.h, EXP2.tipo)) {
+				if (S2.tipo == error) {
+					LCASE.tipo = error;
+				} else {
+					LCASE.tipo = LCASE.tipo = LCASE1.tipo;
+				}
+			} else {
+				Error("...");
+				LCASE.tipo = error;
+			}
+
+		}
+	}
+	| default : S3; {LCASE.tipo = S3.tipo;}

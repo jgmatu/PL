@@ -1,0 +1,25 @@
+Asignamos tipo void si es tipo correcto
+
+S ::= while (CMP) {S1} {
+		if (CMP.tipo == error) {
+			S.tipo = error;
+		} else {
+			S.tipo = S1.tipo;
+		}
+	}	
+
+S ::= do {S1} while (CMP); {
+		if (S1.tipo == error) {
+			S.tipo = error;
+		} else {
+			S.tipo = CMP.tipo;
+		}
+	}
+
+S ::= if (CMP) {S1} {
+		if (CMP.tipo == error) {
+			S.tipo = error;
+		} else {
+			S.tipo = S1.tipo;
+		}
+	}

@@ -1,0 +1,32 @@
+CMP ::= CMP1 NR CMP2 
+	| !(CMP1) {CMP.tipo = CMP1.tipo;}
+	| (CMP1) {CMP.tipo = CMP1.tipo;}
+	| DEST OPR DEST1 {
+		if ((DEST.tipo == error) || (DEST1.tipo == error)) {
+			CMP.tipo = error;
+		} else {
+			if (TiposComp(DEST.tipo, DEST1.tipo)) {
+				CMP.tipo = bool;
+			} else {
+				Error("...");
+				CMP.tipo = error;
+			}
+		}
+	}		
+
+OPR ::= == 
+	| != 
+	| < 
+	| <= 
+	| > 
+	| >=
+
+NR ::= && 
+       | ||
+
+DEST ::= id 
+	 | id[cte] 
+	 | id[id] 
+	 | *(DEST)
+
+(* TBAS ::= bool *)

@@ -1,0 +1,41 @@
+PARAM ::= id {
+		ts = BuscaId(id.lexema);
+		if (ts == null) {
+			Error("...");
+			PARAM.tipo = error;
+		} else  {
+			PARAM.tipo = DameTipo(ts);
+		}
+	}
+	| PARAM1, id {
+		ts = BuscaId(id.lexema);
+		if (ts == null) {
+			Error("...");
+			PARAM.tipo = PARAM1.tipo x error;
+			// error de arriba viene de que no esta declarado ts
+		} else {
+			PARAM.tipo = PARAM1.tipo x DameTipo(ts);
+		}
+	}
+
+S ::= id(PARAM) {
+		uso = PARAM -> void; // Uso de id
+		ts = BuscaId(id.lexema);
+		if (ts == null) {
+			Error("...");
+			tipo = error;
+		} else {
+			expTipo = DameTipo(ts);
+			if (esFuncion(expTipo)) {
+				if (TiposComp(expTipo, uso)) {}
+					S.tipo = DaTipoDev(expTipo);
+				} else {
+					Error("...");
+					S.tipo = error;
+				}
+			} else {
+				Error("...");
+				S.tipo = error;
+			}
+		}
+	}

@@ -1,0 +1,23 @@
+programa ::= <PROGRAM> <ID> {NuevoEntorno(ID.lexema);}
+	     ";" bloque {SalirEntorno();} "."
+bloque ::= declaracionL <BEGIN> resto <END>
+bloqueEjecutable ::= defVar <BEGIN> resto <END>
+resto ::= {NuevoEntorno();} bloqueEjecutable {SalirEntorno();} resto | lambda
+
+declaracionL ::= declaracion declaracionL | lambda
+declaracion ::= defVar | defProcedimiento | defFuncion
+
+defVar ::= <VAR> listaVarL | lambda
+defProcedimiento ::= <PROCEDURE> <ID> {InsertaID(proc, ID.lexema); NuevoEntorno(ID.lexema);} parFormales ";" bloque {SalirEntorno();} ";"
+defFuncion ::= <FUNCTION> tipo ":" <ID> {InsertaID(fun, ID.lexema, tipo.t); NuevoEntorno(ID.lexema);} parFormales ";" bloque {SalirEntorno();} ";"
+
+parFormales ::= "(" listaParamL ")" | lambda
+listaParamL ::= listaParam ";" listaParamL | listaParam
+listaParam ::= tipo ":" <ID> {InsertaID(param, ID.lexema, tipo.t); lid.clase = param; lid.t = tipo.t} lid
+
+lid ::= "," <ID> {InsertaID(lid.clase, ID.lexema, lid.t); lid1.clase = lid.clase; lid1.t = lid.t;} lid1 | lambda
+
+listaVarL ::= listaVar ";" listaVarL | listaVar ";"
+listaVar ::= tipo ":" <ID> {InsertaID(vble, ID.lexema, tipo.t); lid.clase = vble; lid.t = tipo.t} lid
+
+tipo ::= <INTEGER> {tipo.t = int;} | <REAL> {tipo.t = real;} | <BOOL> {tipo.t = bool;}

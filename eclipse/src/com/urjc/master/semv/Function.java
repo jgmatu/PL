@@ -46,7 +46,7 @@ public class Function extends Command {
 		TupleTypes types = new TupleTypes();
 		
 		for (Variable v: this.parametros) {
-			types.insert(v.getId(), v.dameTipo());
+			types.insert(v.dameTipo());
 		}
 		return types;
 	}

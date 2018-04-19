@@ -122,7 +122,7 @@ public class Ambito implements APITS {
 		TupleTypes types = new TupleTypes();
 		
 		for (String id : lid.getList()) {
-			types.insert(id, dameTipo(id));
+			types.insert(dameTipo(id));
 		}
 		return types;
 	}

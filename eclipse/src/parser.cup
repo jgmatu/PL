@@ -109,7 +109,6 @@ non terminal LCONDT;
 non terminal LCONDF;
 non terminal COND;
 non terminal OPR;
-non terminal IF2;
 
 /* GRAMMAR */
 PROGRAM ::= PART PROGRAM {:
@@ -246,20 +245,23 @@ SENT ::= treturn EXP:type semicolon {:
 :};
 
 
+// if then else...
+SENT ::= tif l_par LCOND r_par tthen {: 
+
+	this.actual = new Ambito(this.actual);
+
+:} BLQ telse {: 
+
+	this.actual = new Ambito(this.actual);
+
+:} BLQ;
 
 SENT ::= tif l_par LCOND r_par tthen {:
 
 	this.actual = new Ambito(this.actual);
 	System.err.println("if statement no else end BLQ..."); 
 
-:} BLQ IF2;
-
-IF2 ::= telse {: 
-
-	this.actual = new Ambito(this.actual);
-
-:} BLQ | ;
-
+:} BLQ;
 
 // for...
 SENT ::= tfor l_par tid assig EXP semicolon LCOND semicolon tid assig EXP r_par {:

@@ -18,6 +18,10 @@ int main (float hola)
 			v = b + 1;
 		}
 	}	
+	
+	if (a < 3) then {
+		;
+	}
 }
 
 void useMain(float hola) 

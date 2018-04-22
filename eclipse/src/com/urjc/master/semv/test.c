@@ -31,26 +31,35 @@ int function3()
 	;
 }
 
-void useMain(float hola) 
+float useMain(float hola) 
 {
     int result;
     float param, param2;
 
 	result = 0;
-	param = 0.0;
+	param  = 0.0;
 	param2 = 0.0;
 	result = function3();
     result = main(param, result); 
+    
+    if (function3() == 3) then{
+    	;
+    } 
 }
 
-/*
 void
-main(int argc, float argv, int param)
+main2(int argc, float argv, int param)
 {
     int a, b, blasss;
- 
+ 	float nread;
+ 	nread =  0.0;
+ 	
+ 	if (useMain(nread) == 0.0) then { 
+ 		;
+ 	}
+ 	
     a = 3;
-    if (a < 3) then {
+    if (a < 3 and b == 1) then {
         int c, a;
         c = 1;
         b = a + c;
@@ -65,7 +74,7 @@ main(int argc, float argv, int param)
 }
 
 int 
-ble(int argc, int argv, float param) 
+blee(int argc, int argv, float param) 
 {
     int a, b;
     float c, d;
@@ -82,7 +91,11 @@ ble(int argc, int argv, float param)
     if (a < 3) then {
         ;
     } else {
-    	;
+		int r;
+		r = 0;
+		if (r == 3) then {
+			;
+		}	
     }
 }
 
@@ -97,6 +110,9 @@ ble(int argc, int argv)
     }
     {
     	int z, c;
+    	for (z = 0; z < 10; z = z + 1) {    	
+    		argc = 0;
+    	}
     }
 }
 
@@ -125,4 +141,3 @@ blu(float argc, float argv, int param)
     } until(a < 10);
         
 }
-*/

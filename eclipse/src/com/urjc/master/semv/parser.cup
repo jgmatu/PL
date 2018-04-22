@@ -33,7 +33,7 @@ action code {:
 	private Ambito root = new Ambito();
 	private Ambito actual = this.root;
 	
-	private EnumType checkTypesOperation(String op, EnumType type1, EnumType type2) {		
+	private EnumType getTypeOperation(String op, EnumType type1, EnumType type2) {		
 		EnumType type = EnumType.ERROR;
 		
 		if (type1 == EnumType.ERROR || type2 == EnumType.ERROR) {
@@ -330,8 +330,8 @@ LID ::= tid:id {:
 LID ::= tid:id comma LID:lid {:
 
 	lid.add(id);
-	RESULT = lid; 
-	
+	RESULT = lid; 	
+
 :}; // Devolver tipo de tid a LID...
 
 LID ::= /* empty */;
@@ -339,13 +339,13 @@ LID ::= /* empty */;
 EXP ::= EXP:typeExp add EXPT:typeExpt {:
 	EnumType type1 = (EnumType) typeExp;
 	EnumType type2 = (EnumType) typeExpt; 
-	RESULT = checkTypesOperation("add", type1, type2);
+	RESULT = getTypeOperation("add", type1, type2);
 :};
 
 EXP ::= EXP:typeExp sub EXPT:typeExpt {:
 	EnumType type1 = (EnumType) typeExp;
 	EnumType type2 = (EnumType) typeExpt; 
-	RESULT = checkTypesOperation("sub", type1, type2);
+	RESULT = getTypeOperation("sub", type1, type2);
 :};
 
 EXP ::= EXPT:type {:	
@@ -355,13 +355,13 @@ EXP ::= EXPT:type {:
 EXPT ::= EXPT:typeExpr mul FACTOR:typeFactor {:
 	EnumType type1 = (EnumType) typeExpr;
 	EnumType type2 = (EnumType) typeFactor; 
-	RESULT = checkTypesOperation("mul", type1, type2);
+	RESULT = getTypeOperation("mul", type1, type2);
 :};
 
 EXPT ::= EXPT:typeExpr div FACTOR:typeFactor {:
 	EnumType type1 = (EnumType) typeExpr;
 	EnumType type2 = (EnumType) typeFactor; 
-	RESULT = checkTypesOperation("div", type1, type2);
+	RESULT = getTypeOperation("div", type1, type2);
 :};
 
 EXPT ::= FACTOR:type {:	
@@ -413,7 +413,7 @@ LCONDF ::= tnot COND;
 COND ::= EXP:type_1 OPR EXP:type_2 {:
 	EnumType type1 = (EnumType) type_1;
 	EnumType type2 = (EnumType) type_2; 
-	RESULT = checkTypesOperation("conditional expresion", type1, type2);
+	RESULT = getTypeOperation("conditional expresion", type1, type2);
 :};
 
 OPR ::=  equals;

@@ -3,7 +3,7 @@ int main (float hola, int argc)
 { // 6
 	{ // 5
 		int kaka;
-		if (hola == 3) then { // 4
+		if (hola == 3.0) then { // 4
 			int i;
 			for (i = 0; i < 10; i = i + 1) { // 3
 				while (5 == 5) { // 2

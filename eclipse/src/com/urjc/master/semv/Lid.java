@@ -9,7 +9,6 @@ public class Lid {
 	
 	private List<String> idList;
 	private EnumType tipo;
-	private boolean success;
 	
 	public Lid() {
 		 idList = new ArrayList<>();

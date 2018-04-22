@@ -47,7 +47,33 @@ action code {:
 		}
 		return type;	
 	}
+	
+	private EnumType getTypeCallFunction(String id, Lid lid) {
+		Function func = null;
+		Command cmd = null;
+		EnumType type = EnumType.ERROR;
+			
+		cmd = this.actual.buscaId(id);
+		if (cmd == null && !(cmd instanceof Function)) {
+			System.err.println("The function not exist..");
+			type = EnumType.ERROR;
+		} else {
+			func = (Function) cmd;
+			type = cmd.getTipo();
+		}
 		
+		if (func != null && type != EnumType.ERROR) {
+			TupleTypes idTypes_1 = this.actual.buscaIdsType(lid);
+			TupleTypes idTypes_2 = func.getParamsTypes();
+			boolean success = idTypes_1.compare(idTypes_2);
+			if (!success) {
+				type = EnumType.ERROR;
+			}
+		} else {
+			type = EnumType.ERROR;
+		}
+		return type;		
+	}			
 :};
 
 /* TOKENS */
@@ -190,11 +216,10 @@ LISTPARAM ::= LISTPARAM:listparams comma TYPE:type tid:id {:
 :};
 
 LISTPARAM ::= TYPE:type tid:id {: 
-
 	ListParams listparams = new ListParams();
+
 	listparams.insertar(id, type);
 	RESULT = listparams;
-	
 :};
 
 LISTPARAM ::= /* empty */;
@@ -209,7 +234,10 @@ BLQ ::= l_brace SENTLIST r_brace {:
 :};
 
 SENTLIST ::= SENTLIST SENT;
-SENTLIST ::= SENT;
+
+SENTLIST ::= SENT:type {:
+	RESULT = type;
+:};
 
 // Declare id's...
 SENT ::= TYPE:type LID:lid {: 
@@ -236,14 +264,20 @@ SENT ::= tid:idLexema assig EXP:typeExp semicolon {:
 	RESULT = type;
 :};
 
-// Call function...
-SENT ::= tid l_par LID r_par semicolon {: 
-	// System.err.println("Llamada a función!!"); 
+// Call procedure function...
+SENT ::= tid:idLexema l_par LID:lid r_par semicolon {: 
+	EnumType type = EnumType.ERROR;
+
+	if (getTypeCallFunction(idLexema, lid) != EnumType.ERROR) {
+		type = EnumType.VOID;
+	}
+	RESULT = type;
 :};
 
 // return....
-SENT ::= treturn EXP:type semicolon {: 
+SENT ::= treturn EXP:type semicolon {:
 	// System.err.println("Return statement");
+	RESULT = type;
 :};
 
 
@@ -259,16 +293,12 @@ IF2 ::= telse {:
 
 // for...
 SENT ::= tfor l_par tid assig EXP semicolon LCOND semicolon tid assig EXP r_par {:
-
-	this.actual = new Ambito(this.actual);
-	
+	this.actual = new Ambito(this.actual);	
 :} BLQ; 
 
 // while ..
 SENT ::= twhile l_par LCOND r_par {:
-
 	this.actual = new Ambito(this.actual);
-
 :} BLQ;
 
 // do while...
@@ -278,7 +308,7 @@ SENT ::= tdo {:
 
 :} BLQ tuntil l_par LCOND r_par;
 
-// Bloque anonimo
+// Bloque anónimo...
 SENT ::= {:
 
 	this.actual = new Ambito(this.actual);
@@ -286,6 +316,7 @@ SENT ::= {:
 :} BLQ;
 
 SENT ::= semicolon {:
+	;
 :};
 
 LID ::= tid:id {: 
@@ -339,31 +370,8 @@ EXPT ::= FACTOR:type {:
 
 // Llamada a función evaluar...
 FACTOR ::= tid:idLexema l_par LID:lid r_par {:
-	Function func = null;
-	Command cmd = null;
-	EnumType type = EnumType.ERROR;
-		
-	cmd = this.actual.buscaId(idLexema);
-	if (cmd == null && !(cmd instanceof Function)) {
-		System.err.println("The function not exist..");
-		type = EnumType.ERROR;
-	} else {
-		func = (Function) cmd;
-		type = cmd.getTipo();
-	}
-	
-	if (type != EnumType.ERROR && func != null) {
-		TupleTypes idTypes_1 = this.actual.buscaIdsType(lid);
-		TupleTypes idTypes_2 = func.getParamsTypes();
-		boolean success = idTypes_1.compare(idTypes_2);
-		if (!success) {
-			type = EnumType.ERROR;
-		}
-	} else {
-		type = EnumType.ERROR;
-	}
 	// Devuelve el tipo de retorno de la función evaluada...
-	RESULT = type;
+	RESULT = getTypeCallFunction(idLexema, lid);
 :};
 
 FACTOR ::= l_bracket EXP:type {:
@@ -402,7 +410,11 @@ LCONDT  ::=  LCONDF;
 LCONDF ::= COND;
 LCONDF ::= tnot COND;
 
-COND ::= EXP OPR EXP;
+COND ::= EXP:type_1 OPR EXP:type_2 {:
+	EnumType type1 = (EnumType) type_1;
+	EnumType type2 = (EnumType) type_2; 
+	RESULT = checkTypesOperation("conditional expresion", type1, type2);
+:};
 
 OPR ::=  equals;
 OPR ::=  less;

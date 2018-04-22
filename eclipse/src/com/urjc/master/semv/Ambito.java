@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.urjc.master.semv.APITS.EnumType;
-
 public class Ambito implements APITS {
 
 	public static String ERROR_PREFIX = "0func_err";
@@ -14,13 +12,13 @@ public class Ambito implements APITS {
 	private HashMap<String, Command> ambito;
 
 	public Ambito() {
-		this.ambito = new HashMap<String, Command>();
 		this.father = null;
+		this.ambito = new HashMap<String, Command>();
 	}
 
 	public Ambito(Ambito father) {
-		this.ambito = new HashMap<String, Command>();
 		this.father = father;
+		this.ambito = new HashMap<String, Command>();
 	}
 
 	public boolean insertaIdFunction(String idLexema) {
@@ -33,6 +31,7 @@ public class Ambito implements APITS {
 		
 	private boolean addEntry(String id, Command command) {
 		boolean success = !this.existId(id);		
+
 		if (success) {
 			this.ambito.put(id, command);			
 		} else {
@@ -89,6 +88,7 @@ public class Ambito implements APITS {
 
 	public boolean insertaTipo(String id, EnumType tipo) {
 		boolean exit = this.ambito.containsKey(id);
+		
 		if(exit){
 			this.ambito.get(id).setTipo(tipo);
 		}

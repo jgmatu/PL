@@ -3,21 +3,19 @@ package com.urjc.master.semv;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.urjc.master.semv.APITS.EnumType;
-
 public class TupleTypes {
 
-	private List<EnumType> types;
+	private List<Type> types;
 	
 	public TupleTypes() {
 		this.types = new ArrayList<>();
 	}
 	
-	public void insert(EnumType type) {
+	public void insert(Type type) {
 		this.types.add(type);
 	}
 	
-	public List<EnumType> getTupleTypes() {
+	public List<Type> getTupleTypes() {
 		return this.types;
 	}
 
@@ -39,6 +37,10 @@ public class TupleTypes {
 			}
 		}
 		return success;
+	}
+	
+	public Type getReturnType() {
+		return new Type();
 	}
 	
 	public int size() {

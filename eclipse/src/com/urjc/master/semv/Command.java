@@ -1,22 +1,20 @@
 package com.urjc.master.semv;
 
-import com.urjc.master.semv.APITS.EnumType;
-
 public class Command {
 
 	private String id;
-	private EnumType tipo;
+	private Type tipo;
 
-	public Command(String id, EnumType tipo) {
+	public Command(String id, Type tipo) {
 		this.id = id;
 		this.tipo = tipo;
 	}
 
-	public EnumType dameTipo() {
+	public Type dameTipo() {
 		return this.tipo;
 	}
 
-	public void insertaTipo(EnumType tipo) {
+	public void insertaTipo(Type tipo) {
 		this.tipo = tipo;
 	}
 
@@ -40,11 +38,11 @@ public class Command {
 		this.id = id;
 	}
 
-	public EnumType getTipo() {
+	public Type getTipo() {
 		return tipo;
 	}
 
-	public void setTipo(EnumType tipo) {
+	public void setTipo(Type tipo) {
 		this.tipo = tipo;
 	}	
 }

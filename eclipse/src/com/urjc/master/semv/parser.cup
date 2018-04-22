@@ -8,9 +8,7 @@
 
 package com.urjc.master.semv;
 
-import com.urjc.master.semv.APITS.EnumType;
 import java_cup.runtime.Symbol;
-
 
 parser code {:
 
@@ -33,14 +31,14 @@ action code {:
 	private Ambito root = new Ambito();
 	private Ambito actual = this.root;
 	
-	private EnumType getTypeOperation(String op, EnumType type1, EnumType type2) {		
-		EnumType type = EnumType.ERROR;
+	private Type getTypeOperation(String op, Type type1, Type type2) {		
+		Type type = new Type();
 		
-		if (type1 == EnumType.ERROR || type2 == EnumType.ERROR) {
+		if (type1.isError() || type2.isError()) {
 			return type;
 		}
 		
-		if (type1 == type2) {
+		if (type1.equals(type2)) {
 			type = type1;
 		} else {
 			System.err.println(" Incompatible types on " + op);			
@@ -48,29 +46,26 @@ action code {:
 		return type;	
 	}
 	
-	private EnumType getTypeCallFunction(String id, Lid lid) {
+	private Type getTypeCallFunction(String id, Lid lid) {
 		Function func = null;
 		Command cmd = null;
-		EnumType type = EnumType.ERROR;
+		Type type = new Type();
 			
 		cmd = this.actual.buscaId(id);
 		if (cmd == null && !(cmd instanceof Function)) {
 			System.err.println("The function not exist..");
-			type = EnumType.ERROR;
 		} else {
 			func = (Function) cmd;
 			type = cmd.getTipo();
 		}
 		
-		if (func != null && type != EnumType.ERROR) {
+		if (func != null && !type.isError()) {
 			TupleTypes idTypes_1 = this.actual.buscaIdsType(lid);
 			TupleTypes idTypes_2 = func.getParamsTypes();
 			boolean success = idTypes_1.compare(idTypes_2);
 			if (!success) {
-				type = EnumType.ERROR;
+				type.setError();
 			}
-		} else {
-			type = EnumType.ERROR;
 		}
 		return type;		
 	}			
@@ -121,13 +116,13 @@ terminal String tid;
 // non terminals
 non terminal PROGRAM;
 non terminal PART;
-non terminal BLQ;
-non terminal SENTLIST;
-non terminal SENT;
-non terminal EXP;
-non terminal EXPT;
-non terminal FACTOR;
-non terminal EnumType TYPE;
+non terminal TupleTypes BLQ;
+non terminal TupleTypes SENTLIST;
+non terminal Type SENT;
+non terminal Type EXP;
+non terminal Type EXPT;
+non terminal Type FACTOR;
+non terminal Type TYPE;
 non terminal Lid LID;
 non terminal ListParams LISTPARAM;
 non terminal Command RESTPART;
@@ -174,7 +169,7 @@ PART ::= TYPE:type RESTPART:command {:
  * Definición de función...
  *
  */
-RESTPART ::= tid:idLexema l_par LISTPARAM:list {:
+RESTPART ::= tid:idLexema l_par LISTPARAM:list r_par BLQ:types {:
 	boolean success = this.root.insertaIdFunction(idLexema);
 	Function function = null;
 	
@@ -185,15 +180,15 @@ RESTPART ::= tid:idLexema l_par LISTPARAM:list {:
 	}
 	this.actual = function.getAmbito();
 	function.insertarParametros(list);
-	
+	function.insertReturnType(types.getReturnType());
 	RESULT = function;
-	
-:} r_par BLQ;
+			
+:};
 
 /*
  * Definición de función
  */
-RESTPART ::= tid:idLexema l_par tvoid r_par {: 
+RESTPART ::= tid:idLexema l_par tvoid r_par BLQ:types {:
 	boolean success = this.root.insertaIdFunction(idLexema);
 	Function function = null;
 	
@@ -205,7 +200,7 @@ RESTPART ::= tid:idLexema l_par tvoid r_par {:
 	this.actual = function.getAmbito();
 
 	RESULT = function;
-:} BLQ;
+:};
 
 
 LISTPARAM ::= LISTPARAM:listparams comma TYPE:type tid:id {: 
@@ -224,19 +219,23 @@ LISTPARAM ::= TYPE:type tid:id {:
 
 LISTPARAM ::= /* empty */;
 
-BLQ ::= l_brace SENTLIST r_brace {: 	
-	// Manejo de errores al cierre del ámbito...
+BLQ ::= l_brace SENTLIST:types r_brace {: 	
 	Command err = this.actual.buscaError();
 	if (err != null) {
 		this.actual.deleteError(err);
 	}
 	this.actual = this.actual.getFather();
+	RESULT = types;
 :};
 
-SENTLIST ::= SENTLIST SENT;
+SENTLIST ::= SENTLIST:types SENT:type {:
+	types.insert(type);
+:};
 
 SENTLIST ::= SENT:type {:
-	RESULT = type;
+	TupleTypes types = new TupleTypes();
+	types.insert(type);
+	RESULT = types;
 :};
 
 // Declare id's...
@@ -249,14 +248,14 @@ SENT ::= TYPE:type LID:lid {:
 
 // Assign...
 SENT ::= tid:idLexema assig EXP:typeExp semicolon {: 
-	EnumType type = EnumType.ERROR;	
+	Type type = new Type();	
 	Command cmd = this.actual.buscaId(idLexema);
 
 	if (cmd == null) {
 		System.err.println("No existe el identificador de la assignación");
-	} else if (typeExp != EnumType.ERROR) {
-		if (cmd.dameTipo() == typeExp) {
-			type = EnumType.VOID;
+	} else if (!typeExp.isError()) {
+		if (cmd.dameTipo().equals(typeExp)) {
+			type.setVoid();
 		} else {
 			System.err.println("Incompatible types in assgin...");
 		}
@@ -266,10 +265,10 @@ SENT ::= tid:idLexema assig EXP:typeExp semicolon {:
 
 // Call procedure function...
 SENT ::= tid:idLexema l_par LID:lid r_par semicolon {: 
-	EnumType type = EnumType.ERROR;
+	Type type = new Type();
 
-	if (getTypeCallFunction(idLexema, lid) != EnumType.ERROR) {
-		type = EnumType.VOID;
+	if (!getTypeCallFunction(idLexema, lid).isError()) {
+		type.setVoid();
 	}
 	RESULT = type;
 :};
@@ -336,15 +335,11 @@ LID ::= tid:id comma LID:lid {:
 
 LID ::= /* empty */;
 
-EXP ::= EXP:typeExp add EXPT:typeExpt {:
-	EnumType type1 = (EnumType) typeExp;
-	EnumType type2 = (EnumType) typeExpt; 
+EXP ::= EXP:type1 add EXPT:type2 {:
 	RESULT = getTypeOperation("add", type1, type2);
 :};
 
-EXP ::= EXP:typeExp sub EXPT:typeExpt {:
-	EnumType type1 = (EnumType) typeExp;
-	EnumType type2 = (EnumType) typeExpt; 
+EXP ::= EXP:type1 sub EXPT:type2 {:
 	RESULT = getTypeOperation("sub", type1, type2);
 :};
 
@@ -352,15 +347,11 @@ EXP ::= EXPT:type {:
 	RESULT = type;
 :};
 
-EXPT ::= EXPT:typeExpr mul FACTOR:typeFactor {:
-	EnumType type1 = (EnumType) typeExpr;
-	EnumType type2 = (EnumType) typeFactor; 
+EXPT ::= EXPT:type1 mul FACTOR:type2 {:
 	RESULT = getTypeOperation("mul", type1, type2);
 :};
 
-EXPT ::= EXPT:typeExpr div FACTOR:typeFactor {:
-	EnumType type1 = (EnumType) typeExpr;
-	EnumType type2 = (EnumType) typeFactor; 
+EXPT ::= EXPT:type1 div FACTOR:type2 {:
 	RESULT = getTypeOperation("div", type1, type2);
 :};
 
@@ -380,7 +371,7 @@ FACTOR ::= l_bracket EXP:type {:
 
 FACTOR ::= tid:idLexema {:
 	Command cmd = this.actual.buscaId(idLexema);
-	EnumType type = EnumType.ERROR;
+	Type type = new Type();
 	
 	if (cmd == null) {
 		System.err.println("The id : " + idLexema + " not exist...");	
@@ -391,15 +382,15 @@ FACTOR ::= tid:idLexema {:
 :};
 
 FACTOR ::= constint {:
-	RESULT = EnumType.INT;
+	RESULT = new Type(EnumType.INT);
 :};
 FACTOR ::= constfloat {:
-	RESULT = EnumType.FLOAT;
+	RESULT = new Type(EnumType.FLOAT);
 :};
 
-TYPE ::= tvoid:v {: RESULT =  EnumType.VOID; :};
-TYPE ::= tint:i {: RESULT =  EnumType.INT; :};
-TYPE ::= tfloat:f {: RESULT =  EnumType.FLOAT; :};
+TYPE ::= tvoid:v {: RESULT =  new Type(EnumType.VOID); :};
+TYPE ::= tint:i {: RESULT =  new Type(EnumType.INT); :};
+TYPE ::= tfloat:f {: RESULT =  new Type(EnumType.FLOAT); :};
 
 LCOND ::= LCOND tor LCONDT;
 LCOND ::= LCONDT;
@@ -410,9 +401,7 @@ LCONDT  ::=  LCONDF;
 LCONDF ::= COND;
 LCONDF ::= tnot COND;
 
-COND ::= EXP:type_1 OPR EXP:type_2 {:
-	EnumType type1 = (EnumType) type_1;
-	EnumType type2 = (EnumType) type_2; 
+COND ::= EXP:type1 OPR EXP:type2 {:
 	RESULT = getTypeOperation("conditional expresion", type1, type2);
 :};
 

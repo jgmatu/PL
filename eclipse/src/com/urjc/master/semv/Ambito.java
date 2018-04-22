@@ -86,7 +86,7 @@ public class Ambito implements APITS {
 		return this.father;
 	}
 
-	public boolean insertaTipo(String id, EnumType tipo) {
+	public boolean insertaTipo(String id, Type tipo) {
 		boolean exit = this.ambito.containsKey(id);
 		
 		if(exit){
@@ -131,19 +131,19 @@ public class Ambito implements APITS {
 	}
 	
 	@Override
-	public boolean tiposComp(EnumType tipo1, EnumType tipo2) {
+	public boolean tiposComp(Type tipo1, Type tipo2) {
 		return tipo1 == tipo2;
 	}
 		
 	@Override
-	public EnumType dameTipo(String id) {
+	public Type dameTipo(String id) {
 		if (this.ambito.containsKey(id)) {
 			return this.ambito.get(id).dameTipo();
 		}
 		if (this.hasFather()) {
 			return this.father.dameTipo(id);
 		}
-		return EnumType.ERROR;
+		return new Type();
 	}
 
 }

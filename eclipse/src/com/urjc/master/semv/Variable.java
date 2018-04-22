@@ -1,10 +1,8 @@
 package com.urjc.master.semv;
 
-import com.urjc.master.semv.APITS.EnumType;
-
 public class Variable extends Command {
 
-	public Variable(String id, EnumType tipo) {
+	public Variable(String id, Type tipo) {
 		super(id, tipo);
 	}
 	

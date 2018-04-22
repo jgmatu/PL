@@ -2,22 +2,13 @@ package com.urjc.master.semv;
 
 public interface APITS {
 
-      public static enum EnumType {
-            FLOAT, VOID, INT, ERROR
-      };
+	public Command buscaId(String id);
 
-      public static enum EnumCommands {
-            FUNCTION, PARAMETERS, VARIABLE
-      };
-      
-      public Command buscaId(String id);
+	public boolean insertaTipo(String id, Type tipo);
 
-      public boolean insertaTipo(String id, EnumType tipo);
+	public Type dameTipo(String id);
 
-      public EnumType dameTipo(String id);
+	boolean tiposComp(Type tipo1, Type tipo2);
 
-      public boolean tiposComp(EnumType tipo1, EnumType tipo2);
-
-      //ExpTipo -> TBAS || TBAS x TBAS x TBAS || TBAS x TBAS -> TBAS
-
+	// ExpTipo -> TBAS || TBAS x TBAS x TBAS || TBAS x TBAS -> TBAS
 }

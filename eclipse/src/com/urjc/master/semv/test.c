@@ -1,5 +1,5 @@
 // 7
-int main (float hola)
+int main (float hola, int argc)
 { // 6
 	{ // 5
 		int kaka;
@@ -26,6 +26,11 @@ int main (float hola)
 	}
 }
 
+int function3()
+{
+	;
+}
+
 void useMain(float hola) 
 {
     int result;
@@ -34,8 +39,8 @@ void useMain(float hola)
 	result = 0;
 	param = 0.0;
 	param2 = 0.0;
-	
-    result = main(); 
+	result = function3();
+    result = main(param, result); 
 }
 
 /*

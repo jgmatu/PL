@@ -34,8 +34,11 @@ public class Function extends Command {
 	}
 
 	public boolean insertarParametros(ListParams params) {
+		if (params == null) {
+			return false;
+		}
 		boolean success = true;
-
+		
 		for (Entry<String, EnumType> entry : params.getParametros().entrySet()) {
 			success = insertarSingleParametro(entry.getKey(), entry.getValue()) && success;
 		}

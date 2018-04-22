@@ -197,6 +197,8 @@ LISTPARAM ::= TYPE:type tid:id {:
 	
 :};
 
+LISTPARAM ::= /* empty */;
+
 BLQ ::= l_brace SENTLIST r_brace {: 	
 	// Manejo de errores al cierre del ámbito...
 	Command err = this.actual.buscaError();

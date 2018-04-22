@@ -32,15 +32,15 @@ public class TupleTypes {
 			System.err.println("Too few arguments...");
 			return false;			
 		}
-		
+		boolean success = true;
 		for (int i = 0; i < this.types.size(); ++i) {
 			if (types.types.get(i) != this.types.get(i)) {
 				System.err.println("Incompatible types between arguments and parementers"
-						+ "defined on the function.. parameter : " + i);
-				return false;
+						+ " defined on the function.. argument : " + i);
+				success = false;
 			}
 		}
-		return true;
+		return success;
 	}
 	
 	public int size() {

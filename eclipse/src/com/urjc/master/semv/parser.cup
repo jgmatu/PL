@@ -12,13 +12,14 @@ import com.urjc.master.semv.APITS.EnumType;
 import java_cup.runtime.Symbol;
 
 
-parser code{:
+parser code {:
 
 	private Ambito root;
 	private Ambito actual;
 
 	/* Es un método que el cual se llama automáticamente al haber un error en la gramática, 
 	con el que informamos de la linea y la columna en el que se encuentra dicho error.*/
+	
 	@Override 
 	public void syntax_error(Symbol s) { 
 		int l = s.left + 1;
@@ -144,11 +145,10 @@ PART ::= TYPE:type RESTPART:command {:
 :};
 
 /**
- * Definición de función
+ * Definición de función...
  *
  */
 RESTPART ::= tid:idLexema l_par LISTPARAM:list {:
-
 	boolean success = this.root.insertaIdFunction(idLexema);
 	Function function = null;
 	
@@ -203,7 +203,6 @@ BLQ ::= l_brace SENTLIST r_brace {:
 	if (err != null) {
 		this.actual.deleteError(err);
 	}
-//	System.out.println(this.actual.toString());
 	this.actual = this.actual.getFather();
 :};
 
@@ -248,16 +247,11 @@ SENT ::= treturn EXP:type semicolon {:
 
 
 SENT ::= tif l_par LCOND r_par tthen {:
-
 	this.actual = new Ambito(this.actual);
-	System.err.println("if statement no else end BLQ..."); 
-
 :} BLQ IF2;
 
 IF2 ::= telse {: 
-
 	this.actual = new Ambito(this.actual);
-
 :} BLQ | ;
 
 
@@ -265,7 +259,7 @@ IF2 ::= telse {:
 SENT ::= tfor l_par tid assig EXP semicolon LCOND semicolon tid assig EXP r_par {:
 
 	this.actual = new Ambito(this.actual);
-
+	
 :} BLQ; 
 
 // while ..
@@ -290,7 +284,6 @@ SENT ::= {:
 :} BLQ;
 
 SENT ::= semicolon {:
-	// System.err.println("NOP instruction...."); 	
 :};
 
 LID ::= tid:id {: 
@@ -308,7 +301,7 @@ LID ::= tid:id comma LID:lid {:
 	
 :}; // Devolver tipo de tid a LID...
 
-// LID ::= /* empty */;
+LID ::= /* empty */;
 
 EXP ::= EXP:typeExp add EXPT:typeExpt {:
 	EnumType type1 = (EnumType) typeExp;
@@ -367,11 +360,26 @@ FACTOR ::= tid:idLexema l_par LID:lid r_par {:
 	} else {
 		type = EnumType.ERROR;
 	}
+	// Devuelve el tipo de retorno de la función evaluada...
 	RESULT = type;
 :};
 
-FACTOR ::= l_bracket EXP r_bracket;
-FACTOR ::= tid;
+FACTOR ::= l_bracket EXP:type {:
+	RESULT = type;
+:} r_bracket;
+
+FACTOR ::= tid:idLexema {:
+	Command cmd = this.actual.buscaId(idLexema);
+	EnumType type = EnumType.ERROR;
+	
+	if (cmd == null) {
+		System.err.println("The id : " + idLexema + " not exist...");	
+	} else {
+		type = cmd.dameTipo();
+	}
+	RESULT = type;
+:};
+
 FACTOR ::= constint {:
 	RESULT = EnumType.INT;
 :};

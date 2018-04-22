@@ -121,6 +121,9 @@ public class Ambito implements APITS {
 	public TupleTypes buscaIdsType(Lid lid) {
 		TupleTypes types = new TupleTypes();
 		
+		if (lid == null) {
+			return types;
+		}
 		for (String id : lid.getList()) {
 			types.insert(dameTipo(id));
 		}

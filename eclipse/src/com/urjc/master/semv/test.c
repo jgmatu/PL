@@ -7,18 +7,20 @@ int main (float hola)
 			int i;
 			for (i = 0; i < 10; i = i + 1) { // 3
 				while (5 == 5) { // 2
+					int a;
+					a = 0;
 					do { // 1
-						int a;
 					    a = a - 1;
 					} until(a < 10);
 				}
 			}
 		} else {
-			int v, kaka;
+			int v, kaka, b;
 			v = b + 1;
 		}
 	}	
-	
+	int a;
+	a = 3;	
 	if (a < 3) then {
 		;
 	}
@@ -33,7 +35,7 @@ void useMain(float hola)
 	param = 0.0;
 	param2 = 0.0;
 	
-    result = main(param, param2); 
+    result = main(); 
 }
 
 /*

@@ -162,6 +162,8 @@ PART ::= TYPE:type RESTPART:command {:
 	if (command != null && command instanceof Function) {
 		Function function = (Function) command;
 		function.insertaTipo(type);		
+		// Comparar tipo de return...
+		// Comparar llamadas recursivas de procedimientos pero no exp...
 	}
 :};
 

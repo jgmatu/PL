@@ -95,7 +95,7 @@ blee(int argc, int argv, float param)
 		r = 0;
 		if (r == 3) then {
 			;
-		}	
+		}
     }
 }
 

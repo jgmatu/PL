@@ -30,7 +30,8 @@ action code {:
 	
 	private Ambito root = new Ambito();
 	private Ambito actual = this.root;
-	
+	private Function function = null;
+		
 	private Type getTypeOperation(String op, Type type1, Type type2) {		
 		Type type = new Type();
 		
@@ -41,7 +42,7 @@ action code {:
 		if (type1.equals(type2)) {
 			type = type1;
 		} else {
-			System.err.println(" Incompatible types on " + op);			
+			System.err.println("Incompatible types on " + op);			
 		}
 		return type;	
 	}
@@ -139,69 +140,64 @@ PROGRAM ::= PART PROGRAM {:
 :};
 
 PROGRAM ::= PART {:
-//	System.out.println(this.actual.toString());
-	System.err.println("FIN DE PROGRAMA"); 	
+//	System.out.println(this.root.toString());
+//	System.err.println("FIN DE PROGRAMA"); 	
 :};
 
 /**
-* De esta manera RESTPAR devuelve command 
-* podríamos tener variables globales, aunque no esté
-* contemplado, habría que hacer el sintáctico de variable 
-* global, pero se puede dejar así para solo funciones...
-*
-* NOTE: De la clase Command heredan las funciones y las variables que luego se 
-* insertan en el ambito...
-*/
+ * De la clase Command heredan las funciones y las variables que luego se 
+ * insertan en el ambito...
+ *
+ */
 PART ::= TYPE:type RESTPART:command {: 	
-
 	Command err = this.actual.buscaError();
+
 	if (err != null) {
 		this.actual.deleteError(err);
 	}	
-
+	
 	if (command != null && command instanceof Function) {
 		Function function = (Function) command;
 		function.insertaTipo(type);		
 		// Comparar tipo de return...
-		// Comparar llamadas recursivas de procedimientos pero no exp...
+		// Comparar llamadas recursivas...
 	}
+	this.actual = this.root;
+	function = null;
 :};
 
-/**
- * Definición de función...
- *
- */
-RESTPART ::= tid:idLexema l_par LISTPARAM:list r_par BLQ:types {:
+RESTPART ::= tid:idLexema l_par LISTPARAM:list {:
+	boolean success = this.root.insertaIdFunction(idLexema);
+	
+	if (success) {
+		function = new Function(idLexema, this.actual);
+	}
+	
+	if (function != null) {
+		this.actual = function.getAmbito();
+		function.insertarParametros(list);
+	}
+:} r_par BLQ:types {:
+	if (function != null) {
+		function.insertReturnType(types.getReturnType());
+	}	
+:};
+
+RESTPART ::= tid:idLexema l_par tvoid {:
 	boolean success = this.root.insertaIdFunction(idLexema);
 	Function function = null;
 	
 	if (success) {
-		function = (Function) this.root.buscaId(idLexema);
-	} else {
-		function = (Function) this.root.buscaId(Ambito.ERROR_PREFIX + idLexema);
+		function = new Function(idLexema, this.actual);
 	}
-	this.actual = function.getAmbito();
-	function.insertarParametros(list);
-	function.insertReturnType(types.getReturnType());
-	RESULT = function;
-			
-:};
-
-/*
- * Definición de función
- */
-RESTPART ::= tid:idLexema l_par tvoid r_par BLQ:types {:
-	boolean success = this.root.insertaIdFunction(idLexema);
-	Function function = null;
 	
-	if (success) {
-		function = (Function) this.root.buscaId(idLexema);
-	} else {
-		function = (Function) this.root.buscaId(Ambito.ERROR_PREFIX + idLexema);
+	if (function != null) {
+		this.actual = function.getAmbito();
 	}
-	this.actual = function.getAmbito();
-
-	RESULT = function;
+:} r_par BLQ:types {:
+	if (function != null) {
+		function.insertReturnType(types.getReturnType());
+	}
 :};
 
 
@@ -226,7 +222,11 @@ BLQ ::= l_brace SENTLIST:types r_brace {:
 	if (err != null) {
 		this.actual.deleteError(err);
 	}
-	this.actual = this.actual.getFather();
+	if (this.actual.getFather() != null) {
+		this.actual = this.actual.getFather();
+	} else {
+		this.actual = this.root;
+	}
 	RESULT = types;
 :};
 
@@ -255,13 +255,13 @@ SENT ::= tid:idLexema assig EXP:typeExp semicolon {:
 	Command cmd = this.actual.buscaId(idLexema);
 
 	if (cmd == null) {
-		System.err.println("No existe el identificador de la assignación");
+		System.err.println("No existe el identificador de la asignación");
 	} else if (!typeExp.isError()) {
-		if (cmd.dameTipo().equals(typeExp)) {
-			type.setVoid();
-		} else {
-			System.err.println("Incompatible types in assgin...");
+		if (!cmd.dameTipo().equals(typeExp)) {
+			System.err.println("Incompatible types on assign...");
+			type.setError();
 		}
+		
 	}
 	RESULT = type;
 :};
@@ -278,29 +278,36 @@ SENT ::= tid:idLexema l_par LID:lid r_par semicolon {:
 
 // return....
 SENT ::= treturn EXP:type semicolon {:
-	// System.err.println("Return statement");
 	RESULT = type;
 :};
 
 
 
 SENT ::= tif l_par LCOND r_par tthen {:
+
 	this.actual = new Ambito(this.actual);
+	
 :} BLQ IF2;
 
 IF2 ::= telse {: 
+
 	this.actual = new Ambito(this.actual);
+
 :} BLQ | ;
 
 
 // for...
 SENT ::= tfor l_par tid assig EXP semicolon LCOND semicolon tid assig EXP r_par {:
+
 	this.actual = new Ambito(this.actual);	
+
 :} BLQ; 
 
 // while ..
 SENT ::= twhile l_par LCOND r_par {:
+
 	this.actual = new Ambito(this.actual);
+
 :} BLQ;
 
 // do while...
@@ -362,7 +369,6 @@ EXPT ::= FACTOR:type {:
 	RESULT = type;
 :};
 
-// Llamada a función evaluar...
 FACTOR ::= tid:idLexema l_par LID:lid r_par {:
 	// Devuelve el tipo de retorno de la función evaluada...
 	RESULT = getTypeCallFunction(idLexema, lid);
@@ -377,7 +383,7 @@ FACTOR ::= tid:idLexema {:
 	Type type = new Type();
 	
 	if (cmd == null) {
-		System.err.println("The id : " + idLexema + " not exist...");	
+		System.err.println("The id : " + idLexema + " not exist.");	
 	} else {
 		type = cmd.dameTipo();
 	}
@@ -387,6 +393,7 @@ FACTOR ::= tid:idLexema {:
 FACTOR ::= constint {:
 	RESULT = new Type(EnumType.INT);
 :};
+
 FACTOR ::= constfloat {:
 	RESULT = new Type(EnumType.FLOAT);
 :};

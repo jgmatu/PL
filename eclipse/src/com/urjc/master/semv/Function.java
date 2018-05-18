@@ -35,7 +35,7 @@ public class Function extends Command {
 			this.parametros.add(v);
 			this.ambito.insertaIdVariable(new Variable(id, tipo));
 		} else {
-			System.err.println("Ya existe un par�metro " + id + " en la funci�n : " + super.getId());
+			System.err.println("Ya existe un parametro " + id + " en la funcion : " + super.getId());
 			this.parametros.add(new Variable(id, new Type()));	
 		}
 		return success;
@@ -48,7 +48,7 @@ public class Function extends Command {
 		boolean success = true;
 		
 		for (Entry<String, Type> entry : params.getParametros().entrySet()) {
-			success = insertarSingleParametro(entry.getKey(), entry.getValue()) && success;
+			success = this.insertarSingleParametro(entry.getKey(), entry.getValue()) && success;
 		}
 		return success;
 	}

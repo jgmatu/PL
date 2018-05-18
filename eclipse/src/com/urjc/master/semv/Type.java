@@ -29,4 +29,30 @@ public class Type {
  	public boolean isReturn() {
 		return this.sentence == EnumSentence.RETURN;
 	}
+ 	
+ 	@Override
+ 	public boolean equals(Object o) {
+ 		if (o == this) {
+ 			return true;
+ 		}
+ 		if (!(o instanceof Type)) {
+ 			return false;
+ 		}
+ 		Type t = (Type) o;
+ 		return t.type == this.type;
+ 	}
+ 	
+ 	@Override
+ 	public String toString() {
+ 		switch(this.type) {
+ 		case INT:
+ 			return String.format("%s\n", "INT");
+ 		case FLOAT:
+ 			return String.format("%s\n", "FLOAT");
+ 		case ERROR:
+ 			return String.format("%s\n", "ERROR");
+ 		default:
+ 			return String.format("%s\n", "Undefined");
+ 		}
+ 	}
 }

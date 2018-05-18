@@ -1,24 +1,6 @@
 // 7
 int main (float hola, int argc)
 { // 6
-	{ // 5
-		int kaka;
-		if (hola == 3.0) then { // 4
-			int i;
-			for (i = 0; i < 10; i = i + 1) { // 3
-				while (5 == 5) { // 2
-					int a;
-					a = 0;
-					do { // 1
-					    a = a - 1;
-					} until(a < 10);
-				}
-			}
-		} else {
-			int v, kaka, b;
-			v = b + 1;
-		}
-	}	
 	int a;
 	a = 3;	
 	if (a < 3) then {
@@ -139,5 +121,4 @@ blu(float argc, float argv, int param)
     do {
         a = a - 1;
     } until(a < 10);
-        
 }

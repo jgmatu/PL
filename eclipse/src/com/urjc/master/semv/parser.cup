@@ -232,6 +232,7 @@ BLQ ::= l_brace SENTLIST:types r_brace {:
 
 SENTLIST ::= SENTLIST:types SENT:type {:
 	types.insert(type);
+	RESULT = types;
 :};
 
 SENTLIST ::= SENT:type {:

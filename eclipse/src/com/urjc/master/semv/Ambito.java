@@ -6,8 +6,6 @@ import java.util.Map.Entry;
 
 public class Ambito implements APITS {
 
-	public static String ERROR_PREFIX = "0func_err";
-	
 	private Ambito father;
 	private HashMap<String, Command> ambito;
 
@@ -21,8 +19,13 @@ public class Ambito implements APITS {
 		this.ambito = new HashMap<String, Command>();
 	}
 
-	public boolean insertaIdFunction(String idLexema) {
-		return this.addEntry(idLexema, new Function(idLexema, this));
+	public Function insertaIdFunction(String idLexema) {
+		Function function = new Function(idLexema, this);
+		
+		if (!this.addEntry(idLexema, function)) {
+			return null;
+		}
+		return function;
 	}
 	
 	public boolean insertaIdVariable(Variable var) {
@@ -35,32 +38,13 @@ public class Ambito implements APITS {
 		if (success) {
 			this.ambito.put(id, command);			
 		} else {
-			this.printErrorAlreadyExists(command);
-			this.putError(command);
+			printErrorAlreadyExists(command);
 		}
 		return success;
 	}
 	
 	private boolean existIdOnAmbito(String id) {
 		return this.ambito.containsKey(id);
-	}
-	
-	private void putError(Command command) {
-		command.setId(ERROR_PREFIX + command.getId());
-		this.ambito.put(command.getId(), command);		
-	}
-	
-	public Command buscaError() {
-		for (Map.Entry<String, Command> entry : this.ambito.entrySet()) {
-			if (entry.getKey().contains(ERROR_PREFIX)) {
-				return entry.getValue();
-			}
-		}
-		return null;
-	}
-	
-	public void deleteError(Command err) {
-		this.ambito.remove(err.getId());
 	}
 	
 	private void printErrorAlreadyExists(Command command) {

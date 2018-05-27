@@ -13,7 +13,7 @@ int main(int argc) {
     int n;
     
     n = 128;
-    write(numb);    
+    write(n);    
     
-    return 0;
+    return 0.0;
 }

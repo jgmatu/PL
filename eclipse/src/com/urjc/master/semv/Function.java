@@ -10,23 +10,35 @@ public class Function extends Command {
 
 	private List<Variable> parametros;
 	private Ambito ambito;
-	private Type returnType;
-
+	private List<Type> returnTypes;
+	
 	public Function(String id, Ambito father) {
 		super(id, new Type());
 		
 		this.ambito = new Ambito(father);
 		this.parametros = new ArrayList<>();
+		this.returnTypes = new ArrayList<>();
 	}
 	
-	public void insertReturnType(Type type) {
-		this.returnType = type;
+	public void insertReturnTypes(TupleTypes types) {
+		for (Type type : types.getTupleTypes()) {
+			if (type != null && type.isReturn()) {
+				this.returnTypes.add(type);				
+			}
+		}
 	}
 	
-	public Type getReturnType() {
-		return this.returnType;
+	public void checkReturnType(Type t) {
+		for (Type type : this.returnTypes) {
+			if (!type.equals(t)) {
+				System.err.println("Error on return type incompatible return" + 
+						type.toString() +  " function defined type :" + t.toString());
+			} else {
+				System.err.println("Correct type : " + type.toString() + " " + t.toString());
+			}
+		}
 	}
-
+	
 	public boolean insertarSingleParametro(String id, Type tipo) {
 		Variable v = new Variable(id, tipo);
 		boolean success = !parametros.contains(v);

@@ -136,12 +136,12 @@ non terminal IF2;
 
 /* GRAMMAR */
 PROGRAM ::= PART PROGRAM {:
-	;
+//	System.err.println(this.root.toString());
+//	System.err.println("FIN DE PROGRAMA"); 	
 :};
 
 PROGRAM ::= PART {:
-//	System.out.println(this.root.toString());
-//	System.err.println("FIN DE PROGRAMA"); 	
+	;
 :};
 
 /**
@@ -150,62 +150,47 @@ PROGRAM ::= PART {:
  *
  */
 PART ::= TYPE:type RESTPART:command {: 	
-	Command err = this.actual.buscaError();
-
-	if (err != null) {
-		this.actual.deleteError(err);
-	}	
-	
-	if (command != null && command instanceof Function) {
-		Function function = (Function) command;
+	if (function != null) {
 		function.insertaTipo(type);		
-		// Comparar tipo de return...
-		// Comparar llamadas recursivas...
+		function.checkReturnType(type);
 	}
 	this.actual = this.root;
 	function = null;
 :};
 
 RESTPART ::= tid:idLexema l_par LISTPARAM:list {:
-	boolean success = this.root.insertaIdFunction(idLexema);
-	
-	if (success) {
-		function = new Function(idLexema, this.actual);
-	}
+	function = this.root.insertaIdFunction(idLexema);
 	
 	if (function != null) {
 		this.actual = function.getAmbito();
 		function.insertarParametros(list);
 	}
+	
 :} r_par BLQ:types {:
 	if (function != null) {
-		function.insertReturnType(types.getReturnType());
+		function.insertReturnTypes(types);
 	}	
 :};
 
 RESTPART ::= tid:idLexema l_par tvoid {:
-	boolean success = this.root.insertaIdFunction(idLexema);
-	Function function = null;
-	
-	if (success) {
-		function = new Function(idLexema, this.actual);
-	}
+	function = this.root.insertaIdFunction(idLexema);
 	
 	if (function != null) {
 		this.actual = function.getAmbito();
 	}
+	
 :} r_par BLQ:types {:
+
 	if (function != null) {
-		function.insertReturnType(types.getReturnType());
+		function.insertReturnTypes(types);
 	}
+	
 :};
 
 
 LISTPARAM ::= LISTPARAM:listparams comma TYPE:type tid:id {: 
-
 	listparams.insertar(id, type);
-	RESULT = listparams;		
-
+	RESULT = listparams;
 :};
 
 LISTPARAM ::= TYPE:type tid:id {: 
@@ -218,10 +203,6 @@ LISTPARAM ::= TYPE:type tid:id {:
 LISTPARAM ::= /* empty */;
 
 BLQ ::= l_brace SENTLIST:types r_brace {: 	
-	Command err = this.actual.buscaError();
-	if (err != null) {
-		this.actual.deleteError(err);
-	}
 	if (this.actual.getFather() != null) {
 		this.actual = this.actual.getFather();
 	} else {
@@ -261,7 +242,6 @@ SENT ::= tid:idLexema assig EXP:typeExp semicolon {:
 			System.err.println("Incompatible types on assign...");
 			type.setError();
 		}
-		
 	}
 	RESULT = type;
 :};

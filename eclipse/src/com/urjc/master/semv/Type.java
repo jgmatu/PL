@@ -49,6 +49,8 @@ public class Type {
  			return String.format("%s\n", "INT");
  		case FLOAT:
  			return String.format("%s\n", "FLOAT");
+ 		case VOID:
+ 			return String.format("%s\n", "VOID"); 			
  		case ERROR:
  			return String.format("%s\n", "ERROR");
  		default:

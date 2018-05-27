@@ -18,7 +18,7 @@ public class TupleTypes {
 	public List<Type> getTupleTypes() {
 		return this.types;
 	}
-
+	
 	public boolean compare(TupleTypes types) {
 		if (this.size() > types.size()) {
 			System.err.println("Too many arguments...");
@@ -39,11 +39,7 @@ public class TupleTypes {
 		}
 		return success;
 	}
-	
-	public Type getReturnType() {
-		return new Type();
-	}
-	
+		
 	public int size() {
 		return this.types.size();
 	}

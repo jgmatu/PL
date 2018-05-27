@@ -15,5 +15,5 @@ int main(int argc) {
     n = 128;
     write(n);    
     
-    return 0.0;
+    return 0;
 }

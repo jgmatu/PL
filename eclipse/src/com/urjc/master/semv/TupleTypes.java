@@ -30,8 +30,9 @@ public class TupleTypes {
 			return false;			
 		}
 		boolean success = true;
+		
 		for (int i = 0; i < this.types.size(); ++i) {
-			if (types.types.get(i) != this.types.get(i)) {
+			if (!types.types.get(i).equals(this.types.get(i))) {
 				System.err.println("Incompatible types between arguments and parementers " + 
 									" defined on the function... numb of argument : " + i);
 				success = false;

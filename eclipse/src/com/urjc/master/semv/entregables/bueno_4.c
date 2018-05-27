@@ -1,5 +1,5 @@
 
-void write(int n) {
+void write(int n, float b) {
     int i;
     int len;
 
@@ -11,9 +11,11 @@ void write(int n) {
 
 int main(int argc) {
     int n;
+    float b;
     
+    b = 0.0;
     n = 128;
-    write(n);    
+    write(n, b);    
     
     return 0;
 }

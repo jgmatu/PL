@@ -26,6 +26,10 @@ public class Type {
 		this.type = EnumType.VOID;
 	}
 	
+	public void setReturn() {
+		this.sentence = EnumSentence.RETURN;
+	}
+	
  	public boolean isReturn() {
 		return this.sentence == EnumSentence.RETURN;
 	}

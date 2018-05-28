@@ -23,7 +23,7 @@ public class Function extends Command {
 	public void insertReturnTypes(TupleTypes types) {
 		for (Type type : types.getTupleTypes()) {
 			if (type != null && type.isReturn()) {
-				this.returnTypes.add(type);				
+				this.returnTypes.add(type);	
 			}
 		}
 	}
@@ -31,10 +31,8 @@ public class Function extends Command {
 	public void checkReturnType(Type t) {
 		for (Type type : this.returnTypes) {
 			if (!type.equals(t)) {
-				System.err.println("Error on return type incompatible return" + 
-						type.toString() +  " function defined type :" + t.toString());
-			} else {
-				System.err.println("Correct type : " + type.toString() + " " + t.toString());
+				System.err.println("Error on return type incompatible return\n" + 
+						"Sentence return : " + type.toString() +  "Function defined type return :" + t.toString());
 			}
 		}
 	}

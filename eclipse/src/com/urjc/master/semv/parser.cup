@@ -258,6 +258,7 @@ SENT ::= tid:idLexema l_par LID:lid r_par semicolon {:
 
 // return....
 SENT ::= treturn EXP:type semicolon {:
+	type.setReturn();
 	RESULT = type;
 :};
 

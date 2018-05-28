@@ -14,4 +14,6 @@ int main (float hola, int argc)
 	for (a = 0; a < 3; a = a + 1) {
 		a = ax * 10;
 	}
+    
+    return 0.0;
 }

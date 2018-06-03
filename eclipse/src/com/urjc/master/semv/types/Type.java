@@ -1,5 +1,7 @@
-package com.urjc.master.semv;
+package com.urjc.master.semv.types;
 
+import com.urjc.master.semv.enums.EnumSentence;
+import com.urjc.master.semv.enums.EnumType;
 
 public class Type {
 	

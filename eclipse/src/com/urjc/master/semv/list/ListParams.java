@@ -1,7 +1,9 @@
-package com.urjc.master.semv;
+package com.urjc.master.semv.list;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
+
+import com.urjc.master.semv.types.Type;
 
 public class ListParams {
 

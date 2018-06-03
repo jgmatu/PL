@@ -1,7 +1,9 @@
-package com.urjc.master.semv;
+package com.urjc.master.semv.list;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.urjc.master.semv.enums.EnumType;
 
 public class Lid {
 	

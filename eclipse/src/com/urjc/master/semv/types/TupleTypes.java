@@ -1,19 +1,19 @@
-package com.urjc.master.semv;
+package com.urjc.master.semv.types;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 public class TupleTypes {
 
-	private Stack<Type> types;
+	private List<Type> types;
 
 	public TupleTypes() {
-		this.types = new Stack<>();
+		this.types = new ArrayList<>();
 	}
 
 	public void insert(Type type) {
 		if (type != null) {
-			this.types.push(type);			
+			this.types.add(type);			
 		}
 	}
 
@@ -34,18 +34,27 @@ public class TupleTypes {
 		boolean success = true;
 		final int size = this.types.size();
 		
-		for (int i = 0; i < size; ++i) {
-			Type type_arg = this.types.pop();
-			Type type_parm = types.types.pop();
+		for (int i = 0; i < size && success; ++i) {
+			Type type_arg = this.types.get(i);
+			Type type_parm = types.types.get(i);
 
 			if (!type_arg.equals(type_parm)) {
-				System.err.println("Incompatible types between arguments and parementers "
-						+ " defined on the function... numb of argument : " + i);
 				success = false;
 			}
 		}
+		if (!success) {
+			System.err.println("The function is bas used : " + usage(types));
+		}
 		return success;
 	}
+	
+	private String usage (TupleTypes types) {
+		StringBuffer format = new StringBuffer();
+		
+		
+		return format.toString();
+	}
+	
 	
 	@Override
 	public String toString() {

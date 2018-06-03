@@ -1,4 +1,7 @@
-package com.urjc.master.semv;
+package com.urjc.master.semv.interfaces;
+
+import com.urjc.master.semv.commands.Command;
+import com.urjc.master.semv.types.Type;
 
 public interface APITS {
 

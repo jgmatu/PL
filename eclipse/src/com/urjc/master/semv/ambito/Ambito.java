@@ -1,8 +1,15 @@
-package com.urjc.master.semv;
+package com.urjc.master.semv.ambito;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Map.Entry;
+
+import com.urjc.master.semv.commands.Command;
+import com.urjc.master.semv.commands.Function;
+import com.urjc.master.semv.commands.Variable;
+import com.urjc.master.semv.interfaces.APITS;
+import com.urjc.master.semv.list.Lid;
+import com.urjc.master.semv.types.TupleTypes;
+import com.urjc.master.semv.types.Type;
 
 public class Ambito implements APITS {
 

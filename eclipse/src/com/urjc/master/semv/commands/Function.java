@@ -1,10 +1,14 @@
-package com.urjc.master.semv;
+package com.urjc.master.semv.commands;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
-import com.urjc.master.semv.Command;
+import com.urjc.master.semv.ambito.Ambito;
+import com.urjc.master.semv.commands.Command;
+import com.urjc.master.semv.list.ListParams;
+import com.urjc.master.semv.types.TupleTypes;
+import com.urjc.master.semv.types.Type;
 
 public class Function extends Command {
 

@@ -1,4 +1,6 @@
-package com.urjc.master.semv;
+package com.urjc.master.semv.commands;
+
+import com.urjc.master.semv.types.Type;
 
 public class Command {
 

@@ -1,5 +1,7 @@
 package com.urjc.master.semv;
 
+import com.urjc.master.semv.cup.parser;
+
 @SuppressWarnings("deprecation")
 public class Analizador {
 	public static void main(String argv[]) {

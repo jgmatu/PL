@@ -71,10 +71,12 @@ action code {:
 		}
 		
 		if (func != null && !type.isError()) {
-			TupleTypes idTypes_1 = this.actual.buscaIdsType(lid);
-			TupleTypes idTypes_2 = func.getParamsTypes();
+			TupleTypes idTypes_1 = func.getParamsTypes();
+			TupleTypes idTypes_2 = this.actual.buscaIdsType(lid);
+			
 			boolean success = idTypes_1.compare(idTypes_2);
 			if (!success) {
+				func.usage(idTypes_1, idTypes_2, line);
 				type.setError();
 			}
 		}

@@ -5,11 +5,12 @@ import com.urjc.master.semv.cup.parser;
 @SuppressWarnings("deprecation")
 public class Analizador {
 	public static void main(String argv[]) {
+		
 		if (argv.length == 0) {
 			System.out.println("Inserta nombre de archivo\n" + "( Usage : java Analizador <inputfile> )");
 			return;
 		}
-
+		
 		for (int i = 0; i < argv.length; i++) {
 			AnalizadorLexico lexico = null;
 

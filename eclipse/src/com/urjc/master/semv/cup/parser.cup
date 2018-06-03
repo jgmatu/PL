@@ -42,7 +42,7 @@ action code {:
 	private Ambito actual = this.root;
 	private Function function = null;
 		
-	private Type getTypeOperation(String op, Type type1, Type type2) {		
+	private Type getTypeOperation(String op, Type type1, Type type2, int line) {		
 		Type type = new Type();
 		
 		if (type1.isError() || type2.isError()) {
@@ -52,19 +52,19 @@ action code {:
 		if (type1.equals(type2)) {
 			type = type1;
 		} else {
-			System.err.println("Incompatible types on " + op);			
+			System.err.println("Line: " + line + " Incompatible types on " + op);			
 		}
 		return type;	
 	}
 	
-	private Type getTypeCallFunction(String id, Lid lid) {
+	private Type getTypeCallFunction(String id, Lid lid, int line) {
 		Function func = null;
 		Command cmd = null;
 		Type type = new Type();
 			
 		cmd = this.actual.buscaId(id);
 		if (cmd == null && !(cmd instanceof Function)) {
-			System.err.println("The function not exist..");
+			System.err.println("Line:" + line + " The function " + id + " not exist");
 		} else {
 			func = (Function) cmd;
 			type = cmd.getTipo();
@@ -162,7 +162,7 @@ PROGRAM ::= PART {:
 PART ::= TYPE:type RESTPART:command {: 	
 	if (function != null) {
 		function.insertaTipo(type);		
-		function.checkReturnType(type);
+		function.checkReturnType(type, typeleft + 1);
 	}
 	this.actual = this.root;
 	function = null;
@@ -173,7 +173,7 @@ RESTPART ::= tid:idLexema l_par LISTPARAM:list {:
 		
 	if (function != null) {
 		this.actual = function.getAmbito();
-		function.insertarParametros(list);
+		function.insertarParametros(list, listleft + 1);
 	}
 	
 :} r_par BLQ:types {:
@@ -246,11 +246,11 @@ SENT ::= tid:idLexema assig EXP:typeExp semicolon {:
 	Command cmd = this.actual.buscaId(idLexema);
 
 	if (cmd == null) {
-		System.err.println("No existe el identificador de la asignación");
+		System.err.println("Line:" + (idLexemaleft + 1) + "No existe el identificador de la asignacion ");
 	} else if (!typeExp.isError()) {
 		if (!cmd.dameTipo().equals(typeExp)) {
-			System.err.println("Incompatible types on assign...");
-			type.setError();
+			System.err.println("Incompatible types on assign " + (idLexemaleft + 1));
+			type.setError(); 
 		}
 	}
 	RESULT = type;
@@ -260,7 +260,7 @@ SENT ::= tid:idLexema assig EXP:typeExp semicolon {:
 SENT ::= tid:idLexema l_par LID:lid r_par semicolon {: 
 	Type type = new Type();
 
-	if (!getTypeCallFunction(idLexema, lid).isError()) {
+	if (!getTypeCallFunction(idLexema, lid, lidleft + 1).isError()) {
 		type.setVoid();
 	}
 	RESULT = type;
@@ -337,11 +337,11 @@ LID ::= tid:id comma LID:lid {:
 LID ::= /* empty */;
 
 EXP ::= EXP:type1 add EXPT:type2 {:
-	RESULT = getTypeOperation("add", type1, type2);
+	RESULT = getTypeOperation("add", type1, type2, type1left + 1);
 :};
 
 EXP ::= EXP:type1 sub EXPT:type2 {:
-	RESULT = getTypeOperation("sub", type1, type2);
+	RESULT = getTypeOperation("sub", type1, type2, type1left + 1);
 :};
 
 EXP ::= EXPT:type {:	
@@ -349,11 +349,11 @@ EXP ::= EXPT:type {:
 :};
 
 EXPT ::= EXPT:type1 mul FACTOR:type2 {:
-	RESULT = getTypeOperation("mul", type1, type2);
+	RESULT = getTypeOperation("mul", type1, type2, type1left + 1);
 :};
 
 EXPT ::= EXPT:type1 div FACTOR:type2 {:
-	RESULT = getTypeOperation("div", type1, type2);
+	RESULT = getTypeOperation("div", type1, type2, type1left + 1);
 :};
 
 EXPT ::= FACTOR:type {:	
@@ -361,8 +361,7 @@ EXPT ::= FACTOR:type {:
 :};
 
 FACTOR ::= tid:idLexema l_par LID:lid r_par {:
-	// Devuelve el tipo de retorno de la función evaluada...
-	RESULT = getTypeCallFunction(idLexema, lid);
+	RESULT = getTypeCallFunction(idLexema, lid, lidleft + 1);
 :};
 
 FACTOR ::= l_bracket EXP:type {:
@@ -374,24 +373,24 @@ FACTOR ::= tid:idLexema {:
 	Type type = new Type();
 	
 	if (cmd == null) {
-		System.err.println("The id : " + idLexema + " not exist.");	
+		System.err.println("Line: " + (idLexemaleft + 1) + " The id " + idLexema + " not exist ");	
 	} else {
 		type = cmd.dameTipo();
 	}
 	RESULT = type;
 :};
 
-FACTOR ::= constint {:
-	RESULT = new Type(EnumType.INT);
+FACTOR ::= constint:v {:
+	RESULT = new Type(EnumType.INT, vleft);
 :};
 
-FACTOR ::= constfloat {:
-	RESULT = new Type(EnumType.FLOAT);
+FACTOR ::= constfloat:v {:
+	RESULT = new Type(EnumType.FLOAT, vleft);
 :};
 
-TYPE ::= tvoid:v {: RESULT =  new Type(EnumType.VOID); :};
-TYPE ::= tint:i {: RESULT =  new Type(EnumType.INT); :};
-TYPE ::= tfloat:f {: RESULT =  new Type(EnumType.FLOAT); :};
+TYPE ::= tvoid:v {: RESULT =  new Type(EnumType.VOID, vleft); :};
+TYPE ::= tint:i {: RESULT =  new Type(EnumType.INT, ileft); :};
+TYPE ::= tfloat:f {: RESULT =  new Type(EnumType.FLOAT, fleft); :};
 
 LCOND ::= LCOND tor LCONDT;
 LCOND ::= LCONDT;
@@ -403,7 +402,7 @@ LCONDF ::= COND;
 LCONDF ::= tnot COND;
 
 COND ::= EXP:type1 OPR EXP:type2 {:
-	RESULT = getTypeOperation("conditional expresion", type1, type2);
+	RESULT = getTypeOperation("conditional expresion", type1, type2, type1left + 1);
 :};
 
 OPR ::=  equals;

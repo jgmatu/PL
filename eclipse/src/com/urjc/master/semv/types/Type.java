@@ -7,15 +7,21 @@ public class Type {
 	
 	private EnumType type;
 	private EnumSentence sentence;
+	private int line;
 	
 	public Type() {
 		this.type = EnumType.ERROR;
 	}
 	
-	public Type(EnumType type) {
+	public Type(EnumType type, int line) {
 		this.type = type;
+		this.line = line;
 	}
-
+	
+	public int getLine() {
+		return this.line;
+	}
+	
 	public boolean isError() {
 		return this.type == EnumType.ERROR;
 	}
@@ -35,6 +41,10 @@ public class Type {
  	public boolean isReturn() {
 		return this.sentence == EnumSentence.RETURN;
 	}
+ 	
+ 	public boolean isVoid() {
+ 		return this.type == EnumType.VOID;
+ 	}
  	
  	@Override
  	public boolean equals(Object o) {

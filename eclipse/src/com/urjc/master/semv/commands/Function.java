@@ -15,33 +15,37 @@ public class Function extends Command {
 	private List<Variable> parametros;
 	private Ambito ambito;
 	private List<Type> returnTypes;
-	
+
 	public Function(String id, Ambito father) {
 		super(id, new Type());
-		
+
 		this.ambito = new Ambito(father);
 		this.parametros = new ArrayList<>();
 		this.returnTypes = new ArrayList<>();
 	}
-	
+
 	public void insertReturnTypes(TupleTypes types) {
 		for (Type type : types.getTupleTypes()) {
 			if (type != null && type.isReturn()) {
-				this.returnTypes.add(type);	
+				this.returnTypes.add(type);
 			}
 		}
 	}
-	
-	public void checkReturnType(Type t) {
+
+	public void checkReturnType(Type t, int line) {
 		for (Type type : this.returnTypes) {
 			if (!type.equals(t)) {
-				System.err.println("Error on return type incompatible return\n" + 
-						"Sentence return : " + type.toString() +  "Function defined type return :" + t.toString());
+				System.err.println("\nLine:" + type.getLine() + " Error on return type incompatible return\n" + "Line:" + type.getLine()
+						+ " Sentence return : " + type.toString() + "Line:" + line + " Function defined type return :"
+						+ t.toString());
 			}
 		}
+		if (this.returnTypes.size() == 0 && !t.isVoid()) {
+			System.err.println("Line: " + line + " The function should be have a return sentence.");
+		}
 	}
-	
-	public boolean insertarSingleParametro(String id, Type tipo) {
+
+	public boolean insertarSingleParametro(String id, Type tipo, int line) {
 		Variable v = new Variable(id, tipo);
 		boolean success = !parametros.contains(v);
 
@@ -49,33 +53,33 @@ public class Function extends Command {
 			this.parametros.add(v);
 			this.ambito.insertaIdVariable(new Variable(id, tipo));
 		} else {
-			System.err.println("Ya existe un parametro " + id + " en la funcion : " + super.getId());
-			this.parametros.add(new Variable(id, new Type()));	
+			System.err.println("Line:" + line + "Ya existe un parametro " + id + " en la funcion : " + super.getId());
+			this.parametros.add(new Variable(id, new Type()));
 		}
 		return success;
 	}
 
-	public boolean insertarParametros(ListParams params) {
+	public boolean insertarParametros(ListParams params, int line) {
 		if (params == null) {
 			return false;
 		}
 		boolean success = true;
-		
+
 		for (Entry<String, Type> entry : params.getParametros().entrySet()) {
-			success = this.insertarSingleParametro(entry.getKey(), entry.getValue()) && success;
+			success = this.insertarSingleParametro(entry.getKey(), entry.getValue(), line) && success;
 		}
 		return success;
 	}
-	
+
 	public TupleTypes getParamsTypes() {
 		TupleTypes types = new TupleTypes();
-		
-		for (Variable v: this.parametros) {
+
+		for (Variable v : this.parametros) {
 			types.insert(v.dameTipo());
 		}
 		return types;
 	}
-	
+
 	public void eraseAmbito() {
 		this.ambito = null;
 	}
@@ -83,7 +87,7 @@ public class Function extends Command {
 	public Ambito getAmbito() {
 		return this.ambito;
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuffer format = new StringBuffer();

@@ -10,7 +10,9 @@ rm AnalizadorLexico.java
 sleep 1
 
 jflex lexico.flex
+
 java -jar java-cup-11b.jar parser.cup
+java -jar java-cup-11b.jar -parser include include.cup
 
 javac -Xlint *.java
 

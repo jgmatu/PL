@@ -35,13 +35,14 @@ public class Function extends Command {
 	public void checkReturnType(Type t, int line) {
 		for (Type type : this.returnTypes) {
 			if (!type.equals(t)) {
-				System.err.println("\nLine:" + type.getLine() + " Error on return type incompatible return\n" + "Line:" + type.getLine()
-						+ " Sentence return : " + type.toString() + "Line:" + line + " Function defined type return :"
-						+ t.toString());
+				System.err.println("\nLine:" + type.getLine() + " Error on return type incompatible return\n" + "Line:"
+						+ type.getLine() + " Sentence return : " + type.toString() + "Line:" + line
+						+ " Function defined type return :" + t.toString());
 			}
 		}
 		if (this.returnTypes.size() == 0 && !t.isVoid()) {
-			System.err.println("Line: " + line + " The function should be have a return sentence.");
+			System.err
+					.println("Line: " + line + " The function " + this.getId() + " should be have a return sentence.");
 		}
 	}
 
@@ -86,6 +87,15 @@ public class Function extends Command {
 
 	public Ambito getAmbito() {
 		return this.ambito;
+	}
+
+	public void usage(TupleTypes defTypes, TupleTypes callTypes, int line) {
+		StringBuffer format = new StringBuffer();
+		format.append("Line:" + line);
+		format.append(" The function is bad used \n");
+		format.append("Line:" + line + " Function defined: " + this.getId() + " " + defTypes.toString());
+		format.append("Line:" + line + " Function called: " + this.getId() + " " + callTypes.toString());
+		System.err.println(format);
 	}
 
 	@Override

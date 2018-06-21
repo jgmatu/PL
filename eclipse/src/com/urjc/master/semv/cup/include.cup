@@ -1,0 +1,51 @@
+/* includes cup */
+package com.urjc.master.semv.cup;
+
+import java_cup.runtime.Symbol;
+
+import com.urjc.master.semv.types.Type;
+import com.urjc.master.semv.ambito.Ambito;
+import com.urjc.master.semv.commands.Command;
+import com.urjc.master.semv.commands.Function;
+import com.urjc.master.semv.commands.Variable;
+import com.urjc.master.semv.enums.EnumType;
+import com.urjc.master.semv.list.Lid;
+import com.urjc.master.semv.list.ListParams;
+import com.urjc.master.semv.types.TupleTypes;
+
+
+terminal String tvoid;
+terminal String tint;
+terminal String tfloat;
+terminal String tid;
+
+terminal l_par;
+terminal r_par;
+terminal comma;
+
+non terminal FILEINC;
+non terminal PARTINC;
+
+non terminal Type TYPE;
+non terminal ListParams LISTPARAMF;
+
+FILEINC ::= PARTINC:files | PARTINC:files FILEINC:file {:
+
+:};
+
+PARTINC ::= TYPE:type tid:idLexema l_par LISTPARAMF r_par {:
+
+:};
+
+LISTPARAMF ::= LISTPARAMF:params comma TYPE:type  {:
+
+:};
+
+LISTPARAMF ::= TYPE:type {:
+
+:};
+
+
+TYPE ::= tvoid:v {: RESULT =  new Type(EnumType.VOID, vleft); :};
+TYPE ::= tint:i {: RESULT =  new Type(EnumType.INT, ileft); :};
+TYPE ::= tfloat:f {: RESULT =  new Type(EnumType.FLOAT, fleft); :};

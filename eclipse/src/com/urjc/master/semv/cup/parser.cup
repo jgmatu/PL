@@ -25,7 +25,7 @@ parser code {:
 	private Ambito root;
 	private Ambito actual;
 
-	/* Es un método que el cual se llama automáticamente al haber un error en la gramática, 
+	/* Es un metodo que el cual se llama automaticamente al haber un error en la gramatica, 
 	con el que informamos de la linea y la columna en el que se encuentra dicho error.*/
 	
 	@Override 

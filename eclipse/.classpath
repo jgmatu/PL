@@ -3,7 +3,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="src/com/urjc/master/semv/java-cup-11b-runtime.jar"/>
-	<classpathentry kind="lib" path="src/com/urjc/master/semv/java-cup-11b.jar"/>
+	<classpathentry kind="lib" path="src/com/urjc/master/semv/cup/java-cup-11b-runtime.jar"/>
+	<classpathentry kind="lib" path="src/com/urjc/master/semv/cup/java-cup-11b.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

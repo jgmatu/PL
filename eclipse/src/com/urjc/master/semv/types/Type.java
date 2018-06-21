@@ -62,15 +62,15 @@ public class Type {
  	public String toString() {
  		switch(this.type) {
  		case INT:
- 			return String.format("%s\n", "INT");
+ 			return String.format("%s", "INT");
  		case FLOAT:
- 			return String.format("%s\n", "FLOAT");
+ 			return String.format("%s", "FLOAT");
  		case VOID:
- 			return String.format("%s\n", "VOID"); 			
+ 			return String.format("%s", "VOID"); 			
  		case ERROR:
- 			return String.format("%s\n", "ERROR");
+ 			return String.format("%s", "ERROR");
  		default:
- 			return String.format("%s\n", "Undefined");
+ 			return String.format("%s", "Undefined");
  		}
  	}
 }

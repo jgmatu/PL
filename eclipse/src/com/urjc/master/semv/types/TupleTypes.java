@@ -31,10 +31,9 @@ public class TupleTypes {
 			System.err.println("Too few arguments...");
 			return false;
 		}
-		boolean success = true;
-		final int size = this.types.size();
 		
-		for (int i = 0; i < size && success; ++i) {
+		boolean success = true;
+		for (int i = 0; i < this.types.size() && success; ++i) {
 			Type type_arg = this.types.get(i);
 			Type type_parm = types.types.get(i);
 
@@ -42,22 +41,21 @@ public class TupleTypes {
 				success = false;
 			}
 		}
-		if (!success) {
-			System.err.println("The function is bas used : " + usage(types));
-		}
 		return success;
-	}
-	
-	private String usage (TupleTypes types) {
-		StringBuffer format = new StringBuffer();
-		
-		
-		return format.toString();
-	}
-	
+	}	
 	
 	@Override
 	public String toString() {
-		return "";
+		StringBuffer format = new StringBuffer();
+		
+		format.append("(");
+		for (int i =  this.types.size() - 1; i >= 0; --i) {
+			format.append(this.types.get(i).toString());
+			if (i != 0) {
+				format.append(" , ");
+			}
+		}
+		format.append(")\n");
+		return format.toString();
 	}
 }

@@ -2,7 +2,7 @@ package com.urjc.master.semv.commands;
 
 import com.urjc.master.semv.types.Type;
 
-public class Command {
+public abstract class Command {
 
 	private String id;
 	private Type tipo;

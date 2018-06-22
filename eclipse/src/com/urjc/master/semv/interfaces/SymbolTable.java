@@ -3,7 +3,7 @@ package com.urjc.master.semv.interfaces;
 import com.urjc.master.semv.commands.Command;
 import com.urjc.master.semv.types.Type;
 
-public interface APITS {
+public interface SymbolTable {
 
 	public Command buscaId(String id);
 
@@ -13,5 +13,4 @@ public interface APITS {
 
 	boolean tiposComp(Type tipo1, Type tipo2);
 
-	// ExpTipo -> TBAS || TBAS x TBAS x TBAS || TBAS x TBAS -> TBAS
 }

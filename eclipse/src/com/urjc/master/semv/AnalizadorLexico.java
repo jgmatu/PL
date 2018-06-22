@@ -12,7 +12,7 @@ import java_cup.runtime.*;
  * <a href="http://www.jflex.de/">JFlex</a> 1.6.1
  * from the specification file <tt>lexico.flex</tt>
  */
-class AnalizadorLexico implements java_cup.runtime.Scanner {
+public class AnalizadorLexico implements java_cup.runtime.Scanner {
 
   /** This character denotes the end of file */
   public static final int YYEOF = -1;
@@ -27,7 +27,7 @@ class AnalizadorLexico implements java_cup.runtime.Scanner {
    * ZZ_LEXSTATE[l] is the state in the DFA for the lexical state l
    * ZZ_LEXSTATE[l+1] is the state in the DFA for the lexical state l
    *                  at the beginning of a line
-   * l is of the form l = 2*k, k a non negative integer
+   * l is of the form l = 2*k, k a non negative integer.
    */
   private static final int ZZ_LEXSTATE[] = { 
      0, 0
@@ -323,7 +323,7 @@ class AnalizadorLexico implements java_cup.runtime.Scanner {
    *
    * @param   in  the java.io.Reader to read input from.
    */
-  AnalizadorLexico(java.io.Reader in) {
+  public AnalizadorLexico(java.io.Reader in) {
     this.zzReader = in;
   }
 

@@ -2,7 +2,6 @@ package com.urjc.master.semv.commands;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 
 import com.urjc.master.semv.ambito.Ambito;
 import com.urjc.master.semv.commands.Command;
@@ -12,15 +11,24 @@ import com.urjc.master.semv.types.Type;
 
 public class Function extends Command {
 
-	private List<Variable> parametros;
+	private ListParams parametros;
 	private Ambito ambito;
 	private List<Type> returnTypes;
 
+	public Function(String id, ListParams parametros, Type t) {
+		super(id, t);
+		
+		this.parametros = new ListParams();
+		if (parametros != null) {
+			this.parametros = parametros;			
+		}
+	}
+
 	public Function(String id, Ambito father) {
 		super(id, new Type());
-
+		
 		this.ambito = new Ambito(father);
-		this.parametros = new ArrayList<>();
+		this.parametros = new ListParams();
 		this.returnTypes = new ArrayList<>();
 	}
 
@@ -40,22 +48,21 @@ public class Function extends Command {
 						+ " Function defined type return :" + t.toString());
 			}
 		}
+		
 		if (this.returnTypes.size() == 0 && !t.isVoid()) {
-			System.err
-					.println("Line: " + line + " The function " + this.getId() + " should be have a return sentence.");
+			System.err.println("Line: " + line + " The function " + this.getId() + " should be have a return sentence.");
 		}
 	}
 
-	public boolean insertarSingleParametro(String id, Type tipo, int line) {
-		Variable v = new Variable(id, tipo);
-		boolean success = !parametros.contains(v);
+	public boolean insertarSingleParametro(Parametro parametro, int line) {
+		boolean success = !this.parametros.exist(parametro);
 
 		if (success) {
-			this.parametros.add(v);
-			this.ambito.insertaIdVariable(new Variable(id, tipo));
+			this.parametros.insertar(parametro);
+			this.ambito.insertaIdVariable(new Variable(parametro.getId(), parametro.getTipo()));
 		} else {
-			System.err.println("Line:" + line + "Ya existe un parametro " + id + " en la funcion : " + super.getId());
-			this.parametros.add(new Variable(id, new Type()));
+			System.err.println("Line:" + line + "Ya existe un parametro " + parametro.getId() + " en la funcion : "
+					+ super.getId());
 		}
 		return success;
 	}
@@ -64,21 +71,11 @@ public class Function extends Command {
 		if (params == null) {
 			return false;
 		}
-		boolean success = true;
-
-		for (Entry<String, Type> entry : params.getParametros().entrySet()) {
-			success = this.insertarSingleParametro(entry.getKey(), entry.getValue(), line) && success;
-		}
-		return success;
+		return params.insertar(this, line);
 	}
 
-	public TupleTypes getParamsTypes() {
-		TupleTypes types = new TupleTypes();
-
-		for (Variable v : this.parametros) {
-			types.insert(v.dameTipo());
-		}
-		return types;
+	public TupleTypes getListParamsTypes() {
+		return this.parametros.getListTypes();
 	}
 
 	public void eraseAmbito() {
@@ -104,9 +101,7 @@ public class Function extends Command {
 
 		format.append("Function : " + super.getId() + " return " + super.dameTipo() + "\n");
 		format.append("Parameters... \n");
-		for (Variable var : this.parametros) {
-			format.append("\n\tParameter : " + var.toString() + "\n");
-		}
+		format.append(this.parametros.toString());
 		return format.toString();
 	}
 }

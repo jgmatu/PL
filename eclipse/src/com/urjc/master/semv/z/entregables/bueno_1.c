@@ -1,3 +1,5 @@
+#include suma.h;
+
 int get_bla(int argc, float argv)
 {
 	return 0;
@@ -19,7 +21,9 @@ int main (float hola, int argc)
 
     int bla, d;
     float c;
-    bla = get_bla( c, bla, s, d);
+    bla = get_bla(bla, c);
+    
+    c = sum(bla, d);
     return 0;
 }
 

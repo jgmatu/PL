@@ -19,6 +19,9 @@ import com.urjc.master.semv.enums.EnumType;
 import com.urjc.master.semv.list.Lid;
 import com.urjc.master.semv.list.ListParams;
 import com.urjc.master.semv.types.TupleTypes;
+import com.urjc.master.semv.includes.File;
+import com.urjc.master.semv.includes.Include;
+import com.urjc.master.semv.commands.Parametro;
 
 parser code {:
 
@@ -32,7 +35,7 @@ parser code {:
 	public void syntax_error(Symbol s) { 
 		int l = s.left + 1;
 		int c = s.right + 1;
-		report_error("\n   El String: '" + s.value + "' ha producido un error en la linea " + l + ", columna " + c + ".\n\n", null);
+		report_error("El String: '" + s.value + "' ha producido un error en la linea " + l + ", columna " + c + ".\n", null);
 	}
 :};
 
@@ -71,7 +74,7 @@ action code {:
 		}
 		
 		if (func != null && !type.isError()) {
-			TupleTypes idTypes_1 = func.getParamsTypes();
+			TupleTypes idTypes_1 = func.getListParamsTypes();
 			TupleTypes idTypes_2 = this.actual.buscaIdsType(lid);
 			
 			boolean success = idTypes_1.compare(idTypes_2);
@@ -116,17 +119,22 @@ terminal less;
 terminal greater;
 terminal lessequal;
 terminal greaterequal;
+
 terminal include;
-terminal hfile;
+terminal String hfile;
+
 terminal constint;
 terminal constfloat;
+
 terminal String tvoid;
 terminal String tint;
 terminal String tfloat;
-//terminal tboolean;
 terminal String tid;
 
 // non terminals
+
+non terminal Include INCLUDE;
+non terminal File FILE;
 non terminal PROGRAM;
 non terminal PART;
 non terminal TupleTypes BLQ;
@@ -147,21 +155,24 @@ non terminal OPR;
 non terminal IF2;
 
 /* GRAMMAR */
-PROGRAM ::= PART PROGRAM {:
-//	System.err.println(this.root.toString());
-//	System.err.println("FIN DE PROGRAMA"); 	
+PROGRAM ::= INCLUDE PART PROGRAM | INCLUDE PART | PART PROGRAM | PART;
+
+INCLUDE ::= FILE:file INCLUDE {:
+	Include include = new Include(file);
+	include.include(this.root);
 :};
 
-PROGRAM ::= PART {:
-	;
+INCLUDE ::= FILE:file {:	
+	Include include = new Include(file);
+	include.include(this.root);
 :};
 
-/**
- * De la clase Command heredan las funciones y las variables que luego se 
- * insertan en el ambito...
- *
- */
-PART ::= TYPE:type RESTPART:command {: 	
+FILE ::= include hfile:file semicolon {:
+	RESULT = new File(file);
+:};
+
+
+PART ::= TYPE:type RESTPART:command {: 			
 	if (function != null) {
 		function.insertaTipo(type);		
 		function.checkReturnType(type, typeleft + 1);
@@ -192,23 +203,21 @@ RESTPART ::= tid:idLexema l_par tvoid {:
 	}
 	
 :} r_par BLQ:types {:
-
 	if (function != null) {
 		function.insertReturnTypes(types);
 	}
-	
 :};
 
 
 LISTPARAM ::= LISTPARAM:listparams comma TYPE:type tid:id {: 
-	listparams.insertar(id, type);
+	listparams.insertar(new Parametro(id, type));
 	RESULT = listparams;
 :};
 
 LISTPARAM ::= TYPE:type tid:id {: 
 	ListParams listparams = new ListParams();
 
-	listparams.insertar(id, type);
+	listparams.insertar(new Parametro(id, type));
 	RESULT = listparams;
 :};
 

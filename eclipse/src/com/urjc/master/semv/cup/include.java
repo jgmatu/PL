@@ -6,15 +6,13 @@
 package com.urjc.master.semv.cup;
 
 import java_cup.runtime.Symbol;
+import java.util.ArrayList;
+import java.util.List;
 import com.urjc.master.semv.types.Type;
-import com.urjc.master.semv.ambito.Ambito;
-import com.urjc.master.semv.commands.Command;
-import com.urjc.master.semv.commands.Function;
-import com.urjc.master.semv.commands.Variable;
 import com.urjc.master.semv.enums.EnumType;
-import com.urjc.master.semv.list.Lid;
 import com.urjc.master.semv.list.ListParams;
-import com.urjc.master.semv.types.TupleTypes;
+import com.urjc.master.semv.commands.Function;
+import com.urjc.master.semv.commands.Parametro;
 import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20160615 (GIT 4ac7450) generated parser.
@@ -40,9 +38,10 @@ public class include extends java_cup.runtime.lr_parser {
   /** Production table. */
   protected static final short _production_table[][] = 
     unpackFromStrings(new String[] {
-    "\000\011\000\002\002\003\000\002\002\004\000\002\002" +
-    "\004\000\002\003\007\000\002\005\005\000\002\005\003" +
-    "\000\002\004\003\000\002\004\003\000\002\004\003" });
+    "\000\012\000\002\002\003\000\002\002\004\000\002\002" +
+    "\004\000\002\003\010\000\002\005\006\000\002\005\004" +
+    "\000\002\005\002\000\002\004\003\000\002\004\003\000" +
+    "\002\004\003" });
 
   /** Access to production table. */
   public short[][] production_table() {return _production_table;}
@@ -50,17 +49,18 @@ public class include extends java_cup.runtime.lr_parser {
   /** Parse-action table. */
   protected static final short[][] _action_table = 
     unpackFromStrings(new String[] {
-    "\000\020\000\010\004\007\005\006\006\005\001\002\000" +
-    "\004\002\022\001\002\000\010\007\ufff9\011\ufff9\012\ufff9" +
-    "\001\002\000\010\007\ufffa\011\ufffa\012\ufffa\001\002\000" +
-    "\010\007\ufffb\011\ufffb\012\ufffb\001\002\000\004\007\013" +
-    "\001\002\000\012\002\001\004\007\005\006\006\005\001" +
-    "\002\000\004\002\uffff\001\002\000\004\010\014\001\002" +
-    "\000\010\004\007\005\006\006\005\001\002\000\006\011" +
-    "\020\012\017\001\002\000\006\011\ufffc\012\ufffc\001\002" +
-    "\000\010\004\007\005\006\006\005\001\002\000\012\002" +
-    "\ufffe\004\ufffe\005\ufffe\006\ufffe\001\002\000\006\011\ufffd" +
-    "\012\ufffd\001\002\000\004\002\000\001\002" });
+    "\000\023\000\010\045\007\046\006\047\004\001\002\000" +
+    "\004\050\ufff8\001\002\000\004\002\025\001\002\000\004" +
+    "\050\ufff9\001\002\000\004\050\ufffa\001\002\000\004\050" +
+    "\013\001\002\000\012\002\001\045\007\046\006\047\004" +
+    "\001\002\000\004\002\uffff\001\002\000\004\005\014\001" +
+    "\002\000\014\006\ufffb\013\ufffb\045\007\046\006\047\004" +
+    "\001\002\000\006\006\021\013\020\001\002\000\004\050" +
+    "\017\001\002\000\006\006\ufffc\013\ufffc\001\002\000\010" +
+    "\045\007\046\006\047\004\001\002\000\004\014\022\001" +
+    "\002\000\012\002\ufffe\045\ufffe\046\ufffe\047\ufffe\001\002" +
+    "\000\004\050\024\001\002\000\006\006\ufffd\013\ufffd\001" +
+    "\002\000\004\002\000\001\002" });
 
   /** Access to parse-action table. */
   public short[][] action_table() {return _action_table;}
@@ -68,13 +68,14 @@ public class include extends java_cup.runtime.lr_parser {
   /** <code>reduce_goto</code> table. */
   protected static final short[][] _reduce_table = 
     unpackFromStrings(new String[] {
-    "\000\020\000\010\002\003\003\010\004\007\001\001\000" +
+    "\000\023\000\010\002\004\003\010\004\007\001\001\000" +
     "\002\001\001\000\002\001\001\000\002\001\001\000\002" +
     "\001\001\000\002\001\001\000\010\002\011\003\010\004" +
     "\007\001\001\000\002\001\001\000\002\001\001\000\006" +
     "\004\015\005\014\001\001\000\002\001\001\000\002\001" +
-    "\001\000\004\004\020\001\001\000\002\001\001\000\002" +
-    "\001\001\000\002\001\001" });
+    "\001\000\002\001\001\000\004\004\022\001\001\000\002" +
+    "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
+    "\001\000\002\001\001" });
 
   /** Access to <code>reduce_goto</code> table. */
   public short[][] reduce_table() {return _reduce_table;}
@@ -112,6 +113,25 @@ public class include extends java_cup.runtime.lr_parser {
   public int error_sym() {return 1;}
 
 
+
+
+	private List<Function> functions = new ArrayList<>();
+	
+	/* Es un metodo que el cual se llama automaticamente al haber un error en la gramatica, 
+	con el que informamos de la linea y la columna en el que se encuentra dicho error.*/
+	
+	@Override 
+	public void syntax_error(Symbol s) { 
+		int l = s.left + 1;
+		int c = s.right + 1;
+		report_error("El String: '" + s.value + "' ha producido un error en la linea " + l + ", columna " + c + ".\n", null);
+	}
+	
+	public List<Function> functions() {
+		return this.functions;
+	}
+
+
 /** Cup generated class to encapsulate user supplied action code.*/
 @SuppressWarnings({"rawtypes", "unchecked", "unused"})
 class CUP$include$actions {
@@ -140,9 +160,8 @@ class CUP$include$actions {
           case 0: // FILEINC ::= PARTINC 
             {
               Object RESULT =null;
-		int filesleft = ((java_cup.runtime.Symbol)CUP$include$stack.peek()).left;
-		int filesright = ((java_cup.runtime.Symbol)CUP$include$stack.peek()).right;
-		Object files = (Object)((java_cup.runtime.Symbol) CUP$include$stack.peek()).value;
+		
+	;
 
               CUP$include$result = parser.getSymbolFactory().newSymbol("FILEINC",0, ((java_cup.runtime.Symbol)CUP$include$stack.peek()), ((java_cup.runtime.Symbol)CUP$include$stack.peek()), RESULT);
             }
@@ -166,69 +185,85 @@ class CUP$include$actions {
           case 2: // FILEINC ::= PARTINC FILEINC 
             {
               Object RESULT =null;
-		int filesleft = ((java_cup.runtime.Symbol)CUP$include$stack.elementAt(CUP$include$top-1)).left;
-		int filesright = ((java_cup.runtime.Symbol)CUP$include$stack.elementAt(CUP$include$top-1)).right;
-		Object files = (Object)((java_cup.runtime.Symbol) CUP$include$stack.elementAt(CUP$include$top-1)).value;
-		int fileleft = ((java_cup.runtime.Symbol)CUP$include$stack.peek()).left;
-		int fileright = ((java_cup.runtime.Symbol)CUP$include$stack.peek()).right;
-		Object file = (Object)((java_cup.runtime.Symbol) CUP$include$stack.peek()).value;
 		
-
+	;
 
               CUP$include$result = parser.getSymbolFactory().newSymbol("FILEINC",0, ((java_cup.runtime.Symbol)CUP$include$stack.elementAt(CUP$include$top-1)), ((java_cup.runtime.Symbol)CUP$include$stack.peek()), RESULT);
             }
           return CUP$include$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 3: // PARTINC ::= TYPE tid l_par LISTPARAMF r_par 
+          case 3: // PARTINC ::= TYPE tid l_par LISTPARAMF r_par semicolon 
             {
               Object RESULT =null;
-		int typeleft = ((java_cup.runtime.Symbol)CUP$include$stack.elementAt(CUP$include$top-4)).left;
-		int typeright = ((java_cup.runtime.Symbol)CUP$include$stack.elementAt(CUP$include$top-4)).right;
-		Type type = (Type)((java_cup.runtime.Symbol) CUP$include$stack.elementAt(CUP$include$top-4)).value;
-		int idLexemaleft = ((java_cup.runtime.Symbol)CUP$include$stack.elementAt(CUP$include$top-3)).left;
-		int idLexemaright = ((java_cup.runtime.Symbol)CUP$include$stack.elementAt(CUP$include$top-3)).right;
-		String idLexema = (String)((java_cup.runtime.Symbol) CUP$include$stack.elementAt(CUP$include$top-3)).value;
-		
-
-
-              CUP$include$result = parser.getSymbolFactory().newSymbol("PARTINC",1, ((java_cup.runtime.Symbol)CUP$include$stack.elementAt(CUP$include$top-4)), ((java_cup.runtime.Symbol)CUP$include$stack.peek()), RESULT);
-            }
-          return CUP$include$result;
-
-          /*. . . . . . . . . . . . . . . . . . . .*/
-          case 4: // LISTPARAMF ::= LISTPARAMF comma TYPE 
-            {
-              ListParams RESULT =null;
+		int typeleft = ((java_cup.runtime.Symbol)CUP$include$stack.elementAt(CUP$include$top-5)).left;
+		int typeright = ((java_cup.runtime.Symbol)CUP$include$stack.elementAt(CUP$include$top-5)).right;
+		Type type = (Type)((java_cup.runtime.Symbol) CUP$include$stack.elementAt(CUP$include$top-5)).value;
+		int idleft = ((java_cup.runtime.Symbol)CUP$include$stack.elementAt(CUP$include$top-4)).left;
+		int idright = ((java_cup.runtime.Symbol)CUP$include$stack.elementAt(CUP$include$top-4)).right;
+		String id = (String)((java_cup.runtime.Symbol) CUP$include$stack.elementAt(CUP$include$top-4)).value;
 		int paramsleft = ((java_cup.runtime.Symbol)CUP$include$stack.elementAt(CUP$include$top-2)).left;
 		int paramsright = ((java_cup.runtime.Symbol)CUP$include$stack.elementAt(CUP$include$top-2)).right;
 		ListParams params = (ListParams)((java_cup.runtime.Symbol) CUP$include$stack.elementAt(CUP$include$top-2)).value;
-		int typeleft = ((java_cup.runtime.Symbol)CUP$include$stack.peek()).left;
-		int typeright = ((java_cup.runtime.Symbol)CUP$include$stack.peek()).right;
-		Type type = (Type)((java_cup.runtime.Symbol) CUP$include$stack.peek()).value;
 		
+	functions.add(new Function(id, params, type));
 
-
-              CUP$include$result = parser.getSymbolFactory().newSymbol("LISTPARAMF",3, ((java_cup.runtime.Symbol)CUP$include$stack.elementAt(CUP$include$top-2)), ((java_cup.runtime.Symbol)CUP$include$stack.peek()), RESULT);
+              CUP$include$result = parser.getSymbolFactory().newSymbol("PARTINC",1, ((java_cup.runtime.Symbol)CUP$include$stack.elementAt(CUP$include$top-5)), ((java_cup.runtime.Symbol)CUP$include$stack.peek()), RESULT);
             }
           return CUP$include$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 5: // LISTPARAMF ::= TYPE 
+          case 4: // LISTPARAMF ::= LISTPARAMF comma TYPE tid 
             {
               ListParams RESULT =null;
-		int typeleft = ((java_cup.runtime.Symbol)CUP$include$stack.peek()).left;
-		int typeright = ((java_cup.runtime.Symbol)CUP$include$stack.peek()).right;
-		Type type = (Type)((java_cup.runtime.Symbol) CUP$include$stack.peek()).value;
+		int paramsleft = ((java_cup.runtime.Symbol)CUP$include$stack.elementAt(CUP$include$top-3)).left;
+		int paramsright = ((java_cup.runtime.Symbol)CUP$include$stack.elementAt(CUP$include$top-3)).right;
+		ListParams params = (ListParams)((java_cup.runtime.Symbol) CUP$include$stack.elementAt(CUP$include$top-3)).value;
+		int typeleft = ((java_cup.runtime.Symbol)CUP$include$stack.elementAt(CUP$include$top-1)).left;
+		int typeright = ((java_cup.runtime.Symbol)CUP$include$stack.elementAt(CUP$include$top-1)).right;
+		Type type = (Type)((java_cup.runtime.Symbol) CUP$include$stack.elementAt(CUP$include$top-1)).value;
+		int idleft = ((java_cup.runtime.Symbol)CUP$include$stack.peek()).left;
+		int idright = ((java_cup.runtime.Symbol)CUP$include$stack.peek()).right;
+		String id = (String)((java_cup.runtime.Symbol) CUP$include$stack.peek()).value;
 		
+	params.insertar(new Parametro(id, type));
+	RESULT = params;
 
-
-              CUP$include$result = parser.getSymbolFactory().newSymbol("LISTPARAMF",3, ((java_cup.runtime.Symbol)CUP$include$stack.peek()), ((java_cup.runtime.Symbol)CUP$include$stack.peek()), RESULT);
+              CUP$include$result = parser.getSymbolFactory().newSymbol("LISTPARAMF",3, ((java_cup.runtime.Symbol)CUP$include$stack.elementAt(CUP$include$top-3)), ((java_cup.runtime.Symbol)CUP$include$stack.peek()), RESULT);
             }
           return CUP$include$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 6: // TYPE ::= tvoid 
+          case 5: // LISTPARAMF ::= TYPE tid 
+            {
+              ListParams RESULT =null;
+		int typeleft = ((java_cup.runtime.Symbol)CUP$include$stack.elementAt(CUP$include$top-1)).left;
+		int typeright = ((java_cup.runtime.Symbol)CUP$include$stack.elementAt(CUP$include$top-1)).right;
+		Type type = (Type)((java_cup.runtime.Symbol) CUP$include$stack.elementAt(CUP$include$top-1)).value;
+		int idleft = ((java_cup.runtime.Symbol)CUP$include$stack.peek()).left;
+		int idright = ((java_cup.runtime.Symbol)CUP$include$stack.peek()).right;
+		String id = (String)((java_cup.runtime.Symbol) CUP$include$stack.peek()).value;
+		
+	ListParams params = new ListParams();
+	params.insertar(new Parametro(id, type));
+	
+	RESULT = params;
+
+              CUP$include$result = parser.getSymbolFactory().newSymbol("LISTPARAMF",3, ((java_cup.runtime.Symbol)CUP$include$stack.elementAt(CUP$include$top-1)), ((java_cup.runtime.Symbol)CUP$include$stack.peek()), RESULT);
+            }
+          return CUP$include$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 6: // LISTPARAMF ::= 
+            {
+              ListParams RESULT =null;
+
+              CUP$include$result = parser.getSymbolFactory().newSymbol("LISTPARAMF",3, ((java_cup.runtime.Symbol)CUP$include$stack.peek()), RESULT);
+            }
+          return CUP$include$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 7: // TYPE ::= tvoid 
             {
               Type RESULT =null;
 		int vleft = ((java_cup.runtime.Symbol)CUP$include$stack.peek()).left;
@@ -240,7 +275,7 @@ class CUP$include$actions {
           return CUP$include$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 7: // TYPE ::= tint 
+          case 8: // TYPE ::= tint 
             {
               Type RESULT =null;
 		int ileft = ((java_cup.runtime.Symbol)CUP$include$stack.peek()).left;
@@ -252,7 +287,7 @@ class CUP$include$actions {
           return CUP$include$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 8: // TYPE ::= tfloat 
+          case 9: // TYPE ::= tfloat 
             {
               Type RESULT =null;
 		int fleft = ((java_cup.runtime.Symbol)CUP$include$stack.peek()).left;

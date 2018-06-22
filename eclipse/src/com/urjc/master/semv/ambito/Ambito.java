@@ -6,12 +6,12 @@ import java.util.Map.Entry;
 import com.urjc.master.semv.commands.Command;
 import com.urjc.master.semv.commands.Function;
 import com.urjc.master.semv.commands.Variable;
-import com.urjc.master.semv.interfaces.APITS;
+import com.urjc.master.semv.interfaces.SymbolTable;
 import com.urjc.master.semv.list.Lid;
 import com.urjc.master.semv.types.TupleTypes;
 import com.urjc.master.semv.types.Type;
 
-public class Ambito implements APITS {
+public class Ambito implements SymbolTable {
 
 	private Ambito father;
 	private HashMap<String, Command> ambito;
@@ -35,12 +35,16 @@ public class Ambito implements APITS {
 		return function;
 	}
 	
+	public void insertar(Function function) {
+		this.ambito.put(function.getId(), function);
+	}
+	
 	public boolean insertaIdVariable(Variable var) {
 		return this.addEntry(var.getId(), var);		
 	}
 		
 	private boolean addEntry(String id, Command command) {
-		boolean success = !this.existIdOnAmbito(id);		
+		boolean success = !existIdOnAmbito(id);		
 
 		if (success) {
 			this.ambito.put(id, command);			
@@ -62,7 +66,7 @@ public class Ambito implements APITS {
 		if (this.ambito.containsKey((id))) {
 			return this.ambito.get(id);			
 		} 
-		if (this.hasFather()) {
+		if (hasFather()) {
 			return this.father.buscaId(id);				
 		}		
 		return null;
@@ -71,20 +75,48 @@ public class Ambito implements APITS {
 	public boolean hasFather(){
 		return this.father != null;
 	}
-	// ExpTipo -> TBAS || TBAS x TBAS x TBAS || TBAS x TBAS -> TBAS
+	
 	public Ambito getFather(){
 		return this.father;
 	}
 
 	public boolean insertaTipo(String id, Type tipo) {
-		boolean exit = this.ambito.containsKey(id);
+		boolean exist = this.ambito.containsKey(id);
 		
-		if(exit){
+		if(exist){
 			this.ambito.get(id).setTipo(tipo);
 		}
-		return exit;
+		return exist;
 	}
-	
+
+	public TupleTypes buscaIdsType(Lid lid) {
+		TupleTypes types = new TupleTypes();
+		
+		if (lid == null) {
+			return types;
+		}
+		for (String id : lid.getList()) {
+			types.insert(dameTipo(id));
+		}
+		return types;
+	}
+		
+	@Override
+	public boolean tiposComp(Type tipo1, Type tipo2) {
+		return tipo1 == tipo2;
+	}
+		
+	@Override
+	public Type dameTipo(String id) {
+		if (this.ambito.containsKey(id)) {
+			return this.ambito.get(id).dameTipo();
+		}
+		if (this.hasFather()) {
+			return this.father.dameTipo(id);
+		}
+		return new Type();
+	}
+
 	@Override
 	public String toString() {
 		StringBuffer format = new StringBuffer();
@@ -107,33 +139,4 @@ public class Ambito implements APITS {
 		}
 		return format.toString();
 	}
-	
-	public TupleTypes buscaIdsType(Lid lid) {
-		TupleTypes types = new TupleTypes();
-		
-		if (lid == null) {
-			return types;
-		}
-		for (String id : lid.getList()) {
-			types.insert(dameTipo(id));
-		}
-		return types;
-	}
-	
-	@Override
-	public boolean tiposComp(Type tipo1, Type tipo2) {
-		return tipo1 == tipo2;
-	}
-		
-	@Override
-	public Type dameTipo(String id) {
-		if (this.ambito.containsKey(id)) {
-			return this.ambito.get(id).dameTipo();
-		}
-		if (this.hasFather()) {
-			return this.father.dameTipo(id);
-		}
-		return new Type();
-	}
-
 }

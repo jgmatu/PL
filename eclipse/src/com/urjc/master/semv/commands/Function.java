@@ -43,8 +43,8 @@ public class Function extends Command {
 	public void checkReturnType(Type t, int line) {
 		for (Type type : this.returnTypes) {
 			if (!type.equals(t)) {
-				System.err.println("\nLine:" + type.getLine() + " Error on return type incompatible return\n" + "Line:"
-						+ type.getLine() + " Sentence return : " + type.toString() + "Line:" + line
+				System.err.println("\nLine:" + (type.getLine() + 1) + " Error on return type incompatible return\n" + "Line:"
+						+ (type.getLine() + 1) + " Sentence return : " + type.toString() + "\nLine:" + line
 						+ " Function defined type return :" + t.toString());
 			}
 		}

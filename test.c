@@ -16,5 +16,5 @@ int main(int argc, float argv) {
       int a;
       a = 0;
 
-      return 0;
+      return 0.0;
 }

@@ -7,10 +7,10 @@ public interface SymbolTable {
 
 	public Command buscaId(String id);
 
-	public boolean insertaTipo(String id, Type tipo);
+	public boolean insertaCommand(String id, Type tipo);
 
 	public Type dameTipo(String id);
 
-	boolean tiposComp(Type tipo1, Type tipo2);
+	boolean compararTipos(Type tipo1, Type tipo2);
 
 }

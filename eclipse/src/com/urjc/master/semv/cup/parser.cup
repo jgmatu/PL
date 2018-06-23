@@ -22,6 +22,8 @@ import com.urjc.master.semv.types.TupleTypes;
 import com.urjc.master.semv.includes.File;
 import com.urjc.master.semv.includes.Include;
 import com.urjc.master.semv.commands.Parametro;
+import com.urjc.master.semv.operadores.Operador;
+
 
 parser code {:
 
@@ -45,7 +47,7 @@ action code {:
 	private Ambito actual = this.root;
 	private Function function = null;
 		
-	private Type getTypeOperation(String op, Type type1, Type type2, int line) {		
+	private Type getTypeOperation(Operador op, Type type1, Type type2, int line) {		
 		Type type = new Type();
 		
 		if (type1.isError() || type2.isError()) {
@@ -55,7 +57,7 @@ action code {:
 		if (type1.equals(type2)) {
 			type = type1;
 		} else {
-			System.err.println("Line: " + line + " Incompatible types on " + op);			
+			System.err.println("Line: " + line + " Incompatible types " + type1.toString() +  op.toString() + type2.toString());			
 		}
 		return type;	
 	}
@@ -151,7 +153,7 @@ non terminal LCOND;
 non terminal LCONDT;
 non terminal LCONDF;
 non terminal COND;
-non terminal OPR;
+non terminal Operador OPR;
 non terminal IF2;
 
 /* GRAMMAR */
@@ -182,7 +184,7 @@ PART ::= TYPE:type RESTPART:command {:
 :};
 
 RESTPART ::= tid:idLexema l_par LISTPARAM:list {:
-	function = this.root.insertaIdFunction(idLexema);
+	function = this.root.insertarFuncion(idLexema);
 		
 	if (function != null) {
 		this.actual = function.getAmbito();
@@ -196,7 +198,7 @@ RESTPART ::= tid:idLexema l_par LISTPARAM:list {:
 :};
 
 RESTPART ::= tid:idLexema l_par tvoid {:
-	function = this.root.insertaIdFunction(idLexema);
+	function = this.root.insertarFuncion(idLexema);
 	
 	if (function != null) {
 		this.actual = function.getAmbito();
@@ -260,7 +262,7 @@ SENT ::= tid:idLexema assig EXP:typeExp semicolon {:
 		System.err.println("Line:" + (idLexemaleft + 1) + "No existe el identificador de la asignacion ");
 	} else if (!typeExp.isError()) {
 		if (!cmd.dameTipo().equals(typeExp)) {
-			System.err.println("Incompatible types on assign " + (idLexemaleft + 1));
+			System.err.println("Incompatible types on assign on identifier \"" + idLexema + "\" line " + (idLexemaleft + 1));
 			type.setError(); 
 		}
 	}
@@ -319,7 +321,7 @@ SENT ::= tdo {:
 
 :} BLQ tuntil l_par LCOND r_par;
 
-// Bloque anónimo...
+// Bloque anonimo...
 SENT ::= {:
 
 	this.actual = new Ambito(this.actual);
@@ -348,11 +350,15 @@ LID ::= tid:id comma LID:lid {:
 LID ::= /* empty */;
 
 EXP ::= EXP:type1 add EXPT:type2 {:
-	RESULT = getTypeOperation("add", type1, type2, type1left + 1);
+	Operador op = new Operador(" + ");
+
+	RESULT = getTypeOperation(op, type1, type2, type1left + 1);
 :};
 
 EXP ::= EXP:type1 sub EXPT:type2 {:
-	RESULT = getTypeOperation("sub", type1, type2, type1left + 1);
+	Operador op = new Operador(" - ");
+
+	RESULT = getTypeOperation(op, type1, type2, type1left + 1);
 :};
 
 EXP ::= EXPT:type {:	
@@ -360,11 +366,15 @@ EXP ::= EXPT:type {:
 :};
 
 EXPT ::= EXPT:type1 mul FACTOR:type2 {:
-	RESULT = getTypeOperation("mul", type1, type2, type1left + 1);
+	Operador op = new Operador(" x ");
+
+	RESULT = getTypeOperation(op, type1, type2, type1left + 1);
 :};
 
 EXPT ::= EXPT:type1 div FACTOR:type2 {:
-	RESULT = getTypeOperation("div", type1, type2, type1left + 1);
+	Operador op = new Operador(" / ");
+	
+	RESULT = getTypeOperation(op, type1, type2, type1left + 1);
 :};
 
 EXPT ::= FACTOR:type {:	
@@ -410,14 +420,29 @@ LCONDT ::= LCONDT tand LCONDF;
 LCONDT  ::=  LCONDF;
 
 LCONDF ::= COND;
-LCONDF ::= tnot COND;
 
-COND ::= EXP:type1 OPR EXP:type2 {:
-	RESULT = getTypeOperation("conditional expresion", type1, type2, type1left + 1);
+LCONDF ::= tnot COND {:
+	;
 :};
 
-OPR ::=  equals;
-OPR ::=  less;
-OPR ::=  greater;
-OPR ::=  greaterequal;
-OPR ::=  lessequal;
+COND ::= EXP:type1 OPR:op EXP:type2 {:
+	RESULT = getTypeOperation(op, type1, type2, type1left + 1);
+:};
+
+OPR ::=  equals {:
+	RESULT = new Operador(" == ");
+:};
+OPR ::=  less {:
+	RESULT = new Operador(" < ");
+:};
+OPR ::=  greater {:
+	RESULT = new Operador(" > ");
+:};
+
+OPR ::=  greaterequal {:
+	RESULT = new Operador(" >= ");
+:};
+
+OPR ::=  lessequal {:
+	RESULT = new Operador(" <= ");
+:};

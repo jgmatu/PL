@@ -5,6 +5,8 @@ import com.urjc.master.semv.cup.parser;
 @SuppressWarnings("deprecation")
 public class Analizador {
 
+	private static boolean debug = false;
+	
 	public static void main(String argv[]) {
 		if (argv.length == 0) {
 			System.out.println("Inserta nombre de archivo\n" + "( Usage : java Analizador <inputfile> )");
@@ -23,7 +25,9 @@ public class Analizador {
 				System.out.println("Error durante la lectura del" + " archivo \"" + argv[i] + "\".");
 				e.printStackTrace();
 			} catch (Exception e) {
-				;
+				if (debug) {
+					e.printStackTrace();
+				}
 			}
 		}
 

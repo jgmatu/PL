@@ -11,6 +11,7 @@ import com.urjc.master.semv.cup.include;
 public class Include {
 
 	private File file;
+	private boolean debug = false;
 	
 	public Include (File file) {
 		this.file = file;
@@ -33,7 +34,9 @@ public class Include {
 		} catch (java.io.IOException e) {
 			System.err.println("Error durante la lectura del" + " archivo de cabecerra \"" + file.getName() + "\".");
 		} catch (Exception e) {
-			e.printStackTrace();
+			if (debug) {
+				e.printStackTrace();				
+			}
 		}
 	}
 

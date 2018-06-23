@@ -26,7 +26,7 @@ public class Ambito implements SymbolTable {
 		this.ambito = new HashMap<String, Command>();
 	}
 
-	public Function insertaIdFunction(String idLexema) {
+	public Function insertarFuncion(String idLexema) {
 		Function function = new Function(idLexema, this);
 		
 		if (!this.addEntry(idLexema, function)) {
@@ -44,24 +44,16 @@ public class Ambito implements SymbolTable {
 	}
 		
 	private boolean addEntry(String id, Command command) {
-		boolean success = !existIdOnAmbito(id);		
+		boolean success = !this.ambito.containsKey(id);	
 
 		if (success) {
 			this.ambito.put(id, command);			
 		} else {
-			printErrorAlreadyExists(command);
+			System.err.println("The id \"" + command.getId() + "\" already exist\n");
 		}
 		return success;
 	}
 	
-	private boolean existIdOnAmbito(String id) {
-		return this.ambito.containsKey(id);
-	}
-	
-	private void printErrorAlreadyExists(Command command) {
-		System.err.println("The " + command.getClass().getSimpleName() + " " + command.getId() + " already exist\n");
-	}
-
 	public Command buscaId(String id) {
 		if (this.ambito.containsKey((id))) {
 			return this.ambito.get(id);			
@@ -80,7 +72,7 @@ public class Ambito implements SymbolTable {
 		return this.father;
 	}
 
-	public boolean insertaTipo(String id, Type tipo) {
+	public boolean insertaCommand(String id, Type tipo) {
 		boolean exist = this.ambito.containsKey(id);
 		
 		if(exist){
@@ -102,7 +94,7 @@ public class Ambito implements SymbolTable {
 	}
 		
 	@Override
-	public boolean tiposComp(Type tipo1, Type tipo2) {
+	public boolean compararTipos(Type tipo1, Type tipo2) {
 		return tipo1 == tipo2;
 	}
 		

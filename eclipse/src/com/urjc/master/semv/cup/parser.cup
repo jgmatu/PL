@@ -259,10 +259,10 @@ SENT ::= tid:idLexema assig EXP:typeExp semicolon {:
 	Command cmd = this.actual.buscaId(idLexema);
 
 	if (cmd == null) {
-		System.err.println("Line:" + (idLexemaleft + 1) + "No existe el identificador de la asignacion ");
+		System.err.println("Line: " + (idLexemaleft + 1) + " No existe el identificador \"" + idLexema  +"\"");
 	} else if (!typeExp.isError()) {
 		if (!cmd.dameTipo().equals(typeExp)) {
-			System.err.println("Incompatible types on assign on identifier \"" + idLexema + "\" line " + (idLexemaleft + 1));
+			System.err.println("Line: " + (idLexemaleft + 1) + " Incompatible types " + idLexema + " = " + cmd.getId());
 			type.setError(); 
 		}
 	}

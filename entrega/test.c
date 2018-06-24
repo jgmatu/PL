@@ -1,6 +1,5 @@
 #include math.h;
 
-
 int procesar(int n) {
       int i;
       int total;
@@ -15,6 +14,6 @@ int procesar(int n) {
 int main(int argc, float argv) {
       int a;
       a = 0;
-
+      procesar(a);
       return 0;
 }

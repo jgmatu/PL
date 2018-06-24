@@ -7,34 +7,32 @@ int get_bla(int argc, float argv)
 }
 
 int main (float hola, int argc)
-{	
+{
 	int a;
-	a = 3;	
+	a = 3;
+
 	if (argc == 3) then {
 		a = a + 3;
 	} else {
 		a = 0;
 	}
-	
+
 	for (a = 0; a < 3; a = a + 1) {
 		a = a * 10;
 	}
+	
 	plotter();
 	plot(hola);
 
+	int bla, d;
+	float c;
+	bla = get_bla(bla, c);
 
-    int bla, d;
-    float c;
-    bla = get_bla(bla, c);
-    
-    do {
-    	float d;
-    	int k;
-    	d = 0.0;
-	    d = sum(bla, k);    
-	    d = mult(bla, k);
-    } until (bla < d);
-    return 0;
+	d = 0;
+	do {
+		int k;
+		d = sum(bla, k);
+		d = mult(bla, k);
+	} until (bla < d);
+	return 0;
 }
-
-

@@ -13,14 +13,14 @@ void bla() {
 
     a = a + 1.0;
     a = 1;
-    a = b;    
+    a = b;
 }
 
 int main(int argc) {
     int n;
-    
+
     n = 128;
-    writes(numb);   
+    writes(numb);
     bla();
 
     return 0;

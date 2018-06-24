@@ -177,7 +177,7 @@ FILE ::= include hfile:file semicolon {:
 
 PART ::= TYPE:type RESTPART:command {: 			
 	if (function != null) {
-		function.insertaTipo(type);		
+		function.insertarTipo(type);		
 		function.checkReturnType(type, typeleft + 1);
 	}
 	this.actual = this.root;

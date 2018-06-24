@@ -54,12 +54,13 @@ public class Ambito implements SymbolTable {
 		return success;
 	}
 	
-	public Command buscaId(String id) {
+	@Override
+	public Command buscar(String id) {
 		if (this.ambito.containsKey((id))) {
 			return this.ambito.get(id);			
 		} 
 		if (hasFather()) {
-			return this.father.buscaId(id);				
+			return this.father.buscar(id);				
 		}		
 		return null;
 	}
@@ -72,11 +73,12 @@ public class Ambito implements SymbolTable {
 		return this.father;
 	}
 
-	public boolean insertaCommand(String id, Type tipo) {
-		boolean exist = this.ambito.containsKey(id);
+	@Override
+	public boolean insertar(Command cmd) {
+		boolean exist = this.ambito.containsKey(cmd.getId());
 		
 		if(exist){
-			this.ambito.get(id).setTipo(tipo);
+			this.ambito.put(cmd.getId(), cmd);
 		}
 		return exist;
 	}
@@ -88,23 +90,23 @@ public class Ambito implements SymbolTable {
 			return types;
 		}
 		for (String id : lid.getList()) {
-			types.insert(dameTipo(id));
+			types.insert(tipo(id));
 		}
 		return types;
 	}
 		
 	@Override
-	public boolean compararTipos(Type tipo1, Type tipo2) {
+	public boolean comparar(Type tipo1, Type tipo2) {
 		return tipo1 == tipo2;
 	}
 		
 	@Override
-	public Type dameTipo(String id) {
+	public Type tipo(String id) {
 		if (this.ambito.containsKey(id)) {
-			return this.ambito.get(id).dameTipo();
+			return this.ambito.get(id).tipo();
 		}
 		if (this.hasFather()) {
-			return this.father.dameTipo(id);
+			return this.father.tipo(id);
 		}
 		return new Type();
 	}

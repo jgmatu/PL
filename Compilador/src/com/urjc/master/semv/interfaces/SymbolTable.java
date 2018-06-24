@@ -5,12 +5,12 @@ import com.urjc.master.semv.types.Type;
 
 public interface SymbolTable {
 
-	public Command buscaId(String id);
+	public Command buscar(String id);
 
-	public boolean insertaCommand(String id, Type tipo);
+	public boolean insertar(Command cmd);
 
-	public Type dameTipo(String id);
+	public Type tipo(String id);
 
-	boolean compararTipos(Type tipo1, Type tipo2);
+	boolean comparar(Type tipo1, Type tipo2);
 
 }

@@ -41,16 +41,19 @@ public class Function extends Command {
 	}
 
 	public void checkReturnType(Type t, int line) {
+		// Check return types....
 		for (Type type : this.returnTypes) {
 			if (!type.equals(t)) {
-				System.err.println("\nLine:" + (type.getLine() + 1) + " Error on return type incompatible return\n" + "Line:"
-						+ (type.getLine() + 1) + " Sentence return : " + type.toString() + "\nLine:" + line
-						+ " Function defined type return :" + t.toString());
+				System.err.println(
+						"\nLine:" + (type.getLine() + 1) + " Error on return type incompatible return" + 
+						"\nLine:" + (type.getLine() + 1) + " Sentence return : " + type.toString() + 
+						"\nLine:" + line + " Function defined type return :" + t.toString());
 			}
 		}
 		
+		// Check we have return in a function with not void return type...
 		if (this.returnTypes.size() == 0 && !t.isVoid()) {
-			System.err.println("Line: " + line + " The function " + this.getId() + " should be have a return sentence.");
+			System.err.println("Line: " + line + " The function \"" + this.getId() + "\" should be have a return sentence.");
 		}
 	}
 
@@ -61,8 +64,7 @@ public class Function extends Command {
 			this.parametros.insertar(parametro);
 			this.ambito.insertaIdVariable(new Variable(parametro.getId(), parametro.getTipo()));
 		} else {
-			System.err.println("Line:" + line + "Ya existe un parametro " + parametro.getId() + " en la funcion : "
-					+ super.getId());
+			System.err.println("Line:" + line + "Ya existe un parametro \"" + parametro.getId() + "\" en la funcion : \"" + super.getId() + "\"");
 		}
 		return success;
 	}
@@ -99,7 +101,7 @@ public class Function extends Command {
 	public String toString() {
 		StringBuffer format = new StringBuffer();
 
-		format.append("Function : " + super.getId() + " return " + super.dameTipo() + "\n");
+		format.append("Function : " + super.getId() + " return " + super.tipo() + "\n");
 		format.append("Parameters... \n");
 		format.append(this.parametros.toString());
 		return format.toString();

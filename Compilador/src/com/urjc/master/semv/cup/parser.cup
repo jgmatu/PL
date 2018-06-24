@@ -67,9 +67,9 @@ action code {:
 		Command cmd = null;
 		Type type = new Type();
 			
-		cmd = this.actual.buscaId(id);
+		cmd = this.actual.buscar(id);
 		if (cmd == null && !(cmd instanceof Function)) {
-			System.err.println("Line:" + line + " The function " + id + " not exist");
+			System.err.println("Line:" + line + " The function \"" + id + "\" not exist");
 		} else {
 			func = (Function) cmd;
 			type = cmd.getTipo();
@@ -87,6 +87,7 @@ action code {:
 		}
 		return type;		
 	}			
+
 :};
 
 /* TOKENS */
@@ -256,7 +257,7 @@ SENT ::= TYPE:type LID:lid {:
 // Assign...
 SENT ::= tid:idLexema assig EXP:typeExp semicolon {: 
 	Type type = new Type();	
-	Command cmd = this.actual.buscaId(idLexema);
+	Command cmd = this.actual.buscar(idLexema);
 
 	if (cmd == null) {
 		System.err.println("Line: " + (idLexemaleft + 1) + " No existe el identificador \"" + idLexema  +"\"");
@@ -390,7 +391,7 @@ FACTOR ::= l_bracket EXP:type {:
 :} r_bracket;
 
 FACTOR ::= tid:idLexema {:
-	Command cmd = this.actual.buscaId(idLexema);
+	Command cmd = this.actual.buscar(idLexema);
 	Type type = new Type();
 	
 	if (cmd == null) {

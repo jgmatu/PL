@@ -12,18 +12,22 @@ public abstract class Command {
 		this.tipo = tipo;
 	}
 
-	public Type dameTipo() {
+	public Type tipo() {
 		return this.tipo;
 	}
 
-	public void insertaTipo(Type tipo) {
+	public void insertarTipo(Type tipo) {
 		this.tipo = tipo;
 	}
 
-	public boolean compTipos(Command c) {
-		return this.tipo == c.dameTipo();
+	public String getId() {
+		return this.id;
 	}
 
+	public Type getTipo() {
+		return this.tipo;
+	}
+	
 	@Override
 	public String toString() {
 		StringBuffer format = new StringBuffer();
@@ -31,20 +35,4 @@ public abstract class Command {
 		format.append("\n\tId : " + this.id + ", type : " + this.tipo + "\n");
 		return format.toString();
 	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public Type getTipo() {
-		return tipo;
-	}
-
-	public void setTipo(Type tipo) {
-		this.tipo = tipo;
-	}	
 }

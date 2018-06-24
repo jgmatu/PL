@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="C:/Users/Javi/Documents/GitHub/PL/Compilador/src/com/urjc/master/semv/cup/java-cup-11b-runtime.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Javi/Documents/GitHub/PL/Compilador/src/com/urjc/master/semv/cup/java-cup-11b.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="src/com/urjc/master/semv/cup/java-cup-11b-runtime.jar"/>
+	<classpathentry kind="lib" path="src/com/urjc/master/semv/cup/java-cup-11b.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

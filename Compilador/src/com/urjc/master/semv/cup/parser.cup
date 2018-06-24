@@ -262,7 +262,7 @@ SENT ::= tid:idLexema assig EXP:typeExp semicolon {:
 	if (cmd == null) {
 		System.err.println("Line: " + (idLexemaleft + 1) + " No existe el identificador \"" + idLexema  +"\"");
 	} else if (!typeExp.isError()) {
-		if (!cmd.dameTipo().equals(typeExp)) {
+		if (!cmd.tipo().equals(typeExp)) {
 			System.err.println("Line: " + (idLexemaleft + 1) + " Incompatible types " + idLexema + " = " + cmd.getId());
 			type.setError(); 
 		}
@@ -397,7 +397,7 @@ FACTOR ::= tid:idLexema {:
 	if (cmd == null) {
 		System.err.println("Line: " + (idLexemaleft + 1) + " The id " + idLexema + " not exist ");	
 	} else {
-		type = cmd.dameTipo();
+		type = cmd.tipo();
 	}
 	RESULT = type;
 :};

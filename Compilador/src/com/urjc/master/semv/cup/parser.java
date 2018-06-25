@@ -342,7 +342,12 @@ class CUP$parser$actions {
 	private Ambito root = new Ambito();
 	private Ambito actual = this.root;
 	private Function function = null;
+	
 		
+	private void idNotExist(String id, int line) {
+		System.out.println("Line: " + line + " El identificador \"" + id + "\" no existe.");
+	}
+
 	private Type getTypeOperation(Operador op, Type type1, Type type2, int line) {		
 		Type type = new Type();
 		
@@ -353,7 +358,7 @@ class CUP$parser$actions {
 		if (type1.equals(type2)) {
 			type = type1;
 		} else {
-			System.err.println("Line: " + line + " Incompatible types " + type1.toString() +  op.toString() + type2.toString());			
+			System.err.println("Line: " + line + " Incompatible types " + type1.toString() + " " + op.toString() + " " + type2.toString());			
 		}
 		return type;	
 	}
@@ -365,7 +370,7 @@ class CUP$parser$actions {
 			
 		cmd = this.actual.buscar(id);
 		if (cmd == null && !(cmd instanceof Function)) {
-			System.err.println("Line:" + line + " The function \"" + id + "\" not exist");
+			System.err.println("Line:" + line + " La funcion \"" + id + "\" no existe");
 		} else {
 			func = (Function) cmd;
 			type = cmd.getTipo();
@@ -382,7 +387,20 @@ class CUP$parser$actions {
 			}
 		}
 		return type;		
-	}			
+	}		
+	
+	private Type getAssignType(String id, Type exp, int line) {
+		Command cmd = this.actual.buscar(id);
+		Type type = new Type();
+		
+		if (cmd != null && !exp.isError()) {
+			Operador op = new Operador("=");
+			type = getTypeOperation(op, cmd.tipo(), exp,  line);			
+		}  else if (cmd == null) {
+			idNotExist(id, line);
+		}
+		return type;
+	}	
 
 
   private final parser parser;
@@ -759,18 +777,7 @@ class CUP$parser$actions {
 		int typeExpright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Type typeExp = (Type)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		 
-	Type type = new Type();	
-	Command cmd = this.actual.buscar(idLexema);
-
-	if (cmd == null) {
-		System.err.println("Line: " + (idLexemaleft + 1) + " No existe el identificador \"" + idLexema  +"\"");
-	} else if (!typeExp.isError()) {
-		if (!cmd.tipo().equals(typeExp)) {
-			System.err.println("Line: " + (idLexemaleft + 1) + " Incompatible types " + idLexema + " = " + cmd.getId());
-			type.setError(); 
-		}
-	}
-	RESULT = type;
+	RESULT = getAssignType(idLexema, typeExp, idLexemaleft + 1);
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("SENT",6, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -874,10 +881,26 @@ class CUP$parser$actions {
           case 29: // NT$5 ::= 
             {
               Type RESULT =null;
+		int idLexema1left = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-9)).left;
+		int idLexema1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-9)).right;
+		String idLexema1 = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-9)).value;
+		int exp1left = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-7)).left;
+		int exp1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-7)).right;
+		Type exp1 = (Type)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-7)).value;
+		int idLexema2left = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left;
+		int idLexema2right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).right;
+		String idLexema2 = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
+		int exp2left = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int exp2right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		Type exp2 = (Type)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 
-
-	this.actual = new Ambito(this.actual);	
-
+	Type type1 = getAssignType(idLexema1, exp1, idLexema1left + 1);
+	Type type2 = getAssignType(idLexema2, exp2, idLexema2left + 1);	
+	
+	if (type1.isError() || type2.isError()) {
+		RESULT = new Type();
+	}
+	RESULT = type1; // El tipo del for lo damos como el de la variable de incialización...
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("NT$5",25, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -889,6 +912,18 @@ class CUP$parser$actions {
               Type RESULT =null;
               // propagate RESULT from NT$5
                 RESULT = (Type) ((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		int idLexema1left = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-11)).left;
+		int idLexema1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-11)).right;
+		String idLexema1 = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-11)).value;
+		int exp1left = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-9)).left;
+		int exp1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-9)).right;
+		Type exp1 = (Type)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-9)).value;
+		int idLexema2left = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)).left;
+		int idLexema2right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)).right;
+		String idLexema2 = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-5)).value;
+		int exp2left = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left;
+		int exp2right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).right;
+		Type exp2 = (Type)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("SENT",6, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-13)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1181,11 +1216,11 @@ class CUP$parser$actions {
 		int idLexemaright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String idLexema = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-	Command cmd = this.actual.buscar(idLexema);
 	Type type = new Type();
-	
+	Command cmd = this.actual.buscar(idLexema);	
+
 	if (cmd == null) {
-		System.err.println("Line: " + (idLexemaleft + 1) + " The id " + idLexema + " not exist ");	
+		idNotExist(idLexema, (idLexemaleft + 1));
 	} else {
 		type = cmd.tipo();
 	}

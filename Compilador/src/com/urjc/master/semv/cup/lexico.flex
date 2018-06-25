@@ -20,8 +20,6 @@ EndOfLineComment     = "//" {InputCharacter}* {LineTerminator}
 Comment = {TraditionalComment} | {EndOfLineComment}
 
 %%
-/* "void"    { return new Symbol(sym.tvoid); } */
-
 
 "void"    { return new Symbol(sym.tvoid, yyline, yycolumn, yytext()); }
 "return"    { return new Symbol(sym.treturn, yyline, yycolumn, yytext()); }

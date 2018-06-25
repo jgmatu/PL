@@ -11,7 +11,7 @@ import com.urjc.master.semv.cup.include;
 public class Include {
 
 	private File file;
-	private boolean debug = false;
+	private boolean debug = true;
 	
 	public Include (File file) {
 		this.file = file;
@@ -30,9 +30,9 @@ public class Include {
 				ambito.insertar(function);
 			}			
 		} catch (java.io.FileNotFoundException e) {
-			System.err.println("Archivo de cabecera \"" + file.getName() + "\" no encontrado." + System.getProperty("user.dir"));
+			System.err.println("Archivo de cabecera \"" + file.getName() + "\" no encontrado. " + System.getProperty("user.dir"));
 		} catch (java.io.IOException e) {
-			System.err.println("Error durante la lectura del" + " archivo de cabecerra \"" + file.getName() + "\".");
+			System.err.println("Error durante la lectura del" + " archivo de cabecera \"" + file.getName() + "\".");
 		} catch (Exception e) {
 			if (debug) {
 				e.printStackTrace();				

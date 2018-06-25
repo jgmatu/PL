@@ -46,7 +46,12 @@ action code {:
 	private Ambito root = new Ambito();
 	private Ambito actual = this.root;
 	private Function function = null;
+	
 		
+	private void idNotExist(String id, int line) {
+		System.out.println("Line: " + line + " El identificador \"" + id + "\" no existe.");
+	}
+
 	private Type getTypeOperation(Operador op, Type type1, Type type2, int line) {		
 		Type type = new Type();
 		
@@ -57,7 +62,7 @@ action code {:
 		if (type1.equals(type2)) {
 			type = type1;
 		} else {
-			System.err.println("Line: " + line + " Incompatible types " + type1.toString() +  op.toString() + type2.toString());			
+			System.err.println("Line: " + line + " Incompatible types " + type1.toString() + " " + op.toString() + " " + type2.toString());			
 		}
 		return type;	
 	}
@@ -69,7 +74,7 @@ action code {:
 			
 		cmd = this.actual.buscar(id);
 		if (cmd == null && !(cmd instanceof Function)) {
-			System.err.println("Line:" + line + " The function \"" + id + "\" not exist");
+			System.err.println("Line:" + line + " La funcion \"" + id + "\" no existe");
 		} else {
 			func = (Function) cmd;
 			type = cmd.getTipo();
@@ -86,7 +91,20 @@ action code {:
 			}
 		}
 		return type;		
-	}			
+	}		
+	
+	private Type getAssignType(String id, Type exp, int line) {
+		Command cmd = this.actual.buscar(id);
+		Type type = new Type();
+		
+		if (cmd != null && !exp.isError()) {
+			Operador op = new Operador("=");
+			type = getTypeOperation(op, cmd.tipo(), exp,  line);			
+		}  else if (cmd == null) {
+			idNotExist(id, line);
+		}
+		return type;
+	}	
 
 :};
 
@@ -122,13 +140,10 @@ terminal less;
 terminal greater;
 terminal lessequal;
 terminal greaterequal;
-
 terminal include;
 terminal String hfile;
-
 terminal constint;
 terminal constfloat;
-
 terminal String tvoid;
 terminal String tint;
 terminal String tfloat;
@@ -173,7 +188,6 @@ INCLUDE ::= FILE:file {:
 FILE ::= include hfile:file semicolon {:
 	RESULT = new File(file);
 :};
-
 
 PART ::= TYPE:type RESTPART:command {: 			
 	if (function != null) {
@@ -222,9 +236,8 @@ LISTPARAM ::= TYPE:type tid:id {:
 
 	listparams.insertar(new Parametro(id, type));
 	RESULT = listparams;
-:};
+:} | ;
 
-LISTPARAM ::= /* empty */;
 
 BLQ ::= l_brace SENTLIST:types r_brace {: 	
 	if (this.actual.getFather() != null) {
@@ -256,18 +269,7 @@ SENT ::= TYPE:type LID:lid {:
 
 // Assign...
 SENT ::= tid:idLexema assig EXP:typeExp semicolon {: 
-	Type type = new Type();	
-	Command cmd = this.actual.buscar(idLexema);
-
-	if (cmd == null) {
-		System.err.println("Line: " + (idLexemaleft + 1) + " No existe el identificador \"" + idLexema  +"\"");
-	} else if (!typeExp.isError()) {
-		if (!cmd.tipo().equals(typeExp)) {
-			System.err.println("Line: " + (idLexemaleft + 1) + " Incompatible types " + idLexema + " = " + cmd.getId());
-			type.setError(); 
-		}
-	}
-	RESULT = type;
+	RESULT = getAssignType(idLexema, typeExp, idLexemaleft + 1);
 :};
 
 // Call procedure function...
@@ -302,10 +304,14 @@ IF2 ::= telse {:
 
 
 // for...
-SENT ::= tfor l_par tid assig EXP semicolon LCOND semicolon tid assig EXP r_par {:
-
-	this.actual = new Ambito(this.actual);	
-
+SENT ::= tfor l_par tid:idLexema1 assig EXP:exp1 semicolon LCOND semicolon tid:idLexema2 assig EXP:exp2 r_par {:
+	Type type1 = getAssignType(idLexema1, exp1, idLexema1left + 1);
+	Type type2 = getAssignType(idLexema2, exp2, idLexema2left + 1);	
+	
+	if (type1.isError() || type2.isError()) {
+		RESULT = new Type();
+	}
+	RESULT = type1; // El tipo del for lo damos como el de la variable de incialización...
 :} BLQ; 
 
 // while ..
@@ -391,11 +397,11 @@ FACTOR ::= l_bracket EXP:type {:
 :} r_bracket;
 
 FACTOR ::= tid:idLexema {:
-	Command cmd = this.actual.buscar(idLexema);
 	Type type = new Type();
-	
+	Command cmd = this.actual.buscar(idLexema);	
+
 	if (cmd == null) {
-		System.err.println("Line: " + (idLexemaleft + 1) + " The id " + idLexema + " not exist ");	
+		idNotExist(idLexema, (idLexemaleft + 1));
 	} else {
 		type = cmd.tipo();
 	}

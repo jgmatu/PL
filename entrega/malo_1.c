@@ -11,7 +11,7 @@ int main (float hola, int argc)
 		a = 0;
 	}
 	
-	for (a = 0; a < 3; a = a + 1) {
+	for (a = 0.0; a < 3; ax = a + 1) {
 		a = ax * 10;
 	}
     

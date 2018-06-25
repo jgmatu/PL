@@ -49,7 +49,7 @@ public class Ambito implements SymbolTable {
 		if (success) {
 			this.ambito.put(id, command);			
 		} else {
-			System.err.println("The id \"" + command.getId() + "\" already exist\n");
+			System.err.println("El identificador \"" + command.getId() + "\" ya existe\n");
 		}
 		return success;
 	}
@@ -120,7 +120,7 @@ public class Ambito implements SymbolTable {
 			Command cmd = entry.getValue();
 			
 			switch(cmd.getClass().getSimpleName()){
-				case "Function": format.append("Defined funcion... " + cmd.toString() + "\n"); break;
+				case "Function": format.append("Defined funcion : " + cmd.toString() + "\n"); break;
 				case "Variable": format.append("Defined variable : " + cmd.toString() + "\n"); break;
 			}
 		}

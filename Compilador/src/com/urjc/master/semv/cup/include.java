@@ -117,19 +117,16 @@ public class include extends java_cup.runtime.lr_parser {
 
 	private List<Function> functions = new ArrayList<>();
 	
-	/* Es un metodo que el cual se llama automaticamente al haber un error en la gramatica, 
-	con el que informamos de la linea y la columna en el que se encuentra dicho error.*/
+	public List<Function> functions() {
+		return this.functions;
+	}
 	
 	@Override 
 	public void syntax_error(Symbol s) { 
 		int l = s.left + 1;
 		int c = s.right + 1;
 		report_error("El String: '" + s.value + "' ha producido un error en la linea " + l + ", columna " + c + ".\n", null);
-	}
-	
-	public List<Function> functions() {
-		return this.functions;
-	}
+	}	
 
 
 /** Cup generated class to encapsulate user supplied action code.*/
